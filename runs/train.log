@@ -12,3 +12,7 @@
   step    500  loss 1.0631
   step    728  loss 1.0432  chain 0.060  param-2hop(held) 0.062  (156s)
   step   1000  loss 0.9819
+  step   1326  loss 0.9330  chain 0.340  param-2hop(held) 0.271  (279s)
+  step   1500  loss 0.9168
+  step   2000  loss 0.9129
+  step   2414  loss 0.8849  chain 0.260  param-2hop(held) 0.438  (496s)
