@@ -1,33 +1,31 @@
 """Is the J-space really just a bag of concepts?
 
 The paper's own caveat: the lens reads the workspace as a flat set of
-independently active concept vectors. A readout containing *spider*, *legs*
-and *eight* says those concepts are present, not how they are bound together —
-and if the model imposes extra structure (roles, relations, bindings), a
-bag-of-features readout cannot see it.
+independently active concept vectors. A readout containing *spider*, *legs* and
+*eight* says those concepts are present, not how they are bound — and if the
+model imposes extra structure (roles, relations, bindings), a bag-of-features
+readout cannot see it.
 
-The two-hop task makes this testable, because it has a binding in it. At the
-query position the model must know that *this* city is the subject's, and the
-other cities in context are not. So:
+The composed relations make this testable, because they let two differences be
+separated cleanly:
 
-**The paired design.** For each item A, `swapped_chain` produces item B with
-the *same token inventory* — every word identical — but the subject's `lives in`
-fact repointed at a different city. Whatever changes between the two query-
-position activations is the binding and nothing else:
+**The latent axis.** Two subjects whose composed *answer* is the same country
+but whose intermediate city differs. ``d_latent = h(A) - h(B)`` therefore
+differs in the unverbalized intermediate while the output is held fixed.
 
-    d = h_A - h_B
+**The role axis.** The *same* subject city under two different composed
+relations — ``paris utters`` (city -> country -> language) and ``paris stands
+within`` (city -> country -> continent). Same subject, same latent country,
+different relation being applied. ``d_role`` is what the workspace carries
+about *which operation is in flight*, with the concept held fixed.
 
-**The question.** If the workspace is a pure bag of concepts, `d` should be
-essentially `v_c1 - v_c2`: the two cities' J-lens vectors, swapped, nothing
-more. Anything left over is structure the bag cannot represent. We measure
+If the J-space is a bag of concepts, the J-lens dictionary should account for
+the latent axis well and the role axis poorly. If it accounts for both, the
+workspace carries more than concept identity and the bag reading is too
+modest.
 
-    1. how much of `d` the J-lens dictionary explains at all (vs random control)
-    2. how much of `d` the two cities' own vectors explain (the pure-bag model)
-    3. what the leftover is made of — and whether it is *causally* live, by
-       checking whether it alone can move the model's answer
-
-and separately replicate the capacity measurements: occupancy and
-fraction-of-variance-explained by layer.
+Also replicates the capacity measurements: occupancy and fraction of variance
+explained, by layer, against a random-dictionary control.
 """
 
 from __future__ import annotations
@@ -35,7 +33,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import random
+from collections import defaultdict
 
 import numpy as np
 import torch
@@ -50,7 +48,12 @@ from jlens.jspace import (
 )
 from jlens.lens import JacobianLens
 from jlens.toy.model import ToyLensModel, load_toy
-from jlens.toy.world import build_world, chain_benchmark, swapped_chain
+from jlens.toy.world import (
+    COMPOSED_RELATIONS,
+    build_world,
+    composed_prompt,
+    make_split,
+)
 
 
 @torch.no_grad()
@@ -61,43 +64,22 @@ def query_acts(model: ToyLensModel, prompt: str, layers: list[int]):
         return {l: rec.activations[l][0, -1].detach().float() for l in layers}
 
 
-@torch.no_grad()
-def answer_with_added(
-    model: ToyLensModel, prompt: str, delta: dict[int, torch.Tensor], alpha: float
-) -> str:
-    """Run the model with ``alpha * delta[l]`` added at the query position."""
-    handles = []
-
-    def make_hook(layer: int):
-        def hook(module, inputs, output):
-            t = output if torch.is_tensor(output) else output[0]
-            patched = t.clone()
-            patched[0, -1] = t[0, -1] + alpha * delta[layer].to(t.device)
-            return patched if torch.is_tensor(output) else (patched, *output[1:])
-
-        return hook
-
-    try:
-        for l in delta:
-            handles.append(model.layers[l].register_forward_hook(make_hook(l)))
-        logits = model.unembed(model.forward(model.encode(prompt)))
-        return model.tokenizer.decode([int(logits[0, -1].argmax())])
-    finally:
-        for h in handles:
-            h.remove()
-
-
-def explained(x: torch.Tensor, basis: torch.Tensor) -> float:
+def explained_by(x: torch.Tensor, basis: torch.Tensor) -> float:
     """Fraction of ``x``'s energy inside the span of ``basis`` rows."""
     Q, _ = torch.linalg.qr(basis.T.float())
     return float((x.float() @ Q).pow(2).sum() / x.float().pow(2).sum().clamp_min(1e-12))
+
+
+def solves(model: ToyLensModel, prompt: str, answer: str) -> bool:
+    with torch.no_grad():
+        pred = int(model.unembed(model.forward(model.encode(prompt)))[0, -1].argmax())
+    return pred == model.tokenizer.token_id(answer.split()[0])
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--model", default="runs/toy/final.pt")
     ap.add_argument("--lens", default="runs/lens/final_lens.pt")
-    ap.add_argument("--n", type=int, default=80)
     ap.add_argument("--k", type=int, default=25)
     ap.add_argument("--out", default="runs/structure")
     args = ap.parse_args()
@@ -107,126 +89,133 @@ def main() -> None:
     net, tok = load_toy(args.model)
     model = ToyLensModel(net, tok)
     lens = JacobianLens.load(args.lens)
-    world = build_world()
-    n_layers = model.n_layers
-    layers = lens.source_layers
-    band = [l for l in layers if 0.3 <= l / (n_layers - 1) <= 0.75]
+    world, split = build_world(), make_split(build_world())
+    n_layers, layers = model.n_layers, lens.source_layers
+    band = [l for l in layers if 0.3 <= l / (n_layers - 1) <= 0.8]
 
     P_full, _ = build_probe(model, token_ids=torch.arange(len(tok)))
     V = {l: (P_full @ lens.jacobians[l]).float() for l in layers}
 
-    # ---- build A/B pairs the model gets right on BOTH sides ---------------
-    rng = random.Random(11)
-    pairs = []
-    for c in chain_benchmark(world, n=args.n * 6, k=3):
-        s = swapped_chain(rng, c, world)
-        if s is None or s.answer == c.answer:
-            continue
-        ok = True
-        for item in (c, s):
-            with torch.no_grad():
-                pred = int(
-                    model.unembed(model.forward(model.encode(item.prompt)))[0, -1].argmax()
-                )
-            ok &= pred == tok.token_id(item.answer)
-        if ok:
-            pairs.append((c, s))
-        if len(pairs) >= args.n:
-            break
-    print(f"{len(pairs)} minimal pairs where the model answers both sides correctly")
-    if len(pairs) < 8:
+    def vecs(layer: int, words: list[str]) -> torch.Tensor:
+        return torch.stack(
+            [V[layer][tok.encode(w)].sum(0) for w in words if tok.encode(w)]
+        )
+
+    # ---- build the two kinds of pair ------------------------------------
+    composed = world.composed_map("hails_from")
+    latents = world.latent_map("hails_from")
+    by_answer = defaultdict(list)
+    for s, ans in composed.items():
+        if solves(model, composed_prompt("hails_from", s), ans):
+            by_answer[ans].append(s)
+
+    latent_pairs = []
+    for ans, subjects in by_answer.items():
+        for i in range(len(subjects)):
+            for j in range(i + 1, len(subjects)):
+                a, b = subjects[i], subjects[j]
+                if latents[a] != latents[b]:
+                    latent_pairs.append((a, b))
+    print(f"latent-axis pairs (same answer, different intermediate city): "
+          f"{len(latent_pairs)}")
+
+    role_pairs = []
+    for city in world.entities["city"]:
+        pa = composed_prompt("tongue", city)
+        pb = composed_prompt("lies_within", city)
+        ans_a = world.composed_map("tongue").get(city)
+        ans_b = world.composed_map("lies_within").get(city)
+        if ans_a and ans_b and solves(model, pa, ans_a) and solves(model, pb, ans_b):
+            role_pairs.append((city, pa, pb, ans_a, ans_b))
+    print(f"role-axis pairs (same subject and latent, different relation): "
+          f"{len(role_pairs)}")
+    if len(latent_pairs) < 5 or len(role_pairs) < 5:
         raise SystemExit("not enough usable pairs; train the model longer")
 
-    # ---- 1-3: what is in the binding difference? --------------------------
-    stats = {l: {"jspace": [], "pairvec": [], "random": [], "cos": []} for l in band}
-    residual_delta: list[dict[int, torch.Tensor]] = []
-    full_delta: list[dict[int, torch.Tensor]] = []
-    for a, b in pairs:
-        ha, hb = query_acts(model, a.prompt, band), query_acts(model, b.prompt, band)
-        res_d, full_d = {}, {}
+    # ---- how much of each difference does the dictionary explain? --------
+    stats = {
+        axis: {l: defaultdict(list) for l in band}
+        for axis in ("latent", "role")
+    }
+    for a, b in latent_pairs:
+        ha = query_acts(model, composed_prompt("hails_from", a), band)
+        hb = query_acts(model, composed_prompt("hails_from", b), band)
         for l in band:
             d = ha[l] - hb[l]
-            full_d[l] = d
-            # (1) the whole J-lens dictionary, sparse non-negative, k atoms
             dec = gradient_pursuit(d, V[l], args.k)
-            fve_j = 1.0 - float(dec.residual.pow(2).sum() / d.pow(2).sum().clamp_min(1e-12))
             ctrl = gradient_pursuit(d, random_control_dictionary(V[l]), args.k)
-            fve_r = 1.0 - float(ctrl.residual.pow(2).sum() / d.pow(2).sum().clamp_min(1e-12))
-            # (2) the pure-bag model: just the two cities' own vectors
-            ids_a = tok.encode(a.latent)
-            ids_b = tok.encode(b.latent)
-            basis = torch.stack(
-                [V[l][ids_a].sum(0), V[l][ids_b].sum(0)]
+            e = d.pow(2).sum().clamp_min(1e-12)
+            stats["latent"][l]["jspace"].append(
+                1.0 - float(dec.residual.pow(2).sum() / e)
             )
-            fve_p = explained(d, basis)
-            pair_dir = basis[0] - basis[1]
-            cos = float(
-                (d @ pair_dir)
-                / (d.norm() * pair_dir.norm()).clamp_min(1e-12)
+            stats["latent"][l]["random"].append(
+                1.0 - float(ctrl.residual.pow(2).sum() / e)
             )
-            stats[l]["jspace"].append(fve_j)
-            stats[l]["random"].append(fve_r)
-            stats[l]["pairvec"].append(fve_p)
-            stats[l]["cos"].append(cos)
-            # leftover after removing the pure-bag part
-            Q, _ = torch.linalg.qr(basis.T.float())
-            res_d[l] = d - Q @ (Q.T @ d)
-        residual_delta.append(res_d)
-        full_delta.append(full_d)
+            # the pure-bag model: just the two intermediates' own vectors
+            stats["latent"][l]["specific"].append(
+                explained_by(d, vecs(l, [latents[a], latents[b]]))
+            )
+
+    for city, pa, pb, _, _ in role_pairs:
+        ha, hb = query_acts(model, pa, band), query_acts(model, pb, band)
+        for l in band:
+            d = ha[l] - hb[l]
+            dec = gradient_pursuit(d, V[l], args.k)
+            ctrl = gradient_pursuit(d, random_control_dictionary(V[l]), args.k)
+            e = d.pow(2).sum().clamp_min(1e-12)
+            stats["role"][l]["jspace"].append(1.0 - float(dec.residual.pow(2).sum() / e))
+            stats["role"][l]["random"].append(1.0 - float(ctrl.residual.pow(2).sum() / e))
+            # the "concepts named in the two prompts" model: the relation verbs
+            # and the two answers, which is everything a bag-of-concepts
+            # readout could point at to distinguish these two prompts
+            stats["role"][l]["specific"].append(
+                explained_by(
+                    d,
+                    vecs(l, ["utters", "stands within",
+                             world.composed_map("tongue")[city],
+                             world.composed_map("lies_within")[city]]),
+                )
+            )
 
     print()
     print("=" * 78)
-    print("WHAT IS IN THE BINDING DIFFERENCE  d = h(city A bound) - h(city B bound)")
+    print("HOW MUCH OF EACH DIFFERENCE IS IN THE J-SPACE?")
     print("=" * 78)
-    print(f"  {'layer':>5s} {'rho':>5s} | {'k=' + str(args.k) + ' J-lens':>12s} "
-          f"{'random ctrl':>12s} | {'2 city vecs':>12s} {'cos(d, v_A-v_B)':>16s}")
+    print(f"  {'':11s} {'LATENT axis (same answer, diff. city)':>38s}   "
+          f"{'ROLE axis':>24s}")
+    print(f"  {'layer  rho':11s} {'k-atom':>9s} {'random':>9s} {'2 vecs':>9s}   "
+          f"{'k-atom':>7s} {'random':>7s} {'named':>7s}")
     for l in band:
-        s = stats[l]
-        print(f"  {l:5d} {l / (n_layers - 1):5.2f} | "
-              f"{np.mean(s['jspace']):12.3f} {np.mean(s['random']):12.3f} | "
-              f"{np.mean(s['pairvec']):12.3f} {np.mean(s['cos']):16.3f}")
+        s_l, s_r = stats["latent"][l], stats["role"][l]
+        print(f"  {l:5d} {l / (n_layers - 1):5.2f} "
+              f"{np.mean(s_l['jspace']):9.3f} {np.mean(s_l['random']):9.3f} "
+              f"{np.mean(s_l['specific']):9.3f}   "
+              f"{np.mean(s_r['jspace']):7.3f} {np.mean(s_r['random']):7.3f} "
+              f"{np.mean(s_r['specific']):7.3f}")
 
-    mean_pair = float(np.mean([np.mean(stats[l]["pairvec"]) for l in band]))
-    mean_j = float(np.mean([np.mean(stats[l]["jspace"]) for l in band]))
-    mean_r = float(np.mean([np.mean(stats[l]["random"]) for l in band]))
-    print()
-    print(f"  averaged over the band: the two cities' own vectors explain "
-          f"{mean_pair:.1%} of the binding difference;")
-    print(f"  a {args.k}-atom J-lens decomposition explains {mean_j:.1%} "
-          f"(random control {mean_r:.1%}).")
-    print(f"  => {1 - mean_pair:.0%} of the difference is NOT the two swapped "
-          f"concept vectors.")
+    def band_mean(axis: str, key: str) -> float:
+        return float(np.mean([np.mean(stats[axis][l][key]) for l in band]))
 
-    # ---- is the leftover causally live? ----------------------------------
     print()
-    print("=" * 78)
-    print("IS THE LEFTOVER CAUSALLY LIVE?")
-    print("=" * 78)
-    print("  Add the difference vector to item B's query activation and see whether")
-    print("  B's answer moves to A's. Full d is the ceiling; the leftover is d with")
-    print("  the two cities' own directions projected out — a pure bag-of-concepts")
-    print("  account predicts the leftover does nothing.")
-    for name, deltas in (("full d", full_delta), ("leftover only", residual_delta)):
-        for alpha in (1.0, 2.0):
-            moved = same = 0
-            for (a, b), delta in zip(pairs, deltas, strict=True):
-                got = answer_with_added(model, b.prompt, delta, alpha)
-                moved += got == a.answer
-                same += got == b.answer
-            n = len(pairs)
-            print(f"  {name:14s} alpha={alpha:<4}  -> A's answer {moved / n:6.1%}   "
-                  f"stays B's {same / n:6.1%}   other {1 - moved / n - same / n:6.1%}")
+    print(f"  band averages")
+    print(f"    latent axis: {args.k}-atom J-lens {band_mean('latent', 'jspace'):.1%} "
+          f"(random {band_mean('latent', 'random'):.1%}), "
+          f"the two cities' own vectors alone {band_mean('latent', 'specific'):.1%}")
+    print(f"    role   axis: {args.k}-atom J-lens {band_mean('role', 'jspace'):.1%} "
+          f"(random {band_mean('role', 'random'):.1%}), "
+          f"the named tokens alone {band_mean('role', 'specific'):.1%}")
 
     # ---- capacity ---------------------------------------------------------
     print()
     print("=" * 78)
     print("CAPACITY: occupancy and variance share by layer")
     print("=" * 78)
-    acts_by_layer = {l: [] for l in layers}
-    for a, _ in pairs[:24]:
-        h = query_acts(model, a.prompt, layers)
+    probe_subjects = [s for subs in by_answer.values() for s in subs][:24]
+    acts = {l: [] for l in layers}
+    for s in probe_subjects:
+        h = query_acts(model, composed_prompt("hails_from", s), layers)
         for l in layers:
-            acts_by_layer[l].append(h[l])
+            acts[l].append(h[l])
     print(f"  {'layer':>5s} {'rho':>5s} {'occupancy':>10s} {'FVE':>7s} "
           f"{'FVE rand':>9s} {'excess':>7s}")
     capacity = []
@@ -234,27 +223,28 @@ def main() -> None:
     for l in layers:
         occ = [
             occupancy(h, V[l], k_max=40, n_controls=1, generator=gen)[0]
-            for h in acts_by_layer[l][:10]
+            for h in acts[l][:10]
         ]
         k = max(1, int(np.median(occ)))
-        fve, fve_r = fraction_variance_explained(
-            torch.stack(acts_by_layer[l]), V[l], k
-        )
-        capacity.append(
-            {"layer": l, "rho": l / (n_layers - 1), "occupancy": float(np.median(occ)),
-             "fve": fve, "fve_random": fve_r}
-        )
+        fve, fve_r = fraction_variance_explained(torch.stack(acts[l]), V[l], k)
+        capacity.append({"layer": l, "rho": l / (n_layers - 1),
+                         "occupancy": float(np.median(occ)),
+                         "fve": fve, "fve_random": fve_r})
         print(f"  {l:5d} {l / (n_layers - 1):5.2f} {np.median(occ):10.1f} "
               f"{fve:7.3f} {fve_r:9.3f} {fve - fve_r:7.3f}")
 
     with open(os.path.join(args.out, "structure.json"), "w") as f:
         json.dump(
             {
-                "n_pairs": len(pairs),
+                "n_latent_pairs": len(latent_pairs),
+                "n_role_pairs": len(role_pairs),
                 "band": band,
-                "binding": {
-                    str(l): {k: float(np.mean(v)) for k, v in stats[l].items()}
-                    for l in band
+                "axes": {
+                    axis: {
+                        str(l): {k: float(np.mean(v)) for k, v in stats[axis][l].items()}
+                        for l in band
+                    }
+                    for axis in stats
                 },
                 "capacity": capacity,
             },

@@ -44,6 +44,12 @@ PEOPLE = [
     "yuri", "zoe", "abel", "bella", "cyrus", "dana", "elias", "fiona",
     "gus", "hilda", "ivan", "jana", "kurt", "lena", "milo", "nora",
     "omar", "petra", "raj", "sonia", "tomas", "ulla", "vince", "wanda",
+    "arne", "brit", "cleo", "dmitri", "esme", "felix", "greta", "hugo",
+    "inga", "juno", "kira", "lars", "maja", "niko", "otto", "pia",
+    "rune", "sven", "tara", "ulf", "vidal", "wren", "yara", "zane",
+    "anouk", "boris", "celia", "dilan", "eira", "fabio", "gitta", "hans",
+    "ilse", "josef", "klara", "linus", "marit", "nadia", "oskar", "paloma",
+    "remi", "sigrid", "tobias", "ursula", "viggo", "wilma", "yusuf", "zita",
 ]
 #: Half of these are two words long *on purpose*. The tokenizer is word-level,
 #: so a two-word city is a genuinely multi-token concept with no J-lens vector
@@ -270,6 +276,74 @@ def sample_chain(rng: random.Random, world: World, *, k: int = 3) -> Chain:
     )
 
 
+def _premise_block(chain: Chain) -> str:
+    return chain.prompt.rsplit(f" {chain.subject} hails from", 1)[0]
+
+
+def _append_queries(head: str, queries: list[tuple[str, str]]) -> tuple[str, list[int]]:
+    """Append ``(query, answer)`` pairs and return the answer token indices.
+
+    The word-level tokenizer maps one word to one token, so a word index *is*
+    a token index and the supervision mask can be built here.
+    """
+    words = head.split()
+    supervised: list[int] = []
+    for query, answer in queries:
+        words.extend(query.split())
+        supervised.extend(range(len(words), len(words) + len(answer.split())))
+        words.extend(answer.split())
+        words.append(".")
+    return " ".join(words), supervised
+
+
+def recall_item(
+    rng: random.Random, world: World, *, k: int = 3, n_queries: int = 3
+) -> tuple[str, list[int]]:
+    """A one-hop in-context retrieval item with *several* queries.
+
+    Same premise block as a chain, then repeated re-asks of facts already
+    stated: ``<person> lives in`` -> their city, ``<city> sits in`` -> its
+    country.
+
+    Two design points, both learned the hard way:
+
+    * **Two-hop composition has a prerequisite.** A model that cannot retrieve
+      one binding from context cannot chain two. Left to itself, a small
+      transformer sits at chance on the two-hop task indefinitely, learning
+      only the *type* of the answer (a country, not the right country).
+      Supervising each hop directly builds the retrieval circuit first.
+    * **Supervision density decides whether the circuit forms at all.** One
+      supervised answer buried in a 40-token premise block is roughly a 1-in-40
+      gradient signal, and it is not enough. Asking several queries per item —
+      each one requiring the same retrieval — is the difference between the
+      circuit forming in a few hundred steps and never forming. (The same model
+      learns textbook induction, where every position is supervised, in 200
+      steps.)
+    """
+    chain = sample_chain(rng, world, k=k)
+    pool: list[tuple[str, str]] = []
+    for p, c in chain.lives:
+        pool.append((f"{p} lives in", c))
+    for c, country in chain.sits:
+        pool.append((f"{c} sits in", country))
+    rng.shuffle(pool)
+    return _append_queries(_premise_block(chain), pool[:n_queries])
+
+
+def chain_item(
+    rng: random.Random, world: World, *, k: int = 3, n_queries: int = 2
+) -> tuple[str, list[int]]:
+    """A two-hop item with several queries against one premise block."""
+    chain = sample_chain(rng, world, k=k)
+    pool = [
+        (f"{p} hails from", chain.city_country(c))
+        for p, c in chain.lives
+        if chain.city_country(c) is not None
+    ]
+    rng.shuffle(pool)
+    return _append_queries(_premise_block(chain), pool[:n_queries])
+
+
 def swapped_chain(rng: random.Random, chain: Chain, world: World) -> Chain | None:
     """A minimally different item: same token inventory, different correct city.
 
@@ -321,16 +395,33 @@ def build_corpus(
     split: Split,
     *,
     n_sentences: int = 200_000,
-    atomic_weight: float = 2.0,
-    composed_weight: float = 1.0,
-    chain_weight: float = 9.0,
+    atomic_weight: float = 3.0,
+    composed_weight: float = 3.0,
+    # The in-context two-hop items are off by default. They are kept because
+    # the machinery is useful, but a model of this size does not learn
+    # in-context retrieval from them at a reasonable budget: it converges to
+    # predicting the answer's *type* (a country, not the right country) and
+    # sits at chance. Parametric composition, on the other hand, generalises to
+    # held-out subjects at 6-8x chance, which is what the experiments need.
+    chain_weight: float = 0.0,
+    recall_weight: float = 0.0,
     filler_weight: float = 1.0,
     chain_ks: tuple[int, ...] = (2, 3),
     seed: int = 0,
-) -> list[str]:
-    """Sample a training corpus.
+) -> list[tuple[str, list[int] | None]]:
+    """Sample a training corpus of ``(text, supervised_token_indices)`` pairs.
 
-    Four sentence types, and the mix matters:
+    ``None`` means supervise every position; a list restricts the loss to those
+    token indices.
+
+    That distinction is not a refinement, it is what makes the task learnable
+    at this scale. A retrieval item's premise block states *randomly sampled*
+    bindings, so predicting them is impossible by construction; supervising
+    those ~30 positions swamps the few that carry retrieval signal, and the
+    model settles for learning the answer's *type* (a country, not the right
+    country). Masking the premises concentrates the gradient on the hops.
+
+    Five sentence types, and the mix matters:
 
     * **atomic** facts, oversampled — parametric world knowledge.
     * **composed** facts for the train subjects only — the parametric two-hop
@@ -351,21 +442,24 @@ def build_corpus(
         for name in COMPOSED_RELATIONS
         for s in split.train[name]
     ]
-    kinds = ["atomic", "composed", "chain", "filler"]
-    weights = [atomic_weight, composed_weight, chain_weight, filler_weight]
-    out = []
+    kinds = ["atomic", "composed", "chain", "recall", "filler"]
+    weights = [atomic_weight, composed_weight, chain_weight, recall_weight,
+               filler_weight]
+    out: list[tuple[str, list[int] | None]] = []
     for _ in range(n_sentences):
         kind = rng.choices(kinds, weights=weights, k=1)[0]
         if kind == "atomic":
             name, s, o = rng.choice(atomic_items)
-            out.append(atomic_sentence(name, s, o))
+            out.append((atomic_sentence(name, s, o), None))
         elif kind == "composed":
             name, s, o = rng.choice(composed_items)
-            out.append(composed_sentence(name, s, o))
+            out.append((composed_sentence(name, s, o), None))
         elif kind == "chain":
-            out.append(sample_chain(rng, world, k=rng.choice(chain_ks)).text)
+            out.append(chain_item(rng, world, k=rng.choice(chain_ks)))
+        elif kind == "recall":
+            out.append(recall_item(rng, world, k=rng.choice(chain_ks)))
         else:
-            out.append(filler_sentence(rng, world))
+            out.append((filler_sentence(rng, world), None))
     return out
 
 

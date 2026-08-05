@@ -52,6 +52,30 @@ class RMSNorm(nn.Module):
         return (x.float() * scale).type_as(x) * self.weight
 
 
+def rotary_tables(d_head: int, max_seq: int, base: float = 10_000.0):
+    """Precomputed cos/sin tables for rotary position embeddings."""
+    inv = 1.0 / (base ** (torch.arange(0, d_head, 2).float() / d_head))
+    ang = torch.arange(max_seq).float()[:, None] * inv[None]
+    return torch.cos(ang), torch.sin(ang)
+
+
+def apply_rotary(x: torch.Tensor, cos: torch.Tensor, sin: torch.Tensor):
+    """``x``: [B, H, T, Dh]. Rotates query/key pairs by absolute position, so
+    attention scores depend on *relative* position.
+
+    This matters more than it looks for the toy model. Its task is in-context
+    retrieval — match an earlier occurrence of a name and copy what followed it
+    — and with purely learned absolute positions the model has to relearn that
+    match at every offset. Rotary makes the match position-invariant, which is
+    the difference between the retrieval circuit forming and never forming.
+    """
+    T = x.shape[-2]
+    c, s = cos[:T].to(x.device), sin[:T].to(x.device)
+    x1, x2 = x[..., 0::2], x[..., 1::2]
+    out = torch.stack([x1 * c - x2 * s, x1 * s + x2 * c], dim=-1)
+    return out.flatten(-2)
+
+
 class CausalSelfAttention(nn.Module):
     def __init__(self, cfg: ToyConfig) -> None:
         super().__init__()
@@ -59,6 +83,9 @@ class CausalSelfAttention(nn.Module):
         self.qkv = nn.Linear(cfg.d_model, 3 * cfg.d_model, bias=False)
         self.proj = nn.Linear(cfg.d_model, cfg.d_model, bias=False)
         self.freeze_qk = False  # set by the frozen-attention control
+        cos, sin = rotary_tables(cfg.d_head, cfg.max_seq_len)
+        self.register_buffer("rope_cos", cos, persistent=False)
+        self.register_buffer("rope_sin", sin, persistent=False)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         B, T, C = x.shape
@@ -67,6 +94,8 @@ class CausalSelfAttention(nn.Module):
         q = q.view(B, T, H, Dh).transpose(1, 2)
         k = k.view(B, T, H, Dh).transpose(1, 2)
         v = v.view(B, T, H, Dh).transpose(1, 2)
+        q = apply_rotary(q, self.rope_cos, self.rope_sin)
+        k = apply_rotary(k, self.rope_cos, self.rope_sin)
         if self.freeze_qk:
             # Stop-gradient through the attention pattern: perturbing x can no
             # longer change *where* a head looks, only *what* it moves. This is

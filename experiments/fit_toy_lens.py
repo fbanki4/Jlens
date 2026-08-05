@@ -22,20 +22,22 @@ from jlens.toy.model import ToyLensModel, load_toy
 from jlens.toy.world import build_corpus, build_world, make_split
 
 
-def fitting_corpus(n: int, seed: int = 7) -> list[str]:
-    """Generic sentences from the world, in the corpus's natural proportions,
-    concatenated a few at a time so prompts are long enough to have interior
-    positions after ``skip_first``."""
+def fitting_corpus(n: int, seed: int = 7, min_tokens: int = 5) -> list[str]:
+    """Generic sentences from the world, in the corpus's natural proportions.
+
+    One sentence per prompt, deliberately: the toy model is trained on
+    one-sentence rows, so concatenating them would put the lens on activations
+    the model never sees. The whole point of ``J_l`` is to be the average
+    transport *on the model's own input distribution*, and a corpus that
+    drifts off it quietly poisons the estimate.
+    """
     world, split = build_world(), make_split(build_world())
-    sentences = build_corpus(world, split, n_sentences=n * 3, seed=seed)
+    sentences = [
+        text for text, _ in build_corpus(world, split, n_sentences=n * 4, seed=seed)
+    ]
     rng = random.Random(seed)
     rng.shuffle(sentences)
-    out, i = [], 0
-    while len(out) < n and i < len(sentences):
-        chunk = sentences[i : i + 2]
-        i += 2
-        out.append(" ".join(chunk))
-    return out
+    return [s for s in sentences if len(s.split()) >= min_tokens][:n]
 
 
 def main() -> None:
@@ -44,8 +46,8 @@ def main() -> None:
     ap.add_argument("--out", default="runs/lens/final_lens.pt")
     ap.add_argument("--n-prompts", type=int, default=150)
     ap.add_argument("--dim-batch", type=int, default=32)
-    ap.add_argument("--max-seq-len", type=int, default=48)
-    ap.add_argument("--skip-first", type=int, default=4)
+    ap.add_argument("--max-seq-len", type=int, default=16)
+    ap.add_argument("--skip-first", type=int, default=1)
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args()
 

@@ -47,7 +47,13 @@ from jlens.phrases import (
     token_average_vector,
 )
 from jlens.toy.model import ToyLensModel, load_toy
-from jlens.toy.world import build_world, chain_benchmark, sample_chain
+from jlens.toy.world import (
+    COMPOSED_RELATIONS,
+    build_world,
+    composed_prompt,
+    filler_sentence,
+    make_split,
+)
 from experiments.fit_toy_lens import fitting_corpus
 
 
@@ -59,34 +65,28 @@ from experiments.fit_toy_lens import fitting_corpus
 def template_contexts(world, city: str, n: int, seed: int = 3) -> list[str]:
     """Contexts ending exactly where ``city`` is the natural continuation.
 
-    The paper asks an LLM to author these. Here the world generates them, which
-    is the most favourable case the template lens can possibly get: the
-    contexts are perfectly on-distribution and unlimited in supply. If the
-    untrained methods match it *here*, they are not losing anything that the
-    authoring step was providing.
+    The paper's recipe: ask an LLM for passages whose natural continuation is
+    *w*, never using *w* itself, then average the residual at the final
+    position. Here the world supplies them directly — the model has memorised
+    ``<person> lives in <city>``, so any prefix ending in ``<person> lives in``
+    determines the city without naming it. Varying the preceding filler
+    sentence gives unlimited distinct contexts.
+
+    This is the most favourable case the template lens can get: perfectly
+    on-distribution contexts, unlimited supply, no authoring noise. If the
+    untrained methods match it *here*, the authoring step was not buying
+    anything they lack.
     """
     rng = random.Random(hash(city) % 10_000 + seed)
+    residents = [p for p, c in world.atomic["lives_in"].items() if c == city]
+    if not residents:
+        return []
     out = []
-    while len(out) < n:
-        chain = sample_chain(rng, world, k=3)
-        # Rewrite one binding so the target city is what comes next, then cut
-        # the prompt right before it.
-        person = chain.lives[0][0]
-        facts = []
-        for kind, i in chain.order:
-            if kind == "lives":
-                p, c = chain.lives[i]
-                if p == person:
-                    facts.append(f"{p} lives in")
-                    out.append(" ".join(facts))
-                    break
-                facts.append(f"{p} lives in {c} .")
-            else:
-                c, k = chain.sits[i]
-                facts.append(f"{c} sits in {k} .")
-        else:
-            continue
-    return out[:n]
+    for i in range(n):
+        person = residents[i % len(residents)]
+        prefix = filler_sentence(rng, world) if i >= len(residents) else ""
+        out.append(f"{prefix} {person} lives in".strip())
+    return out
 
 
 @torch.no_grad()
@@ -161,7 +161,7 @@ def decode_rank(
 
 
 @torch.no_grad()
-def swap_answer(
+def swap_with_vectors(
     model: ToyLensModel,
     prompt: str,
     v_src: dict[int, torch.Tensor],
@@ -196,7 +196,6 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--model", default="runs/toy/final.pt")
     ap.add_argument("--lens", default="runs/lens/final_lens.pt")
-    ap.add_argument("--n-items", type=int, default=90)
     ap.add_argument("--n-corpus", type=int, default=40)
     ap.add_argument("--out", default="runs/phrase")
     args = ap.parse_args()
@@ -206,11 +205,9 @@ def main() -> None:
     net, tok = load_toy(args.model)
     model = ToyLensModel(net, tok)
     lens = JacobianLens.load(args.lens)
-    world = build_world()
+    world, split = build_world(), make_split(build_world())
     n_layers = model.n_layers
-    band = [
-        l for l in lens.source_layers if 0.3 <= l / (n_layers - 1) <= 0.75
-    ]
+    band = [l for l in lens.source_layers if 0.3 <= l / (n_layers - 1) <= 0.8]
     print(f"workspace band for interventions: {band}")
 
     cities = list(world.entities["city"])
@@ -235,34 +232,38 @@ def main() -> None:
     )
     print("building phrase-Jacobian vectors (untrained) ...")
     methods["phrase-Jacobian"] = fit_phrase_vectors(
-        model, cities, corpus, lens.source_layers, max_seq_len=48, skip_first=4
+        model, cities, corpus, lens.source_layers, max_seq_len=16, skip_first=1
     )
     print("building debiased-sum vectors (untrained) ...")
     methods["debiased-sum"] = build_debiased_vectors(
-        model, lens, cities, corpus[:12], lens.source_layers, max_seq_len=48
+        model, lens, cities, corpus[:12], lens.source_layers, max_seq_len=16
     )
 
     # ---- items the model actually solves ---------------------------------
-    chains = chain_benchmark(world, n=args.n_items * 3, k=3)
+    composed = world.composed_map("hails_from")
+    latents = world.latent_map("hails_from")
     items = []
-    for c in chains:
+    for subject, answer in composed.items():
+        prompt = composed_prompt("hails_from", subject)
         with torch.no_grad():
-            pred = int(model.unembed(model.forward(model.encode(c.prompt)))[0, -1].argmax())
-        if pred == tok.token_id(c.answer):
-            items.append(c)
-        if len(items) >= args.n_items:
-            break
-    print(f"\nanalysing {len(items)} items the model answers correctly "
-          f"({sum(i.latent_is_multitoken for i in items)} with a two-token latent)")
+            pred = int(model.unembed(model.forward(model.encode(prompt)))[0, -1].argmax())
+        if pred == tok.token_id(answer):
+            items.append(
+                {"prompt": prompt, "latent": latents[subject], "answer": answer,
+                 "subject": subject}
+            )
+    n_multi = sum(len(i["latent"].split()) > 1 for i in items)
+    print(f"\nanalysing {len(items)} subjects the model answers correctly "
+          f"({n_multi} with a two-token latent city)")
 
     # ---- DECODE ----------------------------------------------------------
     per_method = {m: defaultdict(list) for m in methods}
     for item in items:
-        acts = query_activations(model, item.prompt, lens.source_layers)
-        length = len(item.latent.split())
+        acts = query_activations(model, item["prompt"], lens.source_layers)
+        length = len(item["latent"].split())
         for m, vecs in methods.items():
             best = min(
-                decode_rank({c: vecs[c][l] for c in cities}, item.latent, acts[l])
+                decode_rank({c: vecs[c][l] for c in cities}, item["latent"], acts[l])
                 for l in band
             )
             per_method[m][length].append(best)
@@ -295,28 +296,43 @@ def main() -> None:
     print("=" * 78)
     print("SWAP: replace the latent's vector with a distractor's in the band")
     print("=" * 78)
+    city_country = world.atomic["city_in"]
+    rng = random.Random(0)
+    targets = {
+        item["subject"]: rng.choice(
+            [c for c in cities
+             if c != item["latent"] and city_country[c] != item["answer"]]
+        )
+        for item in items
+    }
     swap_summary = {}
     for m, vecs in methods.items():
+        per_len = defaultdict(lambda: [0, 0])
         follow = total = 0
         for item in items:
-            if not item.distractor_cities:
-                continue
-            target_city = item.distractor_cities[0]
-            target_country = item.city_country(target_city)
-            if target_country is None:
-                continue
-            got = swap_answer(
-                model, item.prompt,
-                {l: vecs[item.latent][l] for l in band},
+            target_city = targets[item["subject"]]
+            got = swap_with_vectors(
+                model, item["prompt"],
+                {l: vecs[item["latent"]][l] for l in band},
                 {l: vecs[target_city][l] for l in band},
                 band,
             )
             total += 1
-            follow += got == target_country
-        swap_summary[m] = {"n": total, "follow": follow,
-                           "rate": follow / total if total else float("nan")}
-        print(f"  {m:17s}  answer follows the swap "
-              f"{follow}/{total} = {follow / max(total, 1):5.1%}")
+            hit = got == city_country[target_city]
+            follow += hit
+            key = len(item["latent"].split())
+            per_len[key][1] += 1
+            per_len[key][0] += hit
+        swap_summary[m] = {
+            "n": total, "follow": follow,
+            "rate": follow / total if total else float("nan"),
+            "by_length": {str(k): v for k, v in per_len.items()},
+        }
+        detail = "  ".join(
+            f"{k}-tok {hit / tot:.0%}" for k, (hit, tot) in sorted(per_len.items()) if tot
+        )
+        print(f"  {m:17s}  follows the swap {follow}/{total} = "
+              f"{follow / max(total, 1):5.1%}   ({detail})")
 
     with open(os.path.join(args.out, "phrase.json"), "w") as f:
         json.dump(

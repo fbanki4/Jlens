@@ -50,8 +50,8 @@ from jlens.fitting import fit
 from jlens.jspace import participation_ratio
 from jlens.lens import JacobianLens
 from jlens.toy.model import ToyLensModel, load_toy
-from jlens.toy.train import chain_accuracy
-from jlens.toy.world import build_world, chain_benchmark
+from jlens.toy.train import composed_accuracy
+from jlens.toy.world import build_world, make_split
 from experiments.fit_toy_lens import fitting_corpus
 
 
@@ -84,7 +84,7 @@ def main() -> None:
     os.makedirs(args.out, exist_ok=True)
     os.makedirs(os.path.join(args.out, "lenses"), exist_ok=True)
     prompts = fitting_corpus(args.n_prompts)
-    chains = chain_benchmark(build_world(), n=100)
+    world, split = build_world(), make_split(build_world())
 
     ckpts = checkpoint_paths(args.run_dir)
     if not ckpts:
@@ -98,7 +98,7 @@ def main() -> None:
         cache = os.path.join(args.out, "lenses", f"lens_step{step:06d}.pt")
         lens = fit_or_load(
             path, model, prompts, cache,
-            dim_batch=args.dim_batch, max_seq_len=48, skip_first=4,
+            dim_batch=args.dim_batch, max_seq_len=16, skip_first=1,
         )
         P, _ = build_probe(model)
         C = cka_matrix(lens, P)
@@ -109,7 +109,10 @@ def main() -> None:
             {
                 "step": step,
                 "path": path,
-                "chain_acc": chain_accuracy(net, tok, chains),
+                "acc_heldout": composed_accuracy(
+                    net, tok, world, split.heldout)["hails_from"],
+                "acc_train": composed_accuracy(
+                    net, tok, world, split.train)["hails_from"],
                 "n_blocks": seg.n_blocks,
                 "blockiness": seg.blockiness,
                 "layer_coupling": seg.layer_coupling,
@@ -122,7 +125,7 @@ def main() -> None:
                 "n_layers": model.n_layers,
             }
         )
-        print(f"  step {step:6d}  chain {entries[-1]['chain_acc']:.2f}  "
+        print(f"  step {step:6d}  2hop-held {entries[-1]['acc_heldout']:.2f}  "
               f"k={seg.n_blocks}  blockiness {seg.blockiness:.3f}  "
               f"coupling {seg.layer_coupling:.3f}  "
               f"cuts {[round(b, 2) for b in seg.boundaries_rho]}")
@@ -153,10 +156,10 @@ def main() -> None:
     print("=" * 78)
     print("FORMATION OF THE J-SPACE")
     print("=" * 78)
-    print(f"  {'step':>6s} {'chain':>6s} {'k':>2s} {'blockiness':>10s} "
+    print(f"  {'step':>6s} {'2hop':>6s} {'k':>2s} {'blockiness':>10s} "
           f"{'coupling':>8s} {'lock-in':>8s} {'drift':>7s} {'PR peak':>8s} {'cuts':>12s}")
     for e in entries:
-        print(f"  {e['step']:6d} {e['chain_acc']:6.2f} {e['n_blocks']:2d} "
+        print(f"  {e['step']:6d} {e['acc_heldout']:6.2f} {e['n_blocks']:2d} "
               f"{e['blockiness']:10.3f} {e['layer_coupling']:8.3f} "
               f"{e['lock_in']:8.3f} {e['drift']:7.3f} {e['pr_peak']:8.2f} "
               f"{str([round(b, 2) for b in e['boundaries_rho']]):>12s}")
@@ -172,7 +175,7 @@ def main() -> None:
         hit = np.where(v >= frac * finalv) if rising else np.where(v <= finalv / frac)
         return float(steps[hit[0][0]]) if len(hit[0]) else float("nan")
 
-    acc = [e["chain_acc"] for e in entries]
+    acc = [e["acc_heldout"] for e in entries]
     print()
     print("  first checkpoint reaching 90% of the final value:")
     print(f"    two-hop capability     step {crossing(acc):>7.0f}")

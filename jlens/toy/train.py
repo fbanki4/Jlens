@@ -24,7 +24,6 @@ from jlens.toy.world import (
     Split,
     World,
     build_corpus,
-    chain_benchmark,
     composed_prompt,
     vocabulary,
 )
@@ -32,19 +31,19 @@ from jlens.toy.world import (
 
 @dataclass
 class TrainConfig:
-    steps: int = 4000
-    batch_size: int = 64
+    steps: int = 6000
+    batch_size: int = 128
     lr: float = 3e-3
     warmup: int = 200
     weight_decay: float = 0.01
-    seq_len: int = 48
-    n_checkpoints: int = 14
+    seq_len: int = 16
+    n_checkpoints: int = 16
     seed: int = 0
-    log_every: int = 200
+    log_every: int = 500
 
 
 def pad_corpus(
-    sentences: list[str], tokenizer: WordTokenizer, seq_len: int
+    items: list[tuple[str, int]], tokenizer: WordTokenizer, seq_len: int
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """One sentence per row, right-padded, with a loss mask.
 
@@ -53,19 +52,28 @@ def pad_corpus(
     boundary so the model never sees the premises and the query together. With
     a synthetic corpus there is no reason to pay that cost.
 
+    Each item carries a ``supervise_from`` word index; positions before it are
+    masked out of the loss. See :func:`jlens.toy.world.build_corpus` for why
+    that matters.
+
     Returns ``(ids [n, seq_len], loss_mask [n, seq_len])`` where the mask marks
-    positions whose *next* token is a real target.
+    positions that are valid *targets*.
     """
     pad, eos = tokenizer.token_id("<pad>"), tokenizer.token_id("<eos>")
     rows, masks = [], []
-    for s in sentences:
-        ids = tokenizer.encode(s) + [eos]
+    for text, supervised in items:
+        ids = tokenizer.encode(text) + [eos]
         if len(ids) > seq_len:
             continue
         n_real = len(ids)
-        ids = ids + [pad] * (seq_len - n_real)
-        mask = [1] * n_real + [0] * (seq_len - n_real)
-        rows.append(ids)
+        if supervised is None:
+            mask = [1] * n_real + [0] * (seq_len - n_real)
+        else:
+            mask = [0] * seq_len
+            for i in supervised:
+                if i < n_real:
+                    mask[i] = 1
+        rows.append(ids + [pad] * (seq_len - n_real))
         masks.append(mask)
     return (
         torch.tensor(rows, dtype=torch.long),
@@ -108,6 +116,26 @@ def composed_accuracy(
 
 
 @torch.no_grad()
+def atomic_accuracy(
+    model: ToyTransformer, tokenizer: WordTokenizer, world: World, relation: str
+) -> float:
+    """Parametric recall of an atomic fact, e.g. ``alice lives in`` -> her city.
+
+    This is the prerequisite for parametric composition: the model has to know
+    both single hops cold before chaining them is even possible.
+    """
+    from jlens.toy.world import ATOMIC_RELATIONS
+
+    verb, _, _ = ATOMIC_RELATIONS[relation]
+    table = world.atomic[relation]
+    hits = 0
+    for subject, obj in table.items():
+        ids = torch.tensor(tokenizer.encode(f"{subject} {verb}"), dtype=torch.long)[None]
+        hits += int(model(ids)[0, -1].argmax()) == tokenizer.token_id(obj.split()[0])
+    return hits / len(table)
+
+
+@torch.no_grad()
 def chain_accuracy(
     model: ToyTransformer, tokenizer: WordTokenizer, chains: list[Chain]
 ) -> float:
@@ -141,7 +169,6 @@ def train(
     sentences = build_corpus(world, split, n_sentences=120_000, seed=tcfg.seed)
     data, loss_mask = pad_corpus(sentences, tokenizer, tcfg.seq_len)
     data, loss_mask = data.to(device), loss_mask.to(device)
-    eval_chains = chain_benchmark(world, n=100)
 
     model = ToyTransformer(cfg).to(device)
     n_params = sum(p.numel() for p in model.parameters())
@@ -181,7 +208,7 @@ def train(
         if step in ckpt_at or step == tcfg.steps:
             acc_train = composed_accuracy(model, tokenizer, world, split.train)
             acc_held = composed_accuracy(model, tokenizer, world, split.heldout)
-            acc_chain = chain_accuracy(model, tokenizer, eval_chains)
+            acc_atomic = atomic_accuracy(model, tokenizer, world, "lives_in")
             model.train()
             path = os.path.join(out_dir, f"ckpt_step{step:06d}.pt")
             save_toy(model, tokenizer, path)
@@ -191,16 +218,15 @@ def train(
                 "loss": float(loss.detach()),
                 "acc_train": acc_train,
                 "acc_heldout": acc_held,
-                "acc_chain": acc_chain,
+                "acc_atomic_lives_in": acc_atomic,
                 "path": path,
             }
             history.append(record)
-            held_mean = sum(
-                v for v in acc_held.values() if v == v
-            ) / max(1, len(acc_held))
             print(
-                f"  step {step:6d}  loss {float(loss.detach()):.4f}  chain {acc_chain:.3f}  "
-                f"param-2hop(held) {held_mean:.3f}  "
+                f"  step {step:6d}  loss {float(loss.detach()):.4f}  "
+                f"atomic {acc_atomic:.2f}  "
+                f"2hop train {acc_train['hails_from']:.2f} "
+                f"held {acc_held['hails_from']:.2f}  "
                 f"({time.perf_counter() - start:.0f}s)",
                 flush=True,
             )
