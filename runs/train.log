@@ -1,0 +1,14 @@
+  step      1  loss 5.2080  chain 0.000  param-2hop(held) 0.000  (2s)
+  step      2  loss 5.1575  chain 0.000  param-2hop(held) 0.000  (3s)
+  step      3  loss 5.0753  chain 0.000  param-2hop(held) 0.000  (5s)
+  step      6  loss 4.8451  chain 0.000  param-2hop(held) 0.000  (7s)
+  step     11  loss 4.5935  chain 0.000  param-2hop(held) 0.000  (9s)
+  step     20  loss 4.1885  chain 0.040  param-2hop(held) 0.000  (12s)
+  step     36  loss 3.5213  chain 0.050  param-2hop(held) 0.000  (16s)
+  step     66  loss 2.0212  chain 0.090  param-2hop(held) 0.021  (23s)
+  step    121  loss 1.1842  chain 0.130  param-2hop(held) 0.042  (36s)
+  step    220  loss 1.1287  chain 0.110  param-2hop(held) 0.167  (57s)
+  step    400  loss 1.0994  chain 0.110  param-2hop(held) 0.083  (94s)
+  step    500  loss 1.0631
+  step    728  loss 1.0432  chain 0.060  param-2hop(held) 0.062  (156s)
+  step   1000  loss 0.9819
