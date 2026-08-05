@@ -140,4 +140,26 @@
   forced-k=2 cut across 14 optimizers: 0.419-0.581 (spread 0.161 rho)
   blockiness across the same runs:  0.171-0.261 (spread 0.089)
 
+==============================================================================
+(5) DOES THE SHAPE TRACK MODEL DEPTH?
+==============================================================================
+  depth range 26-66 layers over 67 matrices
+  corr(n_layers, blockiness)      +0.039
+  corr(n_layers, layer_coupling)  +0.339
+  corr(n_layers, forced-k=2 cut)  -0.393
+
+   depth   n  blockiness  coupling  k=2 cut
+      26   8       0.316     0.698    0.450
+      28   2       0.216     0.785    0.630
+      32  18       0.199     0.826    0.518
+      36  13       0.248     0.784    0.567
+      37   1       0.208     0.852    0.333
+      40   4       0.285     0.770    0.712
+      44   1       0.499     0.875    0.977
+      51   1       0.209     0.860    0.300
+      61   1       0.415     0.794    0.617
+      62   4       0.249     0.777    0.443
+      64  12       0.268     0.825    0.362
+      66   2       0.106     0.862    0.492
+
 wrote runs/shapes/shapes.json

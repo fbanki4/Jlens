@@ -182,6 +182,9 @@ def main() -> None:
         rows["distractor_j"].append(
             np.mean([rj[d] for d in distractors], axis=0).tolist()
         )
+        rows["distractor_logit"].append(
+            np.mean([rl[d] for d in distractors], axis=0).tolist()
+        )
         rows["heldout"].append(it["heldout"])
         rows["ntok"].append(len(it["latent"].split()))
     arr = {k: np.array(v) for k, v in rows.items() if k not in ("heldout", "ntok")}
@@ -211,7 +214,12 @@ def main() -> None:
           f"logit-lens latent {np.median(best_l):.0f}")
     print(f"  latent in the lens top-3 somewhere in the band: "
           f"{(best_j <= 3).mean():.0%}  (logit lens {(best_l <= 3).mean():.0%})")
-    print(f"  latent outranks the mean distractor: {(best_j < best_d).mean():.0%}")
+    best_dl = arr["distractor_logit"][:, band_idx].min(axis=1)
+    print(f"  latent outranks the mean distractor: J-lens "
+          f"{(best_j < best_d).mean():.0%}, logit lens {(best_l < best_dl).mean():.0%}")
+    print(f"  specificity (median distractor rank / median latent rank) in band: "
+          f"J-lens {np.median(best_d) / max(np.median(best_j), 1):.1f}x, "
+          f"logit lens {np.median(best_dl) / max(np.median(best_l), 1):.1f}x")
     for name, sel in (("held-out subjects", heldout), ("trained subjects", ~heldout)):
         if sel.any():
             print(f"    {name:18s} n={sel.sum():3d}  latent top-3 "
@@ -285,6 +293,7 @@ def main() -> None:
         "median_rank_latent_jlens": np.median(arr["latent_j"], axis=0).tolist(),
         "median_rank_latent_logitlens": np.median(arr["latent_logit"], axis=0).tolist(),
         "median_rank_distractor_jlens": np.median(arr["distractor_j"], axis=0).tolist(),
+        "median_rank_distractor_logitlens": np.median(arr["distractor_logit"], axis=0).tolist(),
         "median_rank_answer_jlens": np.median(arr["answer_j"], axis=0).tolist(),
         "latent_top3_in_band": float((best_j <= 3).mean()),
         "latent_top3_logitlens": float((best_l <= 3).mean()),

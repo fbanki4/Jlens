@@ -24,8 +24,8 @@ def sh(*args: str) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--steps", type=int, default=8000)
-    ap.add_argument("--n-prompts", type=int, default=120)
+    ap.add_argument("--steps", type=int, default=4000)
+    ap.add_argument("--n-prompts", type=int, default=200)
     ap.add_argument("--skip-training", action="store_true")
     ap.add_argument(
         "--data-root",
@@ -45,8 +45,9 @@ def main() -> None:
         train(
             world,
             make_split(world),
-            model_cfg=ToyConfig(d_model=96, n_layers=12, n_heads=4),
-            train_cfg=TrainConfig(steps=args.steps, n_checkpoints=16, seq_len=48),
+            model_cfg=ToyConfig(d_model=96, n_layers=12, n_heads=6),
+            train_cfg=TrainConfig(steps=args.steps, n_checkpoints=16, seq_len=16,
+                                  batch_size=128),
             out_dir="runs/toy",
         )
 
@@ -61,10 +62,13 @@ def main() -> None:
     # 4. Open problem: untrained multi-token concept vectors.
     sh("experiments/e_phrase.py")
 
-    # 5. Open problem: when does the J-space form?
+    # 5. Open problem: is it more than a bag of concepts?
+    sh("experiments/e_structure.py")
+
+    # 6. Open problem: when does the J-space form?
     sh("experiments/e_form.py")
 
-    # 6. Open problem: what do the shapes indicate? (real open-model data)
+    # 7. Open problem: what do the shapes indicate? (real open-model data)
     if os.path.isdir(args.data_root):
         sh("experiments/e_shapes.py", "--data-root", args.data_root)
     else:

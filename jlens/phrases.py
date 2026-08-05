@@ -168,12 +168,15 @@ def fit_phrase_vectors(
     you what this direction disposes it to say in general.
     """
     encoded = {p: model.tokenizer.encode(p) for p in phrases}
+    longest = max((len(v) for v in encoded.values()), default=0)
     sums = {
         p: {l: torch.zeros(model.d_model) for l in source_layers} for p in phrases
     }
     counts = {p: 0 for p in phrases}
     for prompt_idx, prompt in enumerate(prompts):
-        ctx = model.encode(prompt, max_length=max_seq_len)
+        # The phrase is appended to the context, so the context has to leave
+        # room for it inside the model's position budget.
+        ctx = model.encode(prompt, max_length=max_seq_len - longest)
         if ctx.shape[1] <= skip_first + 1:
             continue
         for phrase in phrases:
@@ -215,7 +218,8 @@ def phrase_continuation_distributions(
     total = None
     used = 0
     for text in contexts:
-        ctx = model.encode(text, max_length=max_seq_len)
+        # Leave room for the phrase inside the model's position budget.
+        ctx = model.encode(text, max_length=max_seq_len - len(phrase_ids))
         if ctx.shape[1] < 2:
             continue
         full = torch.cat(

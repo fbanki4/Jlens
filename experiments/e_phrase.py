@@ -49,6 +49,7 @@ from jlens.phrases import (
 from jlens.toy.model import ToyLensModel, load_toy
 from jlens.toy.world import (
     COMPOSED_RELATIONS,
+    build_corpus,
     build_world,
     composed_prompt,
     filler_sentence,
@@ -62,37 +63,43 @@ from experiments.fit_toy_lens import fitting_corpus
 # ----------------------------------------------------------------------------
 
 
-def template_contexts(world, city: str, n: int, seed: int = 3) -> list[str]:
-    """Contexts ending exactly where ``city`` is the natural continuation.
+def build_context_index(world, split, n_sentences: int = 40_000, seed: int = 5):
+    """Mine the corpus for prefixes ending right where each phrase is next.
 
-    The paper's recipe: ask an LLM for passages whose natural continuation is
-    *w*, never using *w* itself, then average the residual at the final
-    position. Here the world supplies them directly — the model has memorised
-    ``<person> lives in <city>``, so any prefix ending in ``<person> lives in``
-    determines the city without naming it. Varying the preceding filler
-    sentence gives unlimited distinct contexts.
+    The paper's recipe asks an LLM for passages whose natural continuation is
+    *w*, never using *w* itself, then averages the residual at the final
+    position. Mining the model's own training distribution is the same thing
+    without the authoring step: scan the corpus, and every time *w* occurs,
+    keep the text before it.
 
-    This is the most favourable case the template lens can get: perfectly
-    on-distribution contexts, unlimited supply, no authoring noise. If the
-    untrained methods match it *here*, the authoring step was not buying
-    anything they lack.
+    Doing it this way keeps the comparison honest in both directions. The
+    template lens gets perfectly on-distribution contexts in unlimited supply
+    — the best case it could ask for — and it still needs this corpus pass per
+    phrase, which is the cost the untrained methods are trying to avoid.
     """
-    rng = random.Random(hash(city) % 10_000 + seed)
-    residents = [p for p, c in world.atomic["lives_in"].items() if c == city]
-    if not residents:
-        return []
-    out = []
-    for i in range(n):
-        person = residents[i % len(residents)]
-        prefix = filler_sentence(rng, world) if i >= len(residents) else ""
-        out.append(f"{prefix} {person} lives in".strip())
-    return out
+    corpus = [text for text, _ in build_corpus(world, split, n_sentences=n_sentences,
+                                               seed=seed)]
+    index: dict[str, list[str]] = defaultdict(list)
+    for text in corpus:
+        words = text.split()
+        for i, wd in enumerate(words):
+            if i == 0:
+                continue
+            index[wd].append(" ".join(words[:i]))
+            if i + 1 < len(words):
+                index[f"{wd} {words[i + 1]}"].append(" ".join(words[:i]))
+    return index
+
+
+def template_contexts(index, phrase: str, n: int) -> list[str]:
+    ctx = index.get(phrase, [])
+    return ctx[:n]
 
 
 @torch.no_grad()
 def template_vectors(
     model: ToyLensModel,
-    world,
+    index,
     phrases: list[str],
     layers: list[int],
     *,
@@ -112,8 +119,13 @@ def template_vectors(
         p: {l: [] for l in layers} for p in phrases
     }
     pooled: dict[int, list[torch.Tensor]] = {l: [] for l in layers}
+    usable = []
     for phrase in phrases:
-        for text in template_contexts(world, phrase, n_contexts):
+        contexts = template_contexts(index, phrase, n_contexts)
+        if not contexts:
+            continue
+        usable.append(phrase)
+        for text in contexts:
             ids = model.encode(text)
             with ActivationRecorder(model.layers, at=layers) as rec:
                 model.forward(ids)
@@ -122,14 +134,14 @@ def template_vectors(
                     per_phrase_acts[phrase][l].append(h)
                     pooled[l].append(h)
 
-    out: dict[str, dict[int, torch.Tensor]] = {p: {} for p in phrases}
+    out: dict[str, dict[int, torch.Tensor]] = {p: {} for p in usable}
     for l in layers:
         X = torch.stack(pooled[l])
         mu = X.mean(dim=0)
         Xc = X - mu
         Sigma = (Xc.T @ Xc) / max(len(X) - 1, 1)
         A = torch.linalg.inv(Sigma + ridge * torch.eye(Sigma.shape[0]))
-        for phrase in phrases:
+        for phrase in usable:
             mu_w = torch.stack(per_phrase_acts[phrase][l]).mean(dim=0)
             out[phrase][l] = A @ (mu_w - mu)
     return out
@@ -211,6 +223,12 @@ def main() -> None:
     print(f"workspace band for interventions: {band}")
 
     cities = list(world.entities["city"])
+    # Rank against every entity in the world, not just cities. With a 24-way
+    # choice every method scores ~95% and the comparison says nothing; the
+    # paper ranks against the whole vocabulary for the same reason. The pool
+    # includes the answer country and the subject, which are the competitors
+    # that actually matter.
+    candidates = sorted({e for group in world.entities.values() for e in group})
     corpus = fitting_corpus(args.n_corpus)
 
     # ---- build the five vector sets --------------------------------------
@@ -220,23 +238,26 @@ def main() -> None:
     methods: dict[str, dict[str, dict[int, torch.Tensor]]] = {}
     methods["first-token"] = {
         c: {l: first_token_vector(V_by_layer[l], tok.encode(c)) for l in lens.source_layers}
-        for c in cities
+        for c in candidates
     }
     methods["token-average"] = {
         c: {l: token_average_vector(V_by_layer[l], tok.encode(c)) for l in lens.source_layers}
-        for c in cities
+        for c in candidates
     }
     print("building template vectors (the trained-data reference) ...")
+    context_index = build_context_index(world, split)
     methods["template"] = template_vectors(
-        model, world, cities, lens.source_layers, n_contexts=30
+        model, context_index, candidates, lens.source_layers, n_contexts=30
     )
+    print(f"    template vectors available for "
+          f"{len(methods['template'])}/{len(candidates)} candidates")
     print("building phrase-Jacobian vectors (untrained) ...")
     methods["phrase-Jacobian"] = fit_phrase_vectors(
-        model, cities, corpus, lens.source_layers, max_seq_len=16, skip_first=1
+        model, candidates, corpus, lens.source_layers, max_seq_len=16, skip_first=1
     )
     print("building debiased-sum vectors (untrained) ...")
     methods["debiased-sum"] = build_debiased_vectors(
-        model, lens, cities, corpus[:12], lens.source_layers, max_seq_len=16
+        model, lens, candidates, corpus[:12], lens.source_layers, max_seq_len=16
     )
 
     # ---- items the model actually solves ---------------------------------
@@ -263,14 +284,15 @@ def main() -> None:
         length = len(item["latent"].split())
         for m, vecs in methods.items():
             best = min(
-                decode_rank({c: vecs[c][l] for c in cities}, item["latent"], acts[l])
+                decode_rank({c: vecs[c][l] for c in candidates if c in vecs},
+                            item["latent"], acts[l])
                 for l in band
             )
             per_method[m][length].append(best)
 
     print()
     print("=" * 78)
-    print("DECODE: rank of the true latent among all 24 candidate cities")
+    print(f"DECODE: rank of the true latent among all {len(candidates)} world entities")
     print("        (best over the workspace band; 1 = correct concept on top)")
     print("=" * 78)
     print(f"  {'method':17s} | {'1-token latent':>26s} | {'2-token latent':>26s}")
@@ -305,34 +327,47 @@ def main() -> None:
         )
         for item in items
     }
-    swap_summary = {}
-    for m, vecs in methods.items():
-        per_len = defaultdict(lambda: [0, 0])
-        follow = total = 0
-        for item in items:
-            target_city = targets[item["subject"]]
-            got = swap_with_vectors(
-                model, item["prompt"],
-                {l: vecs[item["latent"]][l] for l in band},
-                {l: vecs[target_city][l] for l in band},
-                band,
+    # Sweep where and how hard to intervene. This model finishes most of its
+    # computation early, so a band chosen by relative depth alone can land
+    # after the argument has already been consumed.
+    bands = {
+        "early L1-4": [l for l in lens.source_layers if 1 <= l <= 4],
+        "mid L4-8": band,
+        "all L1-10": [l for l in lens.source_layers if l >= 1],
+    }
+    swap_summary: dict[str, dict] = {}
+    for band_name, band_layers in bands.items():
+        print(f"\n  band {band_name} = {band_layers}")
+        for m, vecs in methods.items():
+            row = {}
+            for alpha in (1.0, 2.0, 4.0):
+                per_len = defaultdict(lambda: [0, 0])
+                follow = total = 0
+                for item in items:
+                    target_city = targets[item["subject"]]
+                    got = swap_with_vectors(
+                        model, item["prompt"],
+                        {l: vecs[item["latent"]][l] for l in band_layers},
+                        {l: vecs[target_city][l] for l in band_layers},
+                        band_layers, alpha=alpha,
+                    )
+                    total += 1
+                    hit = got == city_country[target_city]
+                    follow += hit
+                    key = len(item["latent"].split())
+                    per_len[key][1] += 1
+                    per_len[key][0] += hit
+                row[f"alpha{alpha}"] = {
+                    "n": total, "follow": follow, "rate": follow / max(total, 1),
+                    "by_length": {str(k): v for k, v in per_len.items()},
+                }
+            swap_summary[f"{m}|{band_name}"] = row
+            cells = "   ".join(
+                f"a={a.replace('alpha', '')}: {row[a]['rate']:5.1%} "
+                f"({'/'.join(f'{h / max(t, 1):.0%}' for _, (h, t) in sorted(row[a]['by_length'].items()))})"
+                for a in row
             )
-            total += 1
-            hit = got == city_country[target_city]
-            follow += hit
-            key = len(item["latent"].split())
-            per_len[key][1] += 1
-            per_len[key][0] += hit
-        swap_summary[m] = {
-            "n": total, "follow": follow,
-            "rate": follow / total if total else float("nan"),
-            "by_length": {str(k): v for k, v in per_len.items()},
-        }
-        detail = "  ".join(
-            f"{k}-tok {hit / tot:.0%}" for k, (hit, tot) in sorted(per_len.items()) if tot
-        )
-        print(f"  {m:17s}  follows the swap {follow}/{total} = "
-              f"{follow / max(total, 1):5.1%}   ({detail})")
+            print(f"    {m:17s} {cells}")
 
     with open(os.path.join(args.out, "phrase.json"), "w") as f:
         json.dump(

@@ -70,6 +70,27 @@ def explained_by(x: torch.Tensor, basis: torch.Tensor) -> float:
     return float((x.float() @ Q).pow(2).sum() / x.float().pow(2).sum().clamp_min(1e-12))
 
 
+def explained_by_random(x: torch.Tensor, dim: int, n_draws: int = 8) -> float:
+    """The matched-dimension chance level.
+
+    A ``dim``-dimensional subspace of ``d`` captures ``dim/d`` of a random
+    vector's energy on average, so a raw "explains 19%" number means nothing
+    until it is divided by this. It is the control the k-atom pursuit cannot
+    provide at this width: with 217 dictionary vectors in 96 dimensions, a
+    *random* dictionary reconstructs better than the real one, because the
+    real J-lens vectors are strongly anisotropic and 25 of them span less than
+    25 isotropic directions do. That comparison measures dimensionality, not
+    structure.
+    """
+    d = x.shape[0]
+    tot = 0.0
+    for i in range(n_draws):
+        g = torch.Generator().manual_seed(1000 + i)
+        Q, _ = torch.linalg.qr(torch.randn(d, dim, generator=g))
+        tot += float((x.float() @ Q).pow(2).sum() / x.float().pow(2).sum().clamp_min(1e-12))
+    return tot / n_draws
+
+
 def solves(model: ToyLensModel, prompt: str, answer: str) -> bool:
     with torch.no_grad():
         pred = int(model.unembed(model.forward(model.encode(prompt)))[0, -1].argmax())
@@ -152,8 +173,10 @@ def main() -> None:
                 1.0 - float(ctrl.residual.pow(2).sum() / e)
             )
             # the pure-bag model: just the two intermediates' own vectors
-            stats["latent"][l]["specific"].append(
-                explained_by(d, vecs(l, [latents[a], latents[b]]))
+            basis = vecs(l, [latents[a], latents[b]])
+            stats["latent"][l]["specific"].append(explained_by(d, basis))
+            stats["latent"][l]["chance"].append(
+                explained_by_random(d, basis.shape[0])
             )
 
     for city, pa, pb, _, _ in role_pairs:
@@ -168,42 +191,46 @@ def main() -> None:
             # the "concepts named in the two prompts" model: the relation verbs
             # and the two answers, which is everything a bag-of-concepts
             # readout could point at to distinguish these two prompts
-            stats["role"][l]["specific"].append(
-                explained_by(
-                    d,
-                    vecs(l, ["utters", "stands within",
+            basis = vecs(l, ["utters", "stands within",
                              world.composed_map("tongue")[city],
-                             world.composed_map("lies_within")[city]]),
-                )
-            )
+                             world.composed_map("lies_within")[city]])
+            stats["role"][l]["specific"].append(explained_by(d, basis))
+            stats["role"][l]["chance"].append(explained_by_random(d, basis.shape[0]))
 
     print()
     print("=" * 78)
     print("HOW MUCH OF EACH DIFFERENCE IS IN THE J-SPACE?")
     print("=" * 78)
-    print(f"  {'':11s} {'LATENT axis (same answer, diff. city)':>38s}   "
-          f"{'ROLE axis':>24s}")
-    print(f"  {'layer  rho':11s} {'k-atom':>9s} {'random':>9s} {'2 vecs':>9s}   "
-          f"{'k-atom':>7s} {'random':>7s} {'named':>7s}")
+    print(f"  {'':11s} {'LATENT axis (same answer, diff. city)':>40s}   "
+          f"{'ROLE axis (same latent, diff. relation)':>40s}")
+    print(f"  {'layer  rho':11s} {'2 vecs':>9s} {'chance':>9s} {'ratio':>9s}   "
+          f"{'4 vecs':>9s} {'chance':>9s} {'ratio':>9s}")
     for l in band:
         s_l, s_r = stats["latent"][l], stats["role"][l]
+        el, cl = np.mean(s_l['specific']), np.mean(s_l['chance'])
+        er, cr = np.mean(s_r['specific']), np.mean(s_r['chance'])
         print(f"  {l:5d} {l / (n_layers - 1):5.2f} "
-              f"{np.mean(s_l['jspace']):9.3f} {np.mean(s_l['random']):9.3f} "
-              f"{np.mean(s_l['specific']):9.3f}   "
-              f"{np.mean(s_r['jspace']):7.3f} {np.mean(s_r['random']):7.3f} "
-              f"{np.mean(s_r['specific']):7.3f}")
+              f"{el:9.3f} {cl:9.3f} {el / max(cl, 1e-9):8.1f}x   "
+              f"{er:9.3f} {cr:9.3f} {er / max(cr, 1e-9):8.1f}x")
 
     def band_mean(axis: str, key: str) -> float:
         return float(np.mean([np.mean(stats[axis][l][key]) for l in band]))
 
     print()
     print(f"  band averages")
-    print(f"    latent axis: {args.k}-atom J-lens {band_mean('latent', 'jspace'):.1%} "
-          f"(random {band_mean('latent', 'random'):.1%}), "
-          f"the two cities' own vectors alone {band_mean('latent', 'specific'):.1%}")
-    print(f"    role   axis: {args.k}-atom J-lens {band_mean('role', 'jspace'):.1%} "
-          f"(random {band_mean('role', 'random'):.1%}), "
-          f"the named tokens alone {band_mean('role', 'specific'):.1%}")
+    print(f"    latent axis: the two cities' own J-lens vectors explain "
+          f"{band_mean('latent', 'specific'):.1%} "
+          f"(chance {band_mean('latent', 'chance'):.1%}, "
+          f"{band_mean('latent', 'specific') / max(band_mean('latent', 'chance'), 1e-9):.1f}x)")
+    print(f"    role   axis: the named tokens' J-lens vectors explain "
+          f"{band_mean('role', 'specific'):.1%} "
+          f"(chance {band_mean('role', 'chance'):.1%}, "
+          f"{band_mean('role', 'specific') / max(band_mean('role', 'chance'), 1e-9):.1f}x)")
+    print()
+    print(f"    Neither axis is anywhere near fully accounted for: "
+          f"{1 - band_mean('latent', 'specific'):.0%} of the latent difference and "
+          f"{1 - band_mean('role', 'specific'):.0%} of the role difference lie")
+    print("    outside the directions a bag-of-concepts readout would name.")
 
     # ---- capacity ---------------------------------------------------------
     print()

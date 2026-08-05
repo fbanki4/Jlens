@@ -364,6 +364,33 @@ def main() -> None:
         print(f"  blockiness across the same runs:  "
               f"{blk.min():.3f}-{blk.max():.3f} (spread {np.ptp(blk):.3f})")
 
+    # ---- (5) does the shape track model depth? ---------------------------
+    print()
+    print("=" * 78)
+    print("(5) DOES THE SHAPE TRACK MODEL DEPTH?")
+    print("=" * 78)
+    depths = np.array([r["n_layers"] for r in records], dtype=float)
+    blk = np.array([r["blockiness"] for r in records])
+    coup = np.array([r["layer_coupling"] for r in records])
+    cut = np.array([
+        r["forced"]["k2"]["boundaries_rho"][0] if "k2" in r["forced"] else np.nan
+        for r in records
+    ])
+    ok = np.isfinite(cut)
+    print(f"  depth range {depths.min():.0f}-{depths.max():.0f} layers "
+          f"over {len(records)} matrices")
+    print(f"  corr(n_layers, blockiness)      {np.corrcoef(depths, blk)[0, 1]:+.3f}")
+    print(f"  corr(n_layers, layer_coupling)  {np.corrcoef(depths, coup)[0, 1]:+.3f}")
+    print(f"  corr(n_layers, forced-k=2 cut)  "
+          f"{np.corrcoef(depths[ok], cut[ok])[0, 1]:+.3f}")
+    print()
+    print(f"  {'depth':>6s} {'n':>3s} {'blockiness':>11s} {'coupling':>9s} {'k=2 cut':>8s}")
+    for d in sorted(set(depths)):
+        sel = depths == d
+        print(f"  {d:6.0f} {sel.sum():3d} {blk[sel].mean():11.3f} "
+              f"{coup[sel].mean():9.3f} "
+              f"{np.nanmean(cut[sel]) if np.isfinite(cut[sel]).any() else float('nan'):8.3f}")
+
     with open(os.path.join(args.out, "shapes.json"), "w") as f:
         json.dump(records, f, indent=2, default=float)
     print(f"\nwrote {args.out}/shapes.json")
