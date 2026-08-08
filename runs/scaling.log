@@ -1,0 +1,5 @@
+
+=== training d2_w96 (2 layers, width 96) ===
+  step      1  loss 5.3591  atomic 0.00  2hop train 0.00 held 0.00  (1s)
+  step     63  loss 1.9186  atomic 0.08  2hop train 0.24 held 0.08  (5s)
+  step   4000  loss 0.3002  atomic 1.00  2hop train 1.00 held 0.88  (170s)
