@@ -3,3 +3,12 @@
   step      1  loss 5.3591  atomic 0.00  2hop train 0.00 held 0.00  (1s)
   step     63  loss 1.9186  atomic 0.08  2hop train 0.24 held 0.08  (5s)
   step   4000  loss 0.3002  atomic 1.00  2hop train 1.00 held 0.88  (170s)
+/home/user/Jlens/jlens/cka.py:395: RuntimeWarning: Mean of empty slice
+  layer_coupling=float(C[iu, ju].mean()),
+/home/user/Jlens/.venv/lib/python3.11/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+  d2_w96: acc=0.97 spec=1.0x swap=0.000
+
+=== training d4_w96 (4 layers, width 96) ===
+  step      1  loss 5.3454  atomic 0.01  2hop train 0.00 held 0.00  (1s)
+  step     63  loss 1.9132  atomic 0.12  2hop train 0.10 held 0.04  (7s)

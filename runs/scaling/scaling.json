@@ -1,0 +1,25 @@
+[
+  {
+    "depth": 2,
+    "width": 96,
+    "params": 264864,
+    "seconds": 178.1,
+    "geometry": {
+      "n_blocks": 1,
+      "blockiness": 0.0,
+      "layer_coupling": NaN,
+      "boundaries_rho": [],
+      "pr_peak": 11.195952415466309,
+      "eff_dim_95_mid": 0.3958333333333333
+    },
+    "function": {
+      "heldout_accuracy": 0.96875,
+      "median_latent_rank": 1000000000.0,
+      "median_distractor_rank": 1000000000.0,
+      "specificity": 1.0,
+      "latent_beats_distractors_frac": 0.0,
+      "swap_n": 93,
+      "swap_follow_rate": 0.0
+    }
+  }
+]

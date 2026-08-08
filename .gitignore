@@ -5,3 +5,4 @@ runs/**/*.pt
 runs/**/*.ckpt
 runs/toy/
 runs/formation/lenses/
+runs/scaling/*/
