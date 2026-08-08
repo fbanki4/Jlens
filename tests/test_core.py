@@ -21,6 +21,8 @@ import numpy as np
 import torch
 from torch import nn
 
+from jlens.broadcast import broadcast_profile
+from jlens.capacity import CapacityCurve, _first_token_id
 from jlens.cka import best_segmentation, blockiness_of, linear_cka, segment_blocks
 from jlens.fitting import (
     delta_jacobian_for_prompt,
@@ -36,6 +38,12 @@ from jlens.jspace import (
     swap_coordinates,
 )
 from jlens.lens import JacobianLens
+from jlens.scaling import (
+    collapse_test,
+    compare_power_laws,
+    fit_broken_power_law,
+    fit_power_law,
+)
 
 
 # ----------------------------------------------------------------------------
@@ -284,6 +292,144 @@ def test_valid_position_mask() -> None:
     print("  ok  position mask excludes sinks and the final position")
 
 
+def test_broadcast_ratio_matches_closed_form() -> None:
+    """The causal broadcast ratio must equal ``||Mu|| / mean_i ||Mr_i||``.
+
+    On the position-local linear stack a perturbation ``δ`` injected at the last
+    position of layer ``l`` arrives at downstream block ``k`` as exactly
+    ``M δ``, and nothing else in the sequence moves. So the reach — the ratio at
+    the deepest block — has a closed form, and because the control directions
+    come from a seeded generator in a known order they can be replayed exactly.
+
+    This pins the part that is easy to get quietly wrong: whether the
+    normalisation really cancels, leaving a ratio that means "how much further
+    than matched noise" rather than "how big was my perturbation".
+    """
+    model = LinearStack(d=8, n_layers=4)
+    prompt = _prompt(12)
+    M = model.true_jacobian(0)  # source layer 0 -> final block
+    u = torch.randn(8, generator=torch.Generator().manual_seed(3))
+
+    n_controls = 8
+    prof = broadcast_profile(
+        model, u, 0, [prompt], n_controls=n_controls, max_seq_len=12,
+        generator=torch.Generator().manual_seed(7),
+    )
+
+    replay = torch.Generator().manual_seed(7)
+    num = (M @ (u / u.norm())).norm()
+    den = np.mean([
+        float((M @ (r / r.norm())).norm())
+        for r in (torch.randn(8, generator=replay) for _ in range(n_controls))
+    ])
+    expected = float(num) / den
+    assert abs(prof.reach - expected) < 1e-4, (prof.reach, expected)
+
+    # A direction the network amplifies must out-reach one it attenuates.
+    _, _, Vh = torch.linalg.svd(M)
+    kw = dict(prompts=[prompt], n_controls=4, max_seq_len=12)
+    top = broadcast_profile(model, Vh[0], 0,
+                            generator=torch.Generator().manual_seed(1), **kw)
+    bot = broadcast_profile(model, Vh[-1], 0,
+                            generator=torch.Generator().manual_seed(1), **kw)
+    assert top.reach > 1.0 > bot.reach, (top.reach, bot.reach)
+    print(f"  ok  broadcast ratio matches closed form (reach {prof.reach:.4f}, "
+          f"top/bottom singular {top.reach:.2f}/{bot.reach:.2f})")
+
+
+def test_eviction_separates_decay_from_eviction() -> None:
+    """A uniform dimming must not be reported as a bottleneck.
+
+    Two curves with the *same* eviction slope: in the first only the earliest
+    item decays, in the second every item decays together. Selectivity is the
+    only thing that tells them apart, and it is the difference between "the
+    workspace evicts" and "the readout gets noisier with longer prompts".
+    """
+    lengths = [1, 2, 3, 4, 6, 8]
+    n = np.array(lengths, float)
+    first = np.exp(0.3 * n)
+
+    def curve(all_item):
+        return CapacityCurve(lengths, first, all_item, {}, np.full(len(n), 1e3))
+
+    evicting = curve(np.full(len(n), np.e))          # average flat
+    dimming = curve(np.exp(0.3 * n))                 # average falls identically
+
+    assert abs(evicting.eviction_slope - 0.3) < 1e-9
+    assert abs(evicting.selectivity - 0.3) < 1e-9
+    assert abs(dimming.eviction_slope - 0.3) < 1e-9
+    assert abs(dimming.selectivity) < 1e-9, dimming.selectivity
+
+    flat = CapacityCurve(lengths, np.full(len(n), 5.0), np.full(len(n), 5.0),
+                         {}, np.full(len(n), 1e3))
+    assert abs(flat.eviction_slope) < 1e-9
+    print("  ok  eviction slope separates selective eviction from uniform decay")
+
+
+def test_first_token_id_skips_bos() -> None:
+    """Every item's first token being BOS would flatten the capacity curve."""
+
+    class BosTokenizer:
+        def encode(self, text, add_special_tokens=True):
+            ids = [ord(c) for c in text]
+            return [0] + ids if add_special_tokens else ids
+
+    assert _first_token_id(BosTokenizer(), "ab") == ord("a")
+
+    class NoKwargTokenizer:
+        def encode(self, text):
+            return [ord(c) for c in text]
+
+    assert _first_token_id(NoKwargTokenizer(), "ab") == ord("a")
+    assert _first_token_id(NoKwargTokenizer(), "") is None
+    print("  ok  first-token lookup avoids the BOS that would flatten the curve")
+
+
+def test_power_law_comparison_on_planted_data() -> None:
+    """Smooth data must not yield a break; planted breaks must be located.
+
+    The bootstrap is the point of the exercise: the naive nested F-test does not
+    price the breakpoint search, so it calls breaks on smooth data. Both
+    branches are checked, because a test that only confirms breaks are found
+    would pass on a procedure that finds them everywhere.
+    """
+    rng = np.random.default_rng(0)
+    x = np.logspace(2, 6, 40)
+
+    smooth_y = 10 ** (1.0 + 0.5 * np.log10(x) + rng.normal(0, 0.03, len(x)))
+    fit = fit_power_law(x, smooth_y)
+    assert abs(fit.slope - 0.5) < 0.05, fit.slope
+    res = compare_power_laws(x, smooth_y, n_boot=200, seed=1)
+    assert res["verdict"] == "smooth power law not rejected", res["verdict"]
+
+    lx = np.log10(x)
+    b = 4.0
+    broken_y = 10 ** (1.0 + np.where(lx < b, 0.05 * (lx - b), 0.9 * (lx - b))
+                      + rng.normal(0, 0.03, len(x)))
+    bf = fit_broken_power_law(x, broken_y)
+    assert abs(np.log10(bf.breakpoint) - b) < 0.35, bf.breakpoint
+    res = compare_power_laws(x, broken_y, n_boot=200, seed=1)
+    assert res["verdict"] == "break justified", res
+    lo, hi = res["breakpoint_ci95"]
+    assert lo <= 10**b <= hi, (lo, 10**b, hi)
+    print(f"  ok  break test: smooth data clean, planted break found at "
+          f"{bf.breakpoint:.3g} (CI {lo:.3g}-{hi:.3g})")
+
+
+def test_collapse_picks_the_generating_axis() -> None:
+    """The collapse test must name the axis the data was actually made from."""
+    rng = np.random.default_rng(2)
+    params = np.repeat([1e7, 1e8, 1e9], 8).astype(float)
+    tokens = np.tile(np.logspace(8, 11, 8), 3)
+    compute = 6 * params * tokens
+    y = 10 ** (-3 + 0.2 * np.log10(compute) + rng.normal(0, 0.02, len(compute)))
+    out = collapse_test(y, {"compute": compute, "params": params, "tokens": tokens})
+    assert out["best"] == "compute", out
+    assert out["compute"]["r2"] > 0.99, out["compute"]
+    print(f"  ok  collapse test picks the generating axis "
+          f"(compute r2 {out['compute']['r2']:.3f})")
+
+
 def main() -> None:
     torch.set_num_threads(2)
     tests = [
@@ -297,6 +443,11 @@ def main() -> None:
         test_segmentation_finds_planted_blocks,
         test_cka_basic_properties,
         test_participation_ratio_bounds,
+        test_broadcast_ratio_matches_closed_form,
+        test_eviction_separates_decay_from_eviction,
+        test_first_token_id_skips_bos,
+        test_power_law_comparison_on_planted_data,
+        test_collapse_picks_the_generating_axis,
     ]
     print(f"running {len(tests)} tests\n")
     for t in tests:
