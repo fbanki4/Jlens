@@ -21,5 +21,51 @@
       "swap_n": 93,
       "swap_follow_rate": 0.0
     }
+  },
+  {
+    "depth": 4,
+    "width": 96,
+    "params": 486432,
+    "seconds": 314.6,
+    "geometry": {
+      "n_blocks": 1,
+      "blockiness": 0.0,
+      "layer_coupling": 0.9851966324140132,
+      "boundaries_rho": [],
+      "pr_peak": 9.190815925598145,
+      "eff_dim_95_mid": 0.3645833333333333
+    },
+    "function": {
+      "heldout_accuracy": 1.0,
+      "median_latent_rank": 9.0,
+      "median_distractor_rank": 127.0,
+      "specificity": 14.11111111111111,
+      "latent_beats_distractors_frac": 1.0,
+      "swap_n": 96,
+      "swap_follow_rate": 0.0
+    }
+  },
+  {
+    "depth": 8,
+    "width": 96,
+    "params": 929568,
+    "seconds": 557.0,
+    "geometry": {
+      "n_blocks": 1,
+      "blockiness": 0.0,
+      "layer_coupling": 0.9838464968634414,
+      "boundaries_rho": [],
+      "pr_peak": 8.235427856445312,
+      "eff_dim_95_mid": 0.3958333333333333
+    },
+    "function": {
+      "heldout_accuracy": 1.0,
+      "median_latent_rank": 2.0,
+      "median_distractor_rank": 47.0,
+      "specificity": 23.5,
+      "latent_beats_distractors_frac": 1.0,
+      "swap_n": 96,
+      "swap_follow_rate": 0.09375
+    }
   }
 ]

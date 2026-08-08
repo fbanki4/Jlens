@@ -384,6 +384,10 @@ def segment_blocks(
         k = min(per_k, key=lambda kk: (-per_k[kk]["penalized"], kk))
     seg = per_k[k]["segments"]
     iu, ju = np.triu_indices(L, k=1)
+    # A one-layer matrix has no off-diagonal pairs; np.mean of an empty slice
+    # warns and returns NaN. Report it as NaN deliberately instead — coupling
+    # between layers is undefined when there is only one.
+    coupling = float(C[iu, ju].mean()) if len(iu) else float("nan")
     return BlockResult(
         n_blocks=int(k),
         segments=seg,
@@ -392,7 +396,7 @@ def segment_blocks(
         blockiness=per_k[k]["blockiness"],
         mean_within=per_k[k]["mean_within"],
         mean_between=per_k[k]["mean_between"],
-        layer_coupling=float(C[iu, ju].mean()),
+        layer_coupling=coupling,
         selection_curve={
             kk: {"blockiness": v["blockiness"], "penalized": v["penalized"]}
             for kk, v in per_k.items()
