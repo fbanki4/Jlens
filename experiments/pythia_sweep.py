@@ -61,7 +61,12 @@ Usage::
     pip install torch transformers
     python experiments/pythia_sweep.py --sizes 70m,160m,410m \\
         --steps 0,1,2,4,8,16,32,64,128,256,512,1000,4000,16000,64000,143000 \\
-        --stage ignition --out runs/pythia
+        --purge --out runs/pythia
+
+No GPU and no HuggingFace account are required for that command. Pythia is
+ungated; the ignition stage is forward passes only, and pythia-410m takes
+about two minutes per checkpoint on four CPU cores. ``--purge`` deletes each
+checkpoint after measuring so peak disk stays at one model.
 """
 
 from __future__ import annotations
@@ -129,23 +134,57 @@ def concept_index(tokenizer, prompt_a: str, prompt_b: str) -> int | None:
     return None
 
 
-def load_pythia(size: str, step: int, dtype: str = "float32", device: str = "cuda"):
+def pick_device(requested: str) -> str:
+    if requested != "auto":
+        return requested
+    return "cuda" if torch.cuda.is_available() else "cpu"
+
+
+def load_pythia(size: str, step: int, dtype: str = "float32", device: str = "cpu"):
+    """Load one (size, checkpoint) pair.
+
+    Pythia is ungated and public: no HuggingFace account, token or payment is
+    needed to download it. ``revision="step{N}"`` selects the checkpoint.
+    """
     import transformers
 
     name = f"EleutherAI/pythia-{size}"
-    revision = f"step{step}"
     hf = transformers.AutoModelForCausalLM.from_pretrained(
-        name, revision=revision, dtype=getattr(torch, dtype)
+        name, revision=f"step{step}", dtype=getattr(torch, dtype)
     ).to(device).eval()
-    tok = transformers.AutoTokenizer.from_pretrained(name, revision=revision)
+    tok = transformers.AutoTokenizer.from_pretrained(name, revision=f"step{step}")
     return hf, tok
+
+
+def purge_cache(size: str, step: int) -> None:
+    """Delete one checkpoint's snapshot from the HF cache.
+
+    Sixteen checkpoints of pythia-410m is ~26 GB in fp32. Measuring then
+    deleting keeps peak disk at one model regardless of how long the sweep is,
+    which is what makes this runnable on a laptop.
+    """
+    import shutil
+
+    from huggingface_hub import scan_cache_dir
+
+    try:
+        cache = scan_cache_dir()
+    except Exception:
+        return
+    for repo in cache.repos:
+        if repo.repo_id != f"EleutherAI/pythia-{size}":
+            continue
+        for rev in repo.revisions:
+            if f"step{step}" in rev.refs:
+                shutil.rmtree(rev.snapshot_path, ignore_errors=True)
 
 
 def run_ignition(size: str, step: int, args) -> dict:
     import jlens
     from jlens.ignition import ignition_sweep
 
-    hf, tok = load_pythia(size, step, args.dtype, args.device)
+    device = pick_device(args.device)
+    hf, tok = load_pythia(size, step, args.dtype, device)
     model = jlens.from_hf(hf, tok)
     trials = build_trials(tok, args.n_trials)
     if not trials:
@@ -168,8 +207,10 @@ def run_ignition(size: str, step: int, args) -> dict:
         "concept_position": pos, "n_trials_used": len(trials),
     })
     del hf, model
-    if args.device == "cuda":
+    if device == "cuda":
         torch.cuda.empty_cache()
+    if args.purge:
+        purge_cache(size, step)
     return out
 
 
@@ -184,7 +225,13 @@ def main() -> None:
     ap.add_argument("--n-alphas", type=int, default=21)
     ap.add_argument("--n-trials", type=int, default=40)
     ap.add_argument("--dtype", default="float32")
-    ap.add_argument("--device", default="cuda")
+    ap.add_argument("--device", default="auto",
+                    help="auto picks cuda when available, else cpu. The "
+                         "ignition stage is forward-passes only: pythia-410m "
+                         "takes ~2 min for 40 trials on four CPU cores.")
+    ap.add_argument("--purge", action="store_true",
+                    help="delete each checkpoint from the HF cache after "
+                         "measuring it, so peak disk stays at one model")
     ap.add_argument("--out", default="runs/pythia")
     args = ap.parse_args()
 
