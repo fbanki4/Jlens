@@ -38,11 +38,18 @@ from jlens.jspace import (
     swap_coordinates,
 )
 from jlens.lens import JacobianLens
+from jlens.lenscontrol import (
+    FittingBudget,
+    capacity_controlled_geometry,
+    lens_fidelity,
+    matched_depth_layers,
+)
 from jlens.scaling import (
     collapse_test,
     compare_power_laws,
     fit_broken_power_law,
     fit_power_law,
+    partial_correlation,
 )
 
 
@@ -430,6 +437,125 @@ def test_collapse_picks_the_generating_axis() -> None:
           f"(compute r2 {out['compute']['r2']:.3f})")
 
 
+def test_matched_depth_layers_are_shape_matched() -> None:
+    """Models of different depths must yield the same number of probe layers.
+
+    Otherwise every layer-resolved statistic is computed on a differently sized
+    matrix, and a claim about depth is partly a claim about matrix size.
+    """
+    for n_layers in (6, 12, 24, 36):
+        layers, rho = matched_depth_layers(n_layers, 5)
+        assert len(layers) == 5, (n_layers, layers)
+        assert len(set(layers)) == len(layers)
+        assert layers == sorted(layers)
+        assert layers[0] == 0 and layers[-1] <= n_layers - 2
+        assert 0.0 <= rho[0] < rho[-1] <= 1.0
+
+    # Too shallow to honour the request: report fewer rather than inventing.
+    short, _ = matched_depth_layers(3, 5)
+    assert len(short) < 5, short
+    print("  ok  probe layers are shape-matched across depths 6..36")
+
+
+def test_budget_fingerprint_catches_a_changed_budget() -> None:
+    """Two runs under different budgets must not hash the same."""
+    base = FittingBudget()
+    assert FittingBudget().fingerprint() == base.fingerprint()
+    for changed in (
+        FittingBudget(n_prompts=base.n_prompts + 1),
+        FittingBudget(max_seq_len=base.max_seq_len * 2),
+        FittingBudget(skip_first=base.skip_first + 1),
+        FittingBudget(n_probe_layers=base.n_probe_layers + 1),
+        FittingBudget(n_probe_tokens=base.n_probe_tokens + 1),
+    ):
+        assert changed.fingerprint() != base.fingerprint(), changed
+    # Samples per entry, not prompts, is what fixes estimation noise, so
+    # sequence length has to move it.
+    assert FittingBudget(max_seq_len=256).samples_per_entry > base.samples_per_entry
+    print("  ok  budget fingerprint changes with every budget field")
+
+
+def test_capacity_control_shrinks_the_width_confound() -> None:
+    """The same latent structure in a wider ambient space must not read as more.
+
+    A rank-``k`` dictionary embedded in 32 and in 96 dimensions holds the same
+    amount; raw participation ratio still reports more for the wider one, which
+    is exactly how a scale sweep talks itself into "bigger models have bigger
+    workspaces". The controlled statistic has to shrink that gap.
+    """
+    def build(d: int) -> torch.Tensor:
+        g = torch.Generator().manual_seed(0)
+        B = torch.randn(8, d, generator=g)
+        W = torch.randn(200, 8, generator=g)
+        return W @ B + 0.05 * torch.randn(200, d, generator=g)
+
+    narrow = capacity_controlled_geometry(build(32), d_ref=24, seed=1)
+    wide = capacity_controlled_geometry(build(96), d_ref=24, seed=1)
+
+    def gap(a, b):
+        return abs(a - b) / max(abs(a), abs(b))
+
+    raw_gap = gap(narrow["participation_ratio"], wide["participation_ratio"])
+    ctl_gap = gap(narrow["projected_pr_ratio"], wide["projected_pr_ratio"])
+    assert ctl_gap < raw_gap, (raw_gap, ctl_gap)
+    assert narrow["d_ref"] == wide["d_ref"] == 24
+    print(f"  ok  width confound shrinks under control ({raw_gap:.1%} -> "
+          f"{ctl_gap:.1%} across a 3x width change)")
+
+
+def test_lens_fidelity_beats_the_logit_lens_where_it_should() -> None:
+    """The instrument check must be able to tell a live lens from a dead one.
+
+    On the linear stack the true Jacobian is known, so a lens holding it must
+    reconstruct the final logits *exactly* (r = 1) and beat the logit lens. A
+    lens holding zeros is the degenerate case an early checkpoint produces, and
+    must report no advantage — that is the signal that suppresses geometry
+    claims from a rung where the transport bought nothing.
+    """
+    model = LinearStack(d=8, n_layers=4)
+    prompts = [_prompt(20), _prompt(22)]
+    layers = [0, 1, 2]
+
+    exact = JacobianLens(
+        {l: model.true_jacobian(l) for l in layers}, n_prompts=1, d_model=8
+    )
+    fid = lens_fidelity(model, exact, prompts, max_seq_len=22)
+    assert np.allclose(fid.jlens_r, 1.0, atol=1e-5), fid.jlens_r
+    assert fid.advantage > 0.0, fid.advantage
+
+    dead = JacobianLens(
+        {l: torch.zeros(8, 8) for l in layers}, n_prompts=1, d_model=8
+    )
+    dead_fid = lens_fidelity(model, dead, prompts, max_seq_len=22)
+    assert not (dead_fid.advantage > 0), dead_fid.advantage
+    print(f"  ok  lens fidelity separates an exact lens (advantage "
+          f"{fid.advantage:+.3f}) from a dead one ({dead_fid.advantage:+.3f})")
+
+
+def test_partial_correlation_reports_full_explanation_as_zero() -> None:
+    """A measure that is entirely the covariate must read 0, not NaN.
+
+    This is the whole point of the instrument control, and it is the case where
+    the residual collapses — so the naive guard returns NaN and hides the
+    finding behind a missing value. The genuinely undefined case (covariate
+    collinear with x) still has to return NaN.
+    """
+    rng = np.random.default_rng(0)
+    x = np.linspace(18, 24, 20)
+    z = 0.3 * (x - 18) / 6 + rng.normal(0, 0.02, 20)
+
+    pure = partial_correlation(2.0 * z, x, {"z": z})
+    assert pure["partial"] == 0.0 and abs(pure["raw"]) > 0.9, pure
+    assert "note" in pure
+
+    real = partial_correlation(2.0 * z + 0.5 * x + rng.normal(0, 0.01, 20), x, {"z": z})
+    assert abs(real["partial"]) > 0.9, real
+
+    collinear = partial_correlation(rng.normal(0, 1, 20), x, {"x_again": x})
+    assert np.isnan(collinear["partial"]) and "note" in collinear, collinear
+    print("  ok  partial correlation: full explanation reads 0, collinear reads NaN")
+
+
 def main() -> None:
     torch.set_num_threads(2)
     tests = [
@@ -448,6 +574,11 @@ def main() -> None:
         test_first_token_id_skips_bos,
         test_power_law_comparison_on_planted_data,
         test_collapse_picks_the_generating_axis,
+        test_matched_depth_layers_are_shape_matched,
+        test_budget_fingerprint_catches_a_changed_budget,
+        test_capacity_control_shrinks_the_width_confound,
+        test_lens_fidelity_beats_the_logit_lens_where_it_should,
+        test_partial_correlation_reports_full_explanation_as_zero,
     ]
     print(f"running {len(tests)} tests\n")
     for t in tests:

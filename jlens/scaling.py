@@ -276,6 +276,85 @@ def metric_robustness(x, y, transforms: dict | None = None, **kw) -> dict:
     return out
 
 
+def partial_correlation(y, x, covariates) -> dict:
+    """Does ``y`` still track ``x`` once the covariates are regressed out?
+
+    Built for one specific job: the J-lens is fitted per model, so lens quality
+    varies across a scale sweep and is itself correlated with scale. "Workspace
+    structure grows with compute" and "the instrument gets better with compute"
+    produce the same raw correlation. Passing lens fidelity (see
+    :func:`jlens.lenscontrol.lens_fidelity`) as a covariate answers whether the
+    relationship survives.
+
+    Both sides are residualised against the covariates — regressing only ``y``
+    would leave the shared component in ``x`` and understate the shrinkage.
+
+    Args:
+        covariates: ``{name: values}``, e.g. ``{"lens_advantage": [...]}``.
+
+    Returns:
+        ``raw`` (before control), ``partial`` (after), ``shrinkage``, ``n``, the
+        share of each side's variance the covariates absorbed, and a ``note``
+        when a residual collapsed. A partial correlation near zero with a large
+        raw one means the covariate explained the effect.
+
+        The fully-explained case is reported as ``partial = 0``, not as
+        undefined. It is the strongest possible version of the result the
+        control exists to find — the covariate absorbed the measure entirely,
+        so nothing is left for ``x`` to explain — and returning ``nan`` there
+        would hide the finding behind a missing value. The genuinely undefined
+        case is a covariate collinear with ``x`` itself, which leaves no
+        independent variation to attribute; that one does return ``nan``.
+    """
+    y = np.asarray(y, float)
+    x = np.asarray(x, float)
+    names = list(covariates)
+    Z = np.column_stack([np.asarray(covariates[n], float) for n in names]) if names \
+        else np.zeros((len(y), 0))
+    ok = np.isfinite(y) & np.isfinite(x) & (
+        np.isfinite(Z).all(axis=1) if Z.shape[1] else True
+    )
+    y, x, Z = y[ok], x[ok], Z[ok]
+    n = len(y)
+    if n < Z.shape[1] + 3:
+        return {"error": f"need >= {Z.shape[1] + 3} complete rows, got {n}", "n": n}
+    if np.std(x) <= 0 or np.std(y) <= 0:
+        return {"error": "x or y is constant", "n": n}
+
+    raw = float(np.corrcoef(x, y)[0, 1])
+    A = np.column_stack([np.ones(n), Z])
+    rx = x - A @ np.linalg.lstsq(A, x, rcond=None)[0]
+    ry = y - A @ np.linalg.lstsq(A, y, rcond=None)[0]
+    # Relative, because an absolute threshold on the residual would depend on
+    # the units the measure happens to be reported in.
+    frac_x = float(np.std(rx) / np.std(x))
+    frac_y = float(np.std(ry) / np.std(y))
+
+    note = ""
+    if frac_x < 1e-6:
+        partial, note = float("nan"), (
+            "covariates are collinear with x; no independent variation left "
+            "to attribute"
+        )
+    elif frac_y < 1e-6:
+        partial, note = 0.0, "covariates explain y entirely"
+    else:
+        partial = float(np.corrcoef(rx, ry)[0, 1])
+
+    out = {
+        "raw": raw,
+        "partial": partial,
+        "shrinkage": abs(raw) - abs(partial),
+        "residual_frac_x": frac_x,
+        "residual_frac_y": frac_y,
+        "covariates": names,
+        "n": n,
+    }
+    if note:
+        out["note"] = note
+    return out
+
+
 def collapse_test(y, axes: dict) -> dict:
     """Which axis do the measurements collapse onto?
 

@@ -58,7 +58,10 @@ def sample_probe_ids(vocab_size: int, n: int = N_PROBE_IDS, seed: int = PROBE_SE
 
 @torch.no_grad()
 def build_probe(
-    model: LensModel, token_ids: np.ndarray | torch.Tensor | None = None
+    model: LensModel,
+    token_ids: np.ndarray | torch.Tensor | None = None,
+    *,
+    n_ids: int = N_PROBE_IDS,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Build ``P`` by pushing the identity through the model's own unembedding.
 
@@ -74,6 +77,12 @@ def build_probe(
     geometry on a large fraction of open models, because ``gamma`` is often
     wildly anisotropic.
 
+    Args:
+        n_ids: How many rows to sample when ``token_ids`` is ``None``. Note the
+            vocabulary size is read off the *model*, not the tokenizer — the
+            two differ on models whose embedding is padded (Pythia among them),
+            and sampling against the tokenizer would then miss legal outputs.
+
     Returns:
         ``(P [n_ids, d_model], token_ids)``.
     """
@@ -81,7 +90,7 @@ def build_probe(
     d = model.d_model
     W = model.unembed(torch.eye(d, device=device)).float().cpu().T  # [vocab, d]
     if token_ids is None:
-        token_ids = sample_probe_ids(W.shape[0])
+        token_ids = sample_probe_ids(W.shape[0], n_ids)
     ids = torch.as_tensor(np.asarray(token_ids), dtype=torch.long)
     return W[ids].contiguous(), ids
 
