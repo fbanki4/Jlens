@@ -39,6 +39,83 @@ python experiments/pythia_sweep.py \
     --purge --out runs/pythia
 ```
 
+## Stage 2, the lens stage
+
+This one wants a GPU, and the reason is structural rather than incidental.
+Fitting `J_l` costs `ceil(d_model / dim_batch)` backward passes **per prompt**,
+each on a batch of `dim_batch` replicas of the sequence. Total backward work is
+therefore about `n_prompts × d_model` sequence-backwards — independent of
+`dim_batch`, which only trades memory for wall-clock.
+
+At the defaults (16 prompts) that is ~8k sequence-backwards for pythia-70m and
+~16k for pythia-410m, per checkpoint. On four CPU cores that is hours per
+checkpoint; on a rented 3090 it is minutes. Run stage 1 on your laptop, then
+move stage 2 to a GPU:
+
+```bash
+python experiments/pythia_sweep.py --stage lens \
+    --sizes 70m,160m,410m --steps 0,16,512,4000,64000,143000 \
+    --purge --out runs/pythia
+
+python experiments/pythia_sweep.py --stage report --out runs/pythia
+```
+
+Fewer checkpoints than stage 1 on purpose — stage 2 exists to *agree or
+disagree* with the lens-free curve at a handful of points, not to re-measure
+it.
+
+### Read the instrument column first
+
+The sweep prints lens fidelity before it prints any result:
+
+```
+   size    step  lens r  vs logit  blockiness  PR ratio
+    70m       0   0.200    +0.000       0.200     0.307  <- lens dead
+    70m     512   0.230    +0.030       0.215     0.319
+```
+
+`vs logit` is the J-lens's margin over the plain logit lens. Where it is zero,
+the fitted transport bought nothing, and every geometry number on that row is
+describing the instrument rather than the model. Those rows are excluded from
+the controlled fits and flagged in the JSON.
+
+This matters because the lens gets better with scale on its own. The report
+prints how strongly, and then regresses it out:
+
+```
+                 measure   raw r  partial r  shrinkage  left of y
+              blockiness  +0.974     +0.000     +0.974      0.0%
+```
+
+That is the failure mode, caught: a raw correlation of +0.97 with compute that
+survives none of the control. Nothing about the workspace, everything about the
+lens warming up. A real effect looks like `+0.999 → +0.994` instead.
+
+The comparison only means anything if every rung was measured the same way, so
+the budget (prompt count, sequence length, probe layers, probe tokens) is
+hashed into every row and the sweep **refuses** to append rows fitted under a
+different budget. If you change `--lens-prompts` mid-sweep, write to a new
+`--out`.
+
+## The two GWT signatures
+
+Separate from the scale sweep, and runnable on the toy model with no downloads:
+
+```bash
+python experiments/e_gwt_signatures.py
+```
+
+**Broadcast breadth** perturbs along a J-lens direction and measures how far the
+disturbance actually travels, as a ratio against a random direction of identical
+norm injected at the same place. 1.0 means "reaches exactly as far as noise of
+the same size". The paper's version is weight-space alignment, which cannot
+distinguish a direction a component reads from one it merely points at.
+
+**The bottleneck** asks whether contents *compete* — hold `n` items, then `n+1`,
+and see whether the first gets pushed out. Reported as an eviction slope plus a
+selectivity, because a readout that dims uniformly as the prompt grows produces
+the same slope without evicting anything.
+
 ## If you want to go bigger
 
 Roughly in order of "free" to "cheap":
@@ -52,9 +129,9 @@ Roughly in order of "free" to "cheap":
 | Vast.ai / RunPod | ~$0.20–0.40/hr for a 3090/4090/A40 | the full 70m–2.8b grid |
 
 Renting is genuinely cheap here: the full ignition grid up to 2.8b is a couple
-of GPU-hours, i.e. **well under a dollar** on a spot 3090. The lens-fitting
-stage is the expensive one (it needs `d_model / dim_batch` backward passes per
-prompt), and that is the stage to move to a rented GPU — not this one.
+of GPU-hours, i.e. **well under a dollar** on a spot 3090. Stage 2 is the
+expensive one, for the reason above, and that is the stage to move to a rented
+GPU — not this one.
 
 ## Colab, copy-paste
 
@@ -63,6 +140,13 @@ prompt), and that is the stage to move to a rented GPU — not this one.
 !git clone -q https://github.com/fbanki4/Jlens && cd Jlens && git checkout -q claude/j-lens-jspace-learning-47fsd0
 %cd Jlens
 !python experiments/pythia_sweep.py --sizes 70m,160m --steps 0,1,2,4,8,16,32,64,128,256,512,1000,4000,16000,64000,143000 --purge
+```
+
+With a GPU runtime attached, add stage 2 and the report:
+
+```python
+!python experiments/pythia_sweep.py --stage lens --sizes 70m,160m --steps 0,16,512,4000,64000,143000 --purge
+!python experiments/pythia_sweep.py --stage report
 ```
 
 ## What you are looking for

@@ -26,22 +26,30 @@ jlens/
   jspace.py     sparse non-negative decomposition, occupancy, steer/ablate/swap
   cka.py        probe, V_l = P·J_l, linear CKA, block segmentation
   phrases.py    multi-token concepts without training anything
+  ignition.py   the ambiguity sweep — a workspace measure that uses no lens
+  broadcast.py  causal broadcast breadth, against matched-norm noise
+  capacity.py   the bottleneck: does an N+1th item evict the first?
+  scaling.py    smooth vs broken power law, with the breakpoint search priced in
+  lenscontrol.py  keeps a per-model instrument out of a cross-model result
   vis.py        self-contained layer × position slice viewer
   hf.py         HuggingFace adapter — run all of the above on a real open model
   toy/          a relational world + trainable small transformer (CPU, no downloads)
 
 experiments/
-  fit_toy_lens.py   fit a lens on a toy checkpoint
-  e_multihop.py     does the lens surface an unverbalized intermediate, and steer?
-  e_phrase.py       untrained vs trained multi-token concept vectors
-  e_form.py         when does the J-space form, relative to the capability?
-  e_shapes.py       what do the block "shapes" indicate? (real open-model data)
-  run_all.py        everything, end to end
+  fit_toy_lens.py     fit a lens on a toy checkpoint
+  e_multihop.py       does the lens surface an unverbalized intermediate, and steer?
+  e_phrase.py         untrained vs trained multi-token concept vectors
+  e_form.py           when does the J-space form, relative to the capability?
+  e_shapes.py         what do the block "shapes" indicate? (real open-model data)
+  e_gwt_signatures.py broadcast breadth and the bottleneck
+  pythia_sweep.py     where does it emerge? lens-free, then lens, then controlled
+  run_all.py          everything, end to end
 
 docs/
   01-coding-a-j-lens.md                  how it works and why each choice matters
   02-how-the-open-model-viz-was-made.md  the open-model measurement pipeline
   03-open-problems.md                    the four investigations and their results
+  04-running-it-yourself.md              the scale sweep, on a laptop and beyond
 ```
 
 ## On a real open model
