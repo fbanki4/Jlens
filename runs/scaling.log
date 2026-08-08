@@ -24,3 +24,20 @@
 === training d16_w96 (16 layers, width 96) ===
   step      1  loss 5.3584  atomic 0.01  2hop train 0.00 held 0.00  (4s)
   step     63  loss 1.9338  atomic 0.08  2hop train 0.21 held 0.04  (27s)
+  step   4000  loss 0.3016  atomic 1.00  2hop train 1.00 held 0.92  (1194s)
+  d16_w96: acc=0.98 spec=19.0x swap=0.000
+
+============================================================================================
+WORKSPACE CRITERIA vs DEPTH  (width fixed; capability reported separately)
+============================================================================================
+  depth    params | 2-hop acc | latent rk  distr rk specificity beats dist |   swap | blockiness
+      2   264,864 |      0.97 | 1000000000 1000000000        1.0x       0.00 |  0.000 |      0.000
+      4   486,432 |      1.00 |         9       127       14.1x       1.00 |  0.000 |      0.000
+      8   929,568 |      1.00 |         2        47       23.5x       1.00 |  0.094 |      0.000
+     16 1,815,840 |      0.98 |         2        38       19.0x       1.00 |  0.000 |      0.000
+
+  Among models that solve the task:
+    specificity  1.0x (d=2)  ->  19.0x (d=16)
+    swap rate    0.000 (d=2)  ->  0.000 (d=16)
+
+wrote runs/scaling/scaling.json

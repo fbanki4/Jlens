@@ -3,36 +3,36 @@
     "depth": 2,
     "width": 96,
     "params": 264864,
-    "seconds": 178.1,
+    "seconds": 0.0,
     "geometry": {
       "n_blocks": 1,
       "blockiness": 0.0,
       "layer_coupling": NaN,
       "boundaries_rho": [],
-      "pr_peak": 11.195952415466309,
+      "pr_peak": 11.196660995483398,
       "eff_dim_95_mid": 0.3958333333333333
     },
     "function": {
       "heldout_accuracy": 0.96875,
-      "median_latent_rank": 1000000000.0,
-      "median_distractor_rank": 1000000000.0,
-      "specificity": 1.0,
-      "latent_beats_distractors_frac": 0.0,
+      "median_latent_rank": 147.0,
+      "median_distractor_rank": 191.0,
+      "specificity": 1.2993197278911566,
+      "latent_beats_distractors_frac": 1.0,
       "swap_n": 93,
-      "swap_follow_rate": 0.0
+      "swap_follow_rate": 0.08602150537634409
     }
   },
   {
     "depth": 4,
     "width": 96,
     "params": 486432,
-    "seconds": 314.6,
+    "seconds": 0.0,
     "geometry": {
       "n_blocks": 1,
       "blockiness": 0.0,
-      "layer_coupling": 0.9851966324140132,
+      "layer_coupling": 0.9851958097962742,
       "boundaries_rho": [],
-      "pr_peak": 9.190815925598145,
+      "pr_peak": 9.19150161743164,
       "eff_dim_95_mid": 0.3645833333333333
     },
     "function": {
@@ -49,13 +49,13 @@
     "depth": 8,
     "width": 96,
     "params": 929568,
-    "seconds": 557.0,
+    "seconds": 0.0,
     "geometry": {
       "n_blocks": 1,
       "blockiness": 0.0,
-      "layer_coupling": 0.9838464968634414,
+      "layer_coupling": 0.9838463657086236,
       "boundaries_rho": [],
-      "pr_peak": 8.235427856445312,
+      "pr_peak": 8.234519004821777,
       "eff_dim_95_mid": 0.3958333333333333
     },
     "function": {
@@ -66,6 +66,29 @@
       "latent_beats_distractors_frac": 1.0,
       "swap_n": 96,
       "swap_follow_rate": 0.09375
+    }
+  },
+  {
+    "depth": 16,
+    "width": 96,
+    "params": 1815840,
+    "seconds": 0.1,
+    "geometry": {
+      "n_blocks": 1,
+      "blockiness": 0.0,
+      "layer_coupling": 0.9891307561391756,
+      "boundaries_rho": [],
+      "pr_peak": 12.36924934387207,
+      "eff_dim_95_mid": 0.4270833333333333
+    },
+    "function": {
+      "heldout_accuracy": 0.9791666666666666,
+      "median_latent_rank": 2.0,
+      "median_distractor_rank": 38.0,
+      "specificity": 19.0,
+      "latent_beats_distractors_frac": 1.0,
+      "swap_n": 94,
+      "swap_follow_rate": 0.0
     }
   }
 ]

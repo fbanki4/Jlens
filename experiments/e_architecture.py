@@ -34,6 +34,7 @@ import torch
 
 from jlens.cka import (
     build_probe,
+    workspace_band,
     cka_matrix,
     effective_dimension,
     lens_vectors,
@@ -72,7 +73,7 @@ def function(model: ToyLensModel, lens: JacobianLens, world, split) -> dict:
     cities = world.entities["city"]
     city_country = world.atomic["city_in"]
     n_layers = model.n_layers
-    band = [l for l in lens.source_layers if 0.3 <= l / (n_layers - 1) <= 0.8]
+    band = workspace_band(lens.source_layers, n_layers)
 
     P_full, _ = build_probe(model, token_ids=torch.arange(len(tok)))
     V = {l: (P_full @ lens.jacobians[l]).float() for l in lens.source_layers}

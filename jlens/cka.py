@@ -142,6 +142,21 @@ def cka_matrix(lens: JacobianLens, P: torch.Tensor) -> np.ndarray:
     return C
 
 
+def workspace_band(
+    source_layers, n_layers: int, lo: float = 0.3, hi: float = 0.8
+) -> list[int]:
+    """Fitted layers whose relative depth falls in ``[lo, hi]``.
+
+    Falls back to *all* fitted layers when the window selects none. A shallow
+    model fits few layers — a 2-layer model fits exactly one, at rho=0.0 — and
+    an empty band silently turns every downstream measurement into whatever
+    sentinel the caller initialised, which looks like a finding rather than a
+    missing measurement. Better to widen and say so.
+    """
+    band = [l for l in source_layers if lo <= l / max(n_layers - 1, 1) <= hi]
+    return band or list(source_layers)
+
+
 def relative_depth(lens: JacobianLens, n_layers: int | None = None) -> np.ndarray:
     """``rho_l = l / (L - 1)`` for each fitted layer — the axis that makes
     models of different depths comparable."""

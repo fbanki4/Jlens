@@ -38,7 +38,7 @@ from collections import defaultdict
 import numpy as np
 import torch
 
-from jlens.cka import build_probe
+from jlens.cka import build_probe, workspace_band
 from jlens.hooks import ActivationRecorder
 from jlens.jspace import (
     fraction_variance_explained,
@@ -112,7 +112,7 @@ def main() -> None:
     lens = JacobianLens.load(args.lens)
     world, split = build_world(), make_split(build_world())
     n_layers, layers = model.n_layers, lens.source_layers
-    band = [l for l in layers if 0.3 <= l / (n_layers - 1) <= 0.8]
+    band = workspace_band(lens.source_layers, n_layers)
 
     P_full, _ = build_probe(model, token_ids=torch.arange(len(tok)))
     V = {l: (P_full @ lens.jacobians[l]).float() for l in layers}
