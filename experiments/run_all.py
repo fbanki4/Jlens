@@ -68,7 +68,10 @@ def main() -> None:
     # 6. Open problem: when does the J-space form?
     sh("experiments/e_form.py")
 
-    # 7. Open problem: what do the shapes indicate? (real open-model data)
+    # 7. Is the J-space architectural or learned? (untrained vs trained)
+    sh("experiments/e_architecture.py")
+
+    # 8. Open problem: what do the shapes indicate? (real open-model data)
     if os.path.isdir(args.data_root):
         sh("experiments/e_shapes.py", "--data-root", args.data_root)
     else:

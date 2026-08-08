@@ -319,6 +319,30 @@ corr(depth, blockiness) = **+0.04**, corr(depth, coupling) = +0.34,
 corr(depth, forced-k=2 cut) = −0.39. Deeper models put the single cut slightly
 *earlier* in relative depth; blockiness is essentially uncorrelated with depth.
 
+**The block structure exists before training.** This one reframes the rest.
+Running the same CKA pipeline on a *randomly initialised* copy of the toy
+model — same architecture, zero training — and on a real model at step 0:
+
+| model | state | n_blocks | blockiness | boundary ρ |
+|---|---|---|---|---|
+| toy (12L, 1.4M) | random init | 2 | 0.144 | 0.45 |
+| toy (12L, 1.4M) | trained | 1 | 0.000 | — |
+| OLMo-7B (32L) | random init, step 0 | 2 | 0.127 | 0.42 |
+| OLMo-7B (32L) | step 16,000 | 2 | 0.171 | 0.58 |
+
+An untrained transformer already has the block structure, at a boundary in the
+same place trained models put theirs. Training modulates it — upward in the
+real model, to zero in the toy — but does not create it. Whatever the layer ×
+layer CKA picture is showing, a large part of it is a property of the
+architecture, not of anything the model learned.
+
+Crucially this does **not** transfer to the workspace's *function*. On the same
+two toy models, the unverbalized intermediate is readable at 17.5× specificity
+over matched distractors after training and 1.2× before it (chance is 1.0×),
+and it outranks distractors on 100% of items after training versus 58% before.
+Geometry is architectural; function is learned. See
+`experiments/e_architecture.py`.
+
 **Is the early block a regime, or is the lens just blind there?** The paper
 lists this as open. The two accounts differ in the CKA fingerprint: a genuine
 processing regime drifts (adjacent layers more similar than distant ones),
@@ -348,6 +372,7 @@ that early layers compute something real which simply is not workspace-shaped.
 | shape differences between models | confounded — the optimizer alone moves the cut by 0.16 ρ |
 | depth explains the differences | no (r = +0.04 with blockiness) |
 | the early block is lens degeneracy | not supported (0/64 show the signature) |
+| the block structure is learned | no — present at random init in both a toy model and OLMo-7B |
 
 ---
 
