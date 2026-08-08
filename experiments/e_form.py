@@ -189,8 +189,19 @@ def main() -> None:
         print(f"\n  corr(lock-in, capability) across checkpoints: "
               f"{np.corrcoef(lock, accv)[0, 1]:+.3f}")
 
+    def json_safe(v):
+        """NaN is not valid JSON. json.dump writes a bare NaN token, which
+        Python re-reads happily and every strict parser (including JS
+        JSON.parse) rejects. drift is legitimately undefined at the first
+        checkpoint, so it becomes null."""
+        if isinstance(v, float) and not np.isfinite(v):
+            return None
+        if isinstance(v, list):
+            return [json_safe(x) for x in v]
+        return v
+
     payload = [
-        {k: v for k, v in e.items() if k not in ("C", "V", "rho")}
+        {k: json_safe(v) for k, v in e.items() if k not in ("C", "V", "rho")}
         | {"rho": e["rho"].tolist(), "C": e["C"].tolist()}
         for e in entries
     ]
