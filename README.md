@@ -31,6 +31,9 @@ jlens/
   capacity.py   the bottleneck: does an N+1th item evict the first?
   scaling.py    smooth vs broken power law, with the breakpoint search priced in
   lenscontrol.py  keeps a per-model instrument out of a cross-model result
+  checkpoints.py  discovers a pretraining run's checkpoints from its repo refs
+  atlas.py      the open campaign's data layout, written and read
+  atlas_vis.py  the atlas viewer — gallery, detail, training
   vis.py        self-contained layer × position slice viewer
   hf.py         HuggingFace adapter — run all of the above on a real open model
   toy/          a relational world + trainable small transformer (CPU, no downloads)
@@ -43,6 +46,7 @@ experiments/
   e_shapes.py         what do the block "shapes" indicate? (real open-model data)
   e_gwt_signatures.py broadcast breadth and the bottleneck
   pythia_sweep.py     where does it emerge? lens-free, then lens, then controlled
+  jspace_open.py      build + view a J-space atlas across checkpoints
   run_all.py          everything, end to end
 
 docs/
