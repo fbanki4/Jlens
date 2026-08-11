@@ -16,13 +16,16 @@ properties that would otherwise only show up as "the readouts seem a bit off":
 from __future__ import annotations
 
 import math
+import os
 
 import numpy as np
 import torch
 from torch import nn
 
+from jlens.atlas import Atlas, AtlasEntry, json_safe, read_entry, write_entry
 from jlens.broadcast import broadcast_profile
 from jlens.capacity import CapacityCurve, _first_token_id
+from jlens.checkpoints import PYTHIA, discover, parse_ref
 from jlens.cka import best_segmentation, blockiness_of, linear_cka, segment_blocks
 from jlens.fitting import (
     delta_jacobian_for_prompt,
@@ -556,6 +559,132 @@ def test_partial_correlation_reports_full_explanation_as_zero() -> None:
     print("  ok  partial correlation: full explanation reads 0, collinear reads NaN")
 
 
+def test_checkpoint_refs_parse_across_families() -> None:
+    """Checkpoint discovery must handle each family's naming, and reject refs
+    that are not checkpoints at all.
+
+    A stale hardcoded list fails silently — it yields a short sweep that looks
+    complete — so the parsing is what has to be right.
+    """
+    cases = {
+        "step143000": (143000, None, None),
+        "stage1-step140000-tokens587B": (140000, 587_000_000_000, "stage1"),
+        "stage2-ingredient1-step11931-tokens50B": (11931, 50_000_000_000, "stage2"),
+        "step1000-tokens4B": (1000, 4_000_000_000, None),
+        "ckpt_356": (356, None, None),
+        "iter_0143000": (143000, None, None),
+    }
+    for ref, (step, tokens, stage) in cases.items():
+        cp = parse_ref(ref)
+        assert cp is not None, ref
+        assert cp.step == step and cp.stage == stage, (ref, cp)
+        if tokens is not None:
+            assert cp.tokens == tokens, (ref, cp.tokens)
+
+    for junk in ("main", "refs/pr/3", "v1.0", "latest"):
+        assert parse_ref(junk) is None, junk
+
+    # A token count in the ref name is the release's own accounting and must
+    # beat a family-level constant, which assumes a schedule that may have
+    # changed mid-run.
+    cp = parse_ref("stage1-step140000-tokens587B", tokens_per_step=999)
+    assert cp.tokens == 587_000_000_000, cp.tokens
+
+    # Same step, different branch: distinct entries, deterministic order.
+    a = parse_ref("stage2-ingredient1-step11931-tokens50B")
+    b = parse_ref("stage2-ingredient3-step11931-tokens50B")
+    assert a.variant != b.variant and a.sort_key < b.sort_key
+    print("  ok  checkpoint refs parse across families, junk refs rejected")
+
+
+def test_discovery_orders_and_subsets() -> None:
+    """Discovery must sort by training order and keep the endpoints."""
+    refs = ["main"] + [f"step{s}" for s in
+                       [0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+                       + list(range(1000, 144000, 1000))]
+    cps = discover("EleutherAI/pythia-410m", tokens_per_step=PYTHIA.tokens_per_step,
+                   lister=lambda r: refs)
+    assert len(cps) == 154, len(cps)  # what Pythia actually publishes
+    assert [c.step for c in cps] == sorted(c.step for c in cps)
+
+    lim = discover("x", lister=lambda r: refs, limit=8)
+    assert len(lim) == 8 and lim[0].step == 0 and lim[-1].step == 143000, lim
+
+    sub = discover("x", lister=lambda r: refs, keep_steps=[0, 512, 999999])
+    assert [c.step for c in sub] == [0, 512], sub  # absent steps dropped, not raised
+
+    _, _, params = PYTHIA.arch("410m")
+    assert cps[-1].compute_flops(params) > 0
+    assert cps[0].compute_flops(None) is None  # unknown params -> unknown compute
+    print(f"  ok  discovery orders 154 Pythia checkpoints, subsets keep endpoints")
+
+
+def test_atlas_roundtrip_and_key_collisions() -> None:
+    """The atlas must round-trip through disk, and colliding labels must not
+    silently merge.
+
+    Two families routinely publish the same ref name — OLMo-7B and OLMo-32B
+    both have ``stage1-step1000`` — and keying on the label alone gives them one
+    shared heatmap in the viewer.
+    """
+    import tempfile
+
+    rng = np.random.default_rng(0)
+    X = rng.normal(size=(9, 9))
+    C = np.clip((X @ X.T) / np.abs(X @ X.T).max(), 0, 1)
+    np.fill_diagonal(C, 1.0)
+
+    with tempfile.TemporaryDirectory() as d:
+        npz, js = write_entry(d, "step1000", C, list(range(9)), 12, 96,
+                              "toy/12L step1000", {"n_blocks": 2})
+        back = read_entry(npz)
+        assert np.allclose(back["C"], C)
+        assert back["n_layers"] == 12 and back["d_model"] == 96
+        assert np.allclose(back["rho"], np.arange(9) / 11)
+        assert os.path.basename(npz) == "cka_step1000.npz"
+        assert os.path.basename(js) == "step1000_blocks.json"
+
+        a = AtlasEntry(label="stage1-step1000", family="olmo7b", size="7B",
+                       repo="r", n_layers=32, d_model=4096)
+        b = AtlasEntry(label="stage1-step1000", family="olmo32b", size="32B",
+                       repo="r", n_layers=64, d_model=5120)
+        assert a.key != b.key, (a.key, b.key)
+
+        atlas = Atlas(entries=[a, b], title="t")
+        assert not atlas.manifest()["warnings"]
+        atlas.add(AtlasEntry(label="stage1-step1000", family="olmo7b",
+                             size="7B", repo="r", n_layers=32, d_model=4096))
+        assert any("duplicate" in w for w in atlas.manifest()["warnings"])
+
+        path = Atlas(entries=[a, b], title="t").save(d)
+        loaded = Atlas.load(path)
+        assert [e.key for e in loaded.entries] == [a.key, b.key]
+
+    # A bare NaN is invalid JSON and blanks the whole viewer, not one cell.
+    assert json_safe({"a": float("nan"), "b": [float("inf"), 1.5]}) == {
+        "a": None, "b": [None, 1.5]}
+    print("  ok  atlas round-trips; colliding labels stay distinct")
+
+
+def test_dead_lens_entries_are_marked() -> None:
+    """An entry whose lens lost to the logit lens must be flagged, and an
+    unmeasured one must not be silently treated as dead."""
+    live = AtlasEntry(label="a", family="f", size="s", repo="r",
+                      n_layers=6, d_model=64, fidelity={"advantage": 0.2})
+    dead = AtlasEntry(label="b", family="f", size="s", repo="r",
+                      n_layers=6, d_model=64, fidelity={"advantage": -0.1})
+    zero = AtlasEntry(label="c", family="f", size="s", repo="r",
+                      n_layers=6, d_model=64, fidelity={"advantage": 0.0})
+    unknown = AtlasEntry(label="d", family="f", size="s", repo="r",
+                         n_layers=6, d_model=64)
+    assert live.lens_is_live and not dead.lens_is_live and not zero.lens_is_live
+    assert unknown.lens_is_live, "absence of a measurement is not evidence of a dead lens"
+
+    warnings = Atlas(entries=[live, dead, zero, unknown]).manifest()["warnings"]
+    assert any("2 of 4" in w for w in warnings), warnings
+    print("  ok  dead-lens entries are flagged, unmeasured ones are not")
+
+
 def main() -> None:
     torch.set_num_threads(2)
     tests = [
@@ -579,6 +708,10 @@ def main() -> None:
         test_capacity_control_shrinks_the_width_confound,
         test_lens_fidelity_beats_the_logit_lens_where_it_should,
         test_partial_correlation_reports_full_explanation_as_zero,
+        test_checkpoint_refs_parse_across_families,
+        test_discovery_orders_and_subsets,
+        test_atlas_roundtrip_and_key_collisions,
+        test_dead_lens_entries_are_marked,
     ]
     print(f"running {len(tests)} tests\n")
     for t in tests:
