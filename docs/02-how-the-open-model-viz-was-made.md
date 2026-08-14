@@ -194,6 +194,7 @@ their cluster.
 View their data with it, no GPU and no downloads beyond the clone:
 
 ```bash
+pip install -e .          # from the repo root, once
 git clone https://github.com/eliebak/open-jlens-data
 python experiments/jspace_open.py --campaign open-jlens-data/runs --out runs/atlas
 ```

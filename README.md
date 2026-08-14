@@ -80,13 +80,36 @@ prompts is a single-GPU afternoon. Shard over prompts and combine with
 ## Without a GPU
 
 ```bash
-pip install torch numpy
+pip install -e .              # installs torch/numpy/scipy, makes `jlens` importable
 python -m experiments.run_all
 ```
 
 Trains a 1.4M-parameter transformer on a synthetic relational world, fits a
 lens at every training checkpoint, and runs all four investigations. About
 half an hour on four CPU cores.
+
+Install the package rather than just its dependencies: without it, `python
+experiments/<script>.py` puts `experiments/` on the import path instead of the
+repo root and fails with `No module named 'jlens'`. `python -m experiments.…`
+works either way, but only from the repo root.
+
+## The J-space atlas
+
+Recreates what `eliebak.com/viz/jspace-open` shows. To browse the open
+campaign's 49 fitted lenses — no GPU, no model downloads:
+
+```bash
+git clone https://github.com/eliebak/open-jlens-data
+python experiments/jspace_open.py --campaign open-jlens-data/runs --out runs/atlas
+open runs/atlas/index.html
+```
+
+To measure your own checkpoints into the same page:
+
+```bash
+pip install -e ".[hf]"
+python experiments/jspace_open.py --family pythia --sizes 70m --limit 8 --purge
+```
 
 The toy world exists so that **ground truth is available**. Its two-hop items
 state some `person lives in city` and `city sits in country` facts in shuffled

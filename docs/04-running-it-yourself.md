@@ -32,7 +32,9 @@ in fp32 is ~26 GB. Pass `--purge` and each checkpoint is deleted after being
 measured, so peak disk stays at one model.
 
 ```bash
-pip install torch transformers
+pip install -e .            # makes `jlens` importable
+pip install transformers    # only needed to download models
+
 python experiments/pythia_sweep.py \
     --sizes 70m,160m,410m \
     --steps 0,1,2,4,8,16,32,64,128,256,512,1000,4000,16000,64000,143000 \
@@ -136,9 +138,10 @@ GPU — not this one.
 ## Colab, copy-paste
 
 ```python
-!pip install -q transformers
-!git clone -q https://github.com/fbanki4/Jlens && cd Jlens && git checkout -q claude/j-lens-jspace-learning-47fsd0
+!git clone -q https://github.com/fbanki4/Jlens
 %cd Jlens
+!git checkout -q claude/j-lens-jspace-learning-47fsd0
+!pip install -q -e . && pip install -q transformers
 !python experiments/pythia_sweep.py --sizes 70m,160m --steps 0,1,2,4,8,16,32,64,128,256,512,1000,4000,16000,64000,143000 --purge
 ```
 
@@ -148,6 +151,28 @@ With a GPU runtime attached, add stage 2 and the report:
 !python experiments/pythia_sweep.py --stage lens --sizes 70m,160m --steps 0,16,512,4000,64000,143000 --purge
 !python experiments/pythia_sweep.py --stage report
 ```
+
+And the atlas, which produces a page you can download and open:
+
+```python
+!python experiments/jspace_open.py --family pythia --sizes 70m --limit 6 --purge --out runs/atlas
+from google.colab import files; files.download('runs/atlas/index.html')
+```
+
+To view the open campaign's own 49 lenses instead — no GPU, no model
+downloads, about ten seconds:
+
+```python
+!git clone -q https://github.com/eliebak/open-jlens-data
+!python experiments/jspace_open.py --campaign open-jlens-data/runs --out runs/atlas
+from google.colab import files; files.download('runs/atlas/index.html')
+```
+
+**`pip install -e .` is not optional.** Without it `python experiments/…`
+puts `experiments/` on the import path rather than the repo root, and every
+script dies on `ModuleNotFoundError: No module named 'jlens'`. (`python -m
+experiments.jspace_open` works without installing, since `-m` adds the current
+directory — but only from the repo root.)
 
 ## What you are looking for
 
