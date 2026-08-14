@@ -137,42 +137,70 @@ GPU — not this one.
 
 ## Colab, copy-paste
 
+Absolute paths throughout, and no `%cd`. `%cd` only changes the notebook's
+working directory, so it silently comes undone when the runtime restarts or
+when a later cell is re-run on its own — and then `pip install -e .` resolves
+to `/content` and reports *"does not appear to be a Python project"*. Naming
+the path leaves nothing to come undone.
+
+**Cell 1 — set up (run once):**
+
 ```python
-!git clone -q https://github.com/fbanki4/Jlens
-%cd Jlens
-!git checkout -q claude/j-lens-jspace-learning-47fsd0
-!pip install -q -e . && pip install -q transformers
-!python experiments/pythia_sweep.py --sizes 70m,160m --steps 0,1,2,4,8,16,32,64,128,256,512,1000,4000,16000,64000,143000 --purge
+!rm -rf /content/Jlens
+!git clone -q https://github.com/fbanki4/Jlens /content/Jlens
+!cd /content/Jlens && git checkout -q claude/j-lens-jspace-learning-47fsd0
+!pip install -q -e /content/Jlens
+```
+
+**Cell 2 — the sweep:**
+
+```python
+!pip install -q transformers
+!python /content/Jlens/experiments/pythia_sweep.py --sizes 70m,160m \
+    --steps 0,1,2,4,8,16,32,64,128,256,512,1000,4000,16000,64000,143000 \
+    --purge --out /content/runs/pythia
 ```
 
 With a GPU runtime attached, add stage 2 and the report:
 
 ```python
-!python experiments/pythia_sweep.py --stage lens --sizes 70m,160m --steps 0,16,512,4000,64000,143000 --purge
-!python experiments/pythia_sweep.py --stage report
+!python /content/Jlens/experiments/pythia_sweep.py --stage lens --sizes 70m,160m \
+    --steps 0,16,512,4000,64000,143000 --purge --out /content/runs/pythia
+!python /content/Jlens/experiments/pythia_sweep.py --stage report --out /content/runs/pythia
 ```
 
 And the atlas, which produces a page you can download and open:
 
 ```python
-!python experiments/jspace_open.py --family pythia --sizes 70m --limit 6 --purge --out runs/atlas
-from google.colab import files; files.download('runs/atlas/index.html')
+!python /content/Jlens/experiments/jspace_open.py --family pythia --sizes 70m \
+    --limit 6 --purge --out /content/atlas
+from google.colab import files; files.download('/content/atlas/index.html')
 ```
 
-To view the open campaign's own 49 lenses instead — no GPU, no model
-downloads, about ten seconds:
+**Start with this one.** It needs no GPU, downloads no models, and finishes in
+about ten seconds — so it tells you whether the setup cell worked before you
+spend anything:
 
 ```python
-!git clone -q https://github.com/eliebak/open-jlens-data
-!python experiments/jspace_open.py --campaign open-jlens-data/runs --out runs/atlas
-from google.colab import files; files.download('runs/atlas/index.html')
+!git clone -q https://github.com/eliebak/open-jlens-data /content/open-jlens-data
+!python /content/Jlens/experiments/jspace_open.py \
+    --campaign /content/open-jlens-data/runs --out /content/atlas
+from google.colab import files; files.download('/content/atlas/index.html')
 ```
 
-**`pip install -e .` is not optional.** Without it `python experiments/…`
-puts `experiments/` on the import path rather than the repo root, and every
-script dies on `ModuleNotFoundError: No module named 'jlens'`. (`python -m
-experiments.jspace_open` works without installing, since `-m` adds the current
-directory — but only from the repo root.)
+### Two failure modes, and what they mean
+
+`ERROR: file:///content does not appear to be a Python project`
+— `pip install -e .` ran somewhere other than the repo. The `.` resolved to
+whatever the working directory happened to be. Install by path instead:
+`pip install -e /content/Jlens`.
+
+`ModuleNotFoundError: No module named 'jlens'`
+— the package was never installed. `python experiments/<script>.py` puts
+`experiments/` on the import path, not the repo root, so the scripts cannot see
+the library beside them. Run the setup cell. (`python -m experiments.<script>`
+works without installing, but only from the repo root — which is the same
+working-directory trap in a different costume.)
 
 ## What you are looking for
 
