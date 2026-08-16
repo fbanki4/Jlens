@@ -1,0 +1,5502 @@
+[
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_1.2b_adamw.npz",
+    "model_name": "OptimizerStudy/adamw_1.2b_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/adamw_1.2b_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.21418436161650822,
+    "layer_coupling": 0.817017105450427,
+    "boundaries_rho": [
+      0.5483870967741935
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5483870967741935
+        ],
+        "blockiness": 0.21418436161650822
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.41935483870967744,
+          0.6774193548387096
+        ],
+        "blockiness": 0.20164791379416702
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.25806451612903225,
+          0.4838709677419355,
+          0.7096774193548387
+        ],
+        "blockiness": 0.1928304125993524
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 17,
+        "slope": -0.013046171196282978,
+        "mean": 0.9237146998809985,
+        "std": 0.05418191986247963,
+        "r2": 0.8696582599619205
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.017280452812461992,
+        "mean": 0.9310184867313946,
+        "std": 0.05665772468377523,
+        "r2": 0.9302335042086968
+      },
+      "first_block_rho": [
+        0.0,
+        0.5161290322580645
+      ],
+      "degeneracy_score": 0.1851401725797608
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_1.2b_muon.npz",
+    "model_name": "OptimizerStudy/muon_1.2b_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/muon_1.2b_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.23799514401413757,
+    "layer_coupling": 0.7971775831980249,
+    "boundaries_rho": [
+      0.5483870967741935
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5483870967741935
+        ],
+        "blockiness": 0.23799514401413757
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.2903225806451613,
+          0.6129032258064516
+        ],
+        "blockiness": 0.2291683551893664
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.2903225806451613,
+          0.5483870967741935,
+          0.7419354838709677
+        ],
+        "blockiness": 0.22291670281284337
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 17,
+        "slope": -0.017276732065943146,
+        "mean": 0.9112540417925471,
+        "std": 0.06847859335174336,
+        "r2": 0.9547832551177339
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.018556947709547373,
+        "mean": 0.9305518100440657,
+        "std": 0.060579773603145225,
+        "r2": 0.9383347410735979
+      },
+      "first_block_rho": [
+        0.0,
+        0.5161290322580645
+      ],
+      "degeneracy_score": -0.05372961425215217
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_1.2b_nadamw.npz",
+    "model_name": "OptimizerStudy/nadamw_1.2b_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/nadamw_1.2b_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.19455051704234094,
+    "layer_coupling": 0.8362912130432923,
+    "boundaries_rho": [
+      0.4838709677419355
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.194,
+      "margin": 0.194,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4838709677419355
+        ],
+        "blockiness": 0.19455051704234094
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.22580645161290322,
+          0.5806451612903226
+        ],
+        "blockiness": 0.17767962194667097
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.22580645161290322,
+          0.4838709677419355,
+          0.7096774193548387
+        ],
+        "blockiness": 0.1755169465542329
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 15,
+        "slope": -0.010074164140200598,
+        "mean": 0.9436058300934858,
+        "std": 0.04068503129388412,
+        "r2": 0.7084995297605396
+      },
+      "later_blocks": {
+        "n": 16,
+        "slope": -0.01528275715144354,
+        "mean": 0.9306656170363159,
+        "std": 0.057530898378903024,
+        "r2": 0.9330513904531823
+      },
+      "first_block_rho": [
+        0.0,
+        0.45161290322580644
+      ],
+      "degeneracy_score": 0.37789913930992536
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_1.2b_soape.npz",
+    "model_name": "OptimizerStudy/soape_1.2b_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/soape_1.2b_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.211393409063947,
+    "layer_coupling": 0.8189962745118629,
+    "boundaries_rho": [
+      0.5806451612903226
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5806451612903226
+        ],
+        "blockiness": 0.211393409063947
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.3870967741935484,
+          0.6451612903225806
+        ],
+        "blockiness": 0.1932586636594904
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.25806451612903225,
+          0.5806451612903226,
+          0.7741935483870968
+        ],
+        "blockiness": 0.18793678660455815
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 18,
+        "slope": -0.011528251689043655,
+        "mean": 0.9227678400011439,
+        "std": 0.06029159694770335,
+        "r2": 0.6174679258800237
+      },
+      "later_blocks": {
+        "n": 13,
+        "slope": -0.019059309076329307,
+        "mean": 0.9304887285181402,
+        "std": 0.05717873774832999,
+        "r2": 0.9505903337847025
+      },
+      "first_block_rho": [
+        0.0,
+        0.5483870967741935
+      ],
+      "degeneracy_score": 0.22047138464858418
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_520m_adamw.npz",
+    "model_name": "OptimizerStudy/adamw_520m_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/adamw_520m_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.18683577569191934,
+    "layer_coupling": 0.8357422077180077,
+    "boundaries_rho": [
+      0.5161290322580645
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.186,
+      "margin": 0.186,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5161290322580645
+        ],
+        "blockiness": 0.18683577569191934
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.25806451612903225,
+          0.6129032258064516
+        ],
+        "blockiness": 0.17193004938257528
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.25806451612903225,
+          0.5161290322580645,
+          0.7741935483870968
+        ],
+        "blockiness": 0.17462346661625194
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 16,
+        "slope": -0.01083835158212728,
+        "mean": 0.9386576882838881,
+        "std": 0.042489320891666085,
+        "r2": 0.8603424305689628
+      },
+      "later_blocks": {
+        "n": 15,
+        "slope": -0.017237641168066885,
+        "mean": 0.9247631615692629,
+        "std": 0.06071703902426299,
+        "r2": 0.931376622749711
+      },
+      "first_block_rho": [
+        0.0,
+        0.4838709677419355
+      ],
+      "degeneracy_score": 0.3351663414321325
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_520m_cautious.npz",
+    "model_name": "OptimizerStudy/cautious_520m_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/cautious_520m_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.26057149358200515,
+    "layer_coupling": 0.7784495456836079,
+    "boundaries_rho": [
+      0.5483870967741935
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5483870967741935
+        ],
+        "blockiness": 0.26057149358200515
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.2903225806451613,
+          0.5483870967741935
+        ],
+        "blockiness": 0.23577361107849437
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.1935483870967742,
+          0.4838709677419355,
+          0.7096774193548387
+        ],
+        "blockiness": 0.2333824507766128
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 17,
+        "slope": -0.016968370717772657,
+        "mean": 0.9041966544296636,
+        "std": 0.06832340382484291,
+        "r2": 0.925193467943327
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.01833954923816908,
+        "mean": 0.9232064487950541,
+        "std": 0.06263581756170665,
+        "r2": 0.8572980052303253
+      },
+      "first_block_rho": [
+        0.0,
+        0.5161290322580645
+      ],
+      "degeneracy_score": -0.0478317895806144
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_520m_kron.npz",
+    "model_name": "OptimizerStudy/kron_520m_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/kron_520m_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.20648625068962745,
+    "layer_coupling": 0.819027160281561,
+    "boundaries_rho": [
+      0.5161290322580645
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5161290322580645
+        ],
+        "blockiness": 0.20648625068962745
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.25806451612903225,
+          0.5806451612903226
+        ],
+        "blockiness": 0.2014025295645866
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.1935483870967742,
+          0.3870967741935484,
+          0.6451612903225806
+        ],
+        "blockiness": 0.19495077018801132
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 16,
+        "slope": -0.017294353680561144,
+        "mean": 0.9085947138926268,
+        "std": 0.06580885164037563,
+        "r2": 0.9131549963156542
+      },
+      "later_blocks": {
+        "n": 15,
+        "slope": -0.01223838976390534,
+        "mean": 0.9450361320325579,
+        "std": 0.04305100099981631,
+        "r2": 0.9338408820745244
+      },
+      "first_block_rho": [
+        0.0,
+        0.4838709677419355
+      ],
+      "degeneracy_score": -0.04641483989132145
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_520m_lion.npz",
+    "model_name": "OptimizerStudy/lion_520m_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/lion_520m_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.24659506905821083,
+    "layer_coupling": 0.7795150788997746,
+    "boundaries_rho": [
+      0.5483870967741935
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5483870967741935
+        ],
+        "blockiness": 0.24659506905821083
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.22580645161290322,
+          0.6129032258064516
+        ],
+        "blockiness": 0.2328093936749085
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.22580645161290322,
+          0.4838709677419355,
+          0.7419354838709677
+        ],
+        "blockiness": 0.23181594769205216
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 17,
+        "slope": -0.01777671154903629,
+        "mean": 0.9005842971373245,
+        "std": 0.07353892479530098,
+        "r2": 0.8765154151517798
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.021052034969559253,
+        "mean": 0.9134186081351813,
+        "std": 0.06800184790808358,
+        "r2": 0.9583998485264333
+      },
+      "first_block_rho": [
+        0.0,
+        0.5161290322580645
+      ],
+      "degeneracy_score": -0.10463986400533098
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_520m_mars.npz",
+    "model_name": "OptimizerStudy/mars_520m_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/mars_520m_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.20115823503525176,
+    "layer_coupling": 0.8234447513735246,
+    "boundaries_rho": [
+      0.5483870967741935
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5483870967741935
+        ],
+        "blockiness": 0.20115823503525176
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.22580645161290322,
+          0.6129032258064516
+        ],
+        "blockiness": 0.18994832656411775
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.22580645161290322,
+          0.5483870967741935,
+          0.7741935483870968
+        ],
+        "blockiness": 0.18779651072901304
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 17,
+        "slope": -0.01349164959536559,
+        "mean": 0.9217588370051967,
+        "std": 0.0570373569158156,
+        "r2": 0.8392717033411655
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.016260108635765713,
+        "mean": 0.9333441258428047,
+        "std": 0.05360918913866244,
+        "r2": 0.9199588653154931
+      },
+      "first_block_rho": [
+        0.0,
+        0.5161290322580645
+      ],
+      "degeneracy_score": 0.15394342552731066
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_520m_mini.npz",
+    "model_name": "OptimizerStudy/mini_520m_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/mini_520m_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.17118514183372513,
+    "layer_coupling": 0.8399582342714358,
+    "boundaries_rho": [
+      0.5161290322580645
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        3
+      ],
+      "stable_penalty_lo": 0.002,
+      "stable_penalty_hi": 0.17,
+      "margin": 0.168,
+      "k_by_penalty": {
+        "0.0": 3,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 1,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5161290322580645
+        ],
+        "blockiness": 0.17118514183372513
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.25806451612903225,
+          0.5806451612903226
+        ],
+        "blockiness": 0.17169801327002077
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.22580645161290322,
+          0.5161290322580645,
+          0.7419354838709677
+        ],
+        "blockiness": 0.1655906313029495
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 16,
+        "slope": -0.016752980646095747,
+        "mean": 0.9150761724119653,
+        "std": 0.06352745471757608,
+        "r2": 0.9195296021259728
+      },
+      "later_blocks": {
+        "n": 15,
+        "slope": -0.012206011418915929,
+        "mean": 0.9434383512356883,
+        "std": 0.04219276335449995,
+        "r2": 0.9670800718030471
+      },
+      "first_block_rho": [
+        0.0,
+        0.4838709677419355
+      ],
+      "degeneracy_score": -0.00915287230216888
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_520m_muon.npz",
+    "model_name": "OptimizerStudy/muon_520m_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/muon_520m_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.24727754695511395,
+    "layer_coupling": 0.7839398786122056,
+    "boundaries_rho": [
+      0.4838709677419355
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4838709677419355
+        ],
+        "blockiness": 0.24727754695511395
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.22580645161290322,
+          0.5806451612903226
+        ],
+        "blockiness": 0.24043653376449137
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.22580645161290322,
+          0.4838709677419355,
+          0.7419354838709677
+        ],
+        "blockiness": 0.23666554376662075
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 15,
+        "slope": -0.019526043449265323,
+        "mean": 0.9071510983046421,
+        "std": 0.07135390595808049,
+        "r2": 0.8653341221051835
+      },
+      "later_blocks": {
+        "n": 16,
+        "slope": -0.018912813152348676,
+        "mean": 0.9154309132733695,
+        "std": 0.07119575584690034,
+        "r2": 0.9330577099607511
+      },
+      "first_block_rho": [
+        0.0,
+        0.45161290322580644
+      ],
+      "degeneracy_score": -0.1593062634982927
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_520m_nadamw.npz",
+    "model_name": "OptimizerStudy/nadamw_520m_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/nadamw_520m_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.20383355240283552,
+    "layer_coupling": 0.818770739694331,
+    "boundaries_rho": [
+      0.4838709677419355
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4838709677419355
+        ],
+        "blockiness": 0.20383355240283552
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.3225806451612903,
+          0.6129032258064516
+        ],
+        "blockiness": 0.20013151361583037
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.3225806451612903,
+          0.5483870967741935,
+          0.7741935483870968
+        ],
+        "blockiness": 0.1915940392680089
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 15,
+        "slope": -0.014468756001077799,
+        "mean": 0.9271323531151964,
+        "std": 0.05206582105992027,
+        "r2": 0.8923757759580224
+      },
+      "later_blocks": {
+        "n": 16,
+        "slope": -0.016391791546054885,
+        "mean": 0.9212126044699471,
+        "std": 0.061336151898413155,
+        "r2": 0.9443309972314105
+      },
+      "first_block_rho": [
+        0.0,
+        0.45161290322580644
+      ],
+      "degeneracy_score": 0.14011882883240334
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_520m_scion.npz",
+    "model_name": "OptimizerStudy/scion_520m_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/scion_520m_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.2059264140643159,
+    "layer_coupling": 0.833650962119169,
+    "boundaries_rho": [
+      0.41935483870967744
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.41935483870967744
+        ],
+        "blockiness": 0.2059264140643159
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.1935483870967742,
+          0.5161290322580645
+        ],
+        "blockiness": 0.1991967625713782
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.1935483870967742,
+          0.45161290322580644,
+          0.6774193548387096
+        ],
+        "blockiness": 0.1840825587573507
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 13,
+        "slope": -0.020680818468730454,
+        "mean": 0.9216351723047967,
+        "std": 0.0625166886340339,
+        "r2": 0.936249778556016
+      },
+      "later_blocks": {
+        "n": 18,
+        "slope": -0.010395049390117038,
+        "mean": 0.9452534511542358,
+        "std": 0.04556133697007629,
+        "r2": 0.8791465443748436
+      },
+      "first_block_rho": [
+        0.0,
+        0.3870967741935484
+      ],
+      "degeneracy_score": -0.15566432098055705
+    }
+  },
+  {
+    "path": "runs/E11_optimizers/results/permodel/cka_520m_soape.npz",
+    "model_name": "OptimizerStudy/soape_520m_8",
+    "experiment": "E11_optimizers",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "OptimizerStudy/soape_520m_8|L32",
+    "n_blocks": 2,
+    "blockiness": 0.2032015114499448,
+    "layer_coupling": 0.8266912108117435,
+    "boundaries_rho": [
+      0.4838709677419355
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4838709677419355
+        ],
+        "blockiness": 0.2032015114499448
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.3548387096774194,
+          0.6451612903225806
+        ],
+        "blockiness": 0.18853874881341048
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.1935483870967742,
+          0.45161290322580644,
+          0.6774193548387096
+        ],
+        "blockiness": 0.18659798373888126
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 15,
+        "slope": -0.014471680274072992,
+        "mean": 0.9294724290137838,
+        "std": 0.0519308813497275,
+        "r2": 0.897382014765326
+      },
+      "later_blocks": {
+        "n": 16,
+        "slope": -0.01523942122830002,
+        "mean": 0.9334042688687758,
+        "std": 0.0576203138720334,
+        "r2": 0.9248901611010073
+      },
+      "first_block_rho": [
+        0.0,
+        0.45161290322580644
+      ],
+      "degeneracy_score": 0.14288169265195405
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/gemma3-1b-it-frozenattn/gemma3-1b-it-frozenattn_horizon_cka.npz",
+    "model_name": "google/gemma-3-1b-it",
+    "experiment": "E1_horizon",
+    "n_layers": 26,
+    "variant": "frozenattn",
+    "model_key": "google/gemma-3-1b-it|L26",
+    "n_blocks": 4,
+    "blockiness": 0.27063051429887475,
+    "layer_coupling": 0.739246399074412,
+    "boundaries_rho": [
+      0.16,
+      0.44,
+      0.68
+    ],
+    "penalty": {
+      "k_at_default": 4,
+      "k_range": [
+        2,
+        4
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.02,
+      "margin": 0.02,
+      "k_by_penalty": {
+        "0.0": 4,
+        "0.02": 4,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.44
+        ],
+        "blockiness": 0.22684623281045735
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.16,
+          0.68
+        ],
+        "blockiness": 0.2496349228138538
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.16,
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.27063051429887475
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 4,
+      "first_block": {
+        "n": 4,
+        "slope": -0.018216693594814645,
+        "mean": 0.9459291019923531,
+        "std": 0.0255640250925582,
+        "r2": 0.2821032773769139
+      },
+      "later_blocks": {
+        "n": 21,
+        "slope": -0.025212851706366,
+        "mean": 0.796249909293366,
+        "std": 0.12986135241391447,
+        "r2": 0.8753623688803939
+      },
+      "first_block_rho": [
+        0.0,
+        0.12
+      ],
+      "degeneracy_score": 0.11500525782953452
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/gemma3-1b-it/gemma3-1b-it_horizon_cka.npz",
+    "model_name": "google/gemma-3-1b-it",
+    "experiment": "E1_horizon",
+    "n_layers": 26,
+    "variant": "default",
+    "model_key": "google/gemma-3-1b-it|L26",
+    "n_blocks": 2,
+    "blockiness": 0.2304036963961631,
+    "layer_coupling": 0.7405395252542714,
+    "boundaries_rho": [
+      0.44
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        4
+      ],
+      "stable_penalty_lo": 0.02,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.18000000000000002,
+      "k_by_penalty": {
+        "0.0": 4,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.44
+        ],
+        "blockiness": 0.2304036963961631
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.23340271944369484
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.16,
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.26921084140984264
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 11,
+        "slope": -0.03313456415101663,
+        "mean": 0.8638243950691029,
+        "std": 0.10532234812212353,
+        "r2": 0.5938444596595658
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.026008750182224302,
+        "mean": 0.8557848130867481,
+        "std": 0.09104315188294161,
+        "r2": 0.8161019161827912
+      },
+      "first_block_rho": [
+        0.0,
+        0.4
+      ],
+      "degeneracy_score": -0.8828475634600563
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/gemma3-1b-pt-frozenattn/gemma3-1b-pt-frozenattn_horizon_cka.npz",
+    "model_name": "google/gemma-3-1b-pt",
+    "experiment": "E1_horizon",
+    "n_layers": 26,
+    "variant": "frozenattn",
+    "model_key": "google/gemma-3-1b-pt|L26",
+    "n_blocks": 2,
+    "blockiness": 0.3682777828223371,
+    "layer_coupling": 0.6532643659095284,
+    "boundaries_rho": [
+      0.44
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.44
+        ],
+        "blockiness": 0.3682777828223371
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.3494943627435505
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.16,
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.35776055700731224
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 11,
+        "slope": -0.03294668403515562,
+        "mean": 0.8571173387181789,
+        "std": 0.09902438584901639,
+        "r2": 0.664186978813635
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.029853965972088208,
+        "mean": 0.8333663299254511,
+        "std": 0.1043735529052553,
+        "r2": 0.8181315341638159
+      },
+      "first_block_rho": [
+        0.0,
+        0.4
+      ],
+      "degeneracy_score": -0.8568475660841113
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/gemma3-1b-pt-vpdiag/gemma3-1b-pt-vpdiag_horizon_cka.npz",
+    "model_name": "google/gemma-3-1b-pt",
+    "experiment": "E1_horizon",
+    "n_layers": 26,
+    "variant": "vpdiag",
+    "model_key": "google/gemma-3-1b-pt|L26",
+    "n_blocks": 2,
+    "blockiness": 0.27235726338080146,
+    "layer_coupling": 0.8127675847550755,
+    "boundaries_rho": [
+      0.64
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.64
+        ],
+        "blockiness": 0.27235726338080146
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.48,
+          0.68
+        ],
+        "blockiness": 0.2286821395661658
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.2,
+          0.6,
+          0.72
+        ],
+        "blockiness": 0.21768712085409958
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 16,
+        "slope": -0.011440931121547171,
+        "mean": 0.9462482488611234,
+        "std": 0.0466459027575687,
+        "r2": 0.7954267439590275
+      },
+      "later_blocks": {
+        "n": 9,
+        "slope": -0.02103806550393208,
+        "mean": 0.934335145566983,
+        "std": 0.04833655927729089,
+        "r2": 0.7366915271779707
+      },
+      "first_block_rho": [
+        0.0,
+        0.6
+      ],
+      "degeneracy_score": 0.30202739296896175
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/gemma3-1b-pt-vpheads/gemma3-1b-pt-vpheads_horizon_cka.npz",
+    "model_name": "google/gemma-3-1b-pt",
+    "experiment": "E1_horizon",
+    "n_layers": 26,
+    "variant": "vpheads",
+    "model_key": "google/gemma-3-1b-pt|L26",
+    "n_blocks": 2,
+    "blockiness": 0.37183118804885723,
+    "layer_coupling": 0.6487242863561272,
+    "boundaries_rho": [
+      0.44
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.44
+        ],
+        "blockiness": 0.37183118804885723
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.34827895941666764
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.2,
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.3624802111163101
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 11,
+        "slope": -0.03699291908661538,
+        "mean": 0.8472113898989543,
+        "std": 0.10670960813698493,
+        "r2": 0.7210766050659263
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.029487375539799392,
+        "mean": 0.8349959062694555,
+        "std": 0.10297646267363024,
+        "r2": 0.819966865161192
+      },
+      "first_block_rho": [
+        0.0,
+        0.4
+      ],
+      "degeneracy_score": -1.059343806113601
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/gemma3-1b-pt/gemma3-1b-pt_horizon_cka.npz",
+    "model_name": "google/gemma-3-1b-pt",
+    "experiment": "E1_horizon",
+    "n_layers": 26,
+    "variant": "default",
+    "model_key": "google/gemma-3-1b-pt|L26",
+    "n_blocks": 2,
+    "blockiness": 0.37382279818799136,
+    "layer_coupling": 0.6479229543224269,
+    "boundaries_rho": [
+      0.44
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.44
+        ],
+        "blockiness": 0.37382279818799136
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.34996642575548065
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.24,
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.3640014688424733
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 11,
+        "slope": -0.03727616552478794,
+        "mean": 0.8478060960155639,
+        "std": 0.10762130913336754,
+        "r2": 0.7198088339033537
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.029486833104462363,
+        "mean": 0.8349910845979597,
+        "std": 0.10297901175357382,
+        "r2": 0.8198961060917553
+      },
+      "first_block_rho": [
+        0.0,
+        0.4
+      ],
+      "degeneracy_score": -1.073725761509424
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/gemma3-27b-it-cross-n250-n710/gemma3-27b-it_n250_cka.npz",
+    "model_name": "google/gemma-3-27b-it",
+    "experiment": "E1_horizon",
+    "n_layers": 62,
+    "variant": "n710",
+    "model_key": "google/gemma-3-27b-it|L62",
+    "n_blocks": 2,
+    "blockiness": 0.24221336059027931,
+    "layer_coupling": 0.7841760237171449,
+    "boundaries_rho": [
+      0.4426229508196721
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        3
+      ],
+      "stable_penalty_lo": 0.016,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.184,
+      "k_by_penalty": {
+        "0.0": 3,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4426229508196721
+        ],
+        "blockiness": 0.24221336059027931
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.4426229508196721,
+          0.8688524590163934
+        ],
+        "blockiness": 0.25708520202501706
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.19672131147540983,
+          0.45901639344262296,
+          0.8688524590163934
+        ],
+        "blockiness": 0.24858454002009678
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 27,
+        "slope": -0.007706047395421782,
+        "mean": 0.9339673309040069,
+        "std": 0.0568816239782976,
+        "r2": 0.7137480131791881
+      },
+      "later_blocks": {
+        "n": 34,
+        "slope": -0.009069262515449027,
+        "mean": 0.8879811439207376,
+        "std": 0.11058313033944256,
+        "r2": 0.4185156516499128
+      },
+      "first_block_rho": [
+        0.0,
+        0.4262295081967213
+      ],
+      "degeneracy_score": 0.39819893917394517
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/gemma3-27b-it-cross-n250-n710/gemma3-27b-it_n710_cka.npz",
+    "model_name": "google/gemma-3-27b-it",
+    "experiment": "E1_horizon",
+    "n_layers": 62,
+    "variant": "n710",
+    "model_key": "google/gemma-3-27b-it|L62",
+    "n_blocks": 2,
+    "blockiness": 0.2563239643416788,
+    "layer_coupling": 0.7698311280832396,
+    "boundaries_rho": [
+      0.4426229508196721
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        5
+      ],
+      "stable_penalty_lo": 0.006,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.194,
+      "k_by_penalty": {
+        "0.0": 5,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4426229508196721
+        ],
+        "blockiness": 0.2563239643416788
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.21311475409836064,
+          0.47540983606557374
+        ],
+        "blockiness": 0.232147090500889
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.21311475409836064,
+          0.45901639344262296,
+          0.8688524590163934
+        ],
+        "blockiness": 0.266716661930655
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 27,
+        "slope": -0.010663639903362897,
+        "mean": 0.9145619821353821,
+        "std": 0.07576744847321941,
+        "r2": 0.7703199624976261
+      },
+      "later_blocks": {
+        "n": 34,
+        "slope": -0.009080448715095708,
+        "mean": 0.888309600996529,
+        "std": 0.11170838067002042,
+        "r2": 0.41113895229541886
+      },
+      "first_block_rho": [
+        0.0,
+        0.4262295081967213
+      ],
+      "degeneracy_score": 0.18494659210798847
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/gemma3-27b-it-n710/gemma3-27b-it_horizon_710_cka.npz",
+    "model_name": "google/gemma-3-27b-it",
+    "experiment": "E1_horizon",
+    "n_layers": 62,
+    "variant": "n710",
+    "model_key": "google/gemma-3-27b-it|L62",
+    "n_blocks": 2,
+    "blockiness": 0.2563239643416788,
+    "layer_coupling": 0.7698311280832396,
+    "boundaries_rho": [
+      0.4426229508196721
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        5
+      ],
+      "stable_penalty_lo": 0.006,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.194,
+      "k_by_penalty": {
+        "0.0": 5,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4426229508196721
+        ],
+        "blockiness": 0.2563239643416788
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.21311475409836064,
+          0.47540983606557374
+        ],
+        "blockiness": 0.232147090500889
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.21311475409836064,
+          0.45901639344262296,
+          0.8688524590163934
+        ],
+        "blockiness": 0.266716661930655
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 27,
+        "slope": -0.010663639903362897,
+        "mean": 0.9145619821353821,
+        "std": 0.07576744847321941,
+        "r2": 0.7703199624976261
+      },
+      "later_blocks": {
+        "n": 34,
+        "slope": -0.009080448715095708,
+        "mean": 0.888309600996529,
+        "std": 0.11170838067002042,
+        "r2": 0.41113895229541886
+      },
+      "first_block_rho": [
+        0.0,
+        0.4262295081967213
+      ],
+      "degeneracy_score": 0.18494659210798847
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/gemma3-27b-it/gemma3-27b-it_horizon_cka.npz",
+    "model_name": "google/gemma-3-27b-it",
+    "experiment": "E1_horizon",
+    "n_layers": 62,
+    "variant": "default",
+    "model_key": "google/gemma-3-27b-it|L62",
+    "n_blocks": 2,
+    "blockiness": 0.24221336059027931,
+    "layer_coupling": 0.7841760237171449,
+    "boundaries_rho": [
+      0.4426229508196721
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        3
+      ],
+      "stable_penalty_lo": 0.016,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.184,
+      "k_by_penalty": {
+        "0.0": 3,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4426229508196721
+        ],
+        "blockiness": 0.24221336059027931
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.4426229508196721,
+          0.8688524590163934
+        ],
+        "blockiness": 0.25708520202501706
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.19672131147540983,
+          0.45901639344262296,
+          0.8688524590163934
+        ],
+        "blockiness": 0.24858454002009678
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 27,
+        "slope": -0.007706047395421782,
+        "mean": 0.9339673309040069,
+        "std": 0.0568816239782976,
+        "r2": 0.7137480131791881
+      },
+      "later_blocks": {
+        "n": 34,
+        "slope": -0.009069262515449027,
+        "mean": 0.8879811439207376,
+        "std": 0.11058313033944256,
+        "r2": 0.4185156516499128
+      },
+      "first_block_rho": [
+        0.0,
+        0.4262295081967213
+      ],
+      "degeneracy_score": 0.39819893917394517
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/olmo3-32b/olmo3-32b_horizon_cka.npz",
+    "model_name": "allenai/Olmo-3-1125-32B",
+    "experiment": "E1_horizon",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "allenai/Olmo-3-1125-32B|L64",
+    "n_blocks": 2,
+    "blockiness": 0.3191481833935802,
+    "layer_coupling": 0.7839754738348672,
+    "boundaries_rho": [
+      0.4126984126984127
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4126984126984127
+        ],
+        "blockiness": 0.3191481833935802
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.38095238095238093,
+          0.6507936507936508
+        ],
+        "blockiness": 0.2800708853426388
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.25396825396825395,
+          0.3968253968253968,
+          0.6507936507936508
+        ],
+        "blockiness": 0.261653084351537
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 26,
+        "slope": -0.006090886692215678,
+        "mean": 0.9630299937572363,
+        "std": 0.042455022690801335,
+        "r2": 0.7409781250265288
+      },
+      "later_blocks": {
+        "n": 37,
+        "slope": -0.0073860479376645725,
+        "mean": 0.9305175514693963,
+        "std": 0.07346710305132437,
+        "r2": 0.7468227681508928
+      },
+      "first_block_rho": [
+        0.0,
+        0.3968253968253968
+      ],
+      "degeneracy_score": 0.5495744353054038
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/qwen3-1.7b/qwen3-1.7b_horizon_cka.npz",
+    "model_name": "Qwen/Qwen3-1.7B",
+    "experiment": "E1_horizon",
+    "n_layers": 28,
+    "variant": "default",
+    "model_key": "Qwen/Qwen3-1.7B|L28",
+    "n_blocks": 3,
+    "blockiness": 0.22486303029578159,
+    "layer_coupling": 0.7805228488709451,
+    "boundaries_rho": [
+      0.1111111111111111,
+      0.6666666666666666
+    ],
+    "penalty": {
+      "k_at_default": 3,
+      "k_range": [
+        1,
+        3
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.042,
+      "margin": 0.042,
+      "k_by_penalty": {
+        "0.0": 3,
+        "0.02": 3,
+        "0.04": 3,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6666666666666666
+        ],
+        "blockiness": 0.1812088442414539
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.1111111111111111,
+          0.6666666666666666
+        ],
+        "blockiness": 0.22486303029578159
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.1111111111111111,
+          0.37037037037037035,
+          0.7037037037037037
+        ],
+        "blockiness": 0.20082420598929973
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 3,
+      "first_block": {
+        "n": 3,
+        "slope": NaN,
+        "mean": NaN,
+        "std": NaN,
+        "r2": NaN
+      },
+      "later_blocks": {
+        "n": 24,
+        "slope": -0.021614418829264848,
+        "mean": 0.8157113519063672,
+        "std": 0.1361914960379249,
+        "r2": 0.7696217429002066
+      },
+      "first_block_rho": [
+        0.0,
+        0.07407407407407407
+      ],
+      "degeneracy_score": NaN
+    }
+  },
+  {
+    "path": "runs/E1_horizon/results/qwen3-4b/qwen3-4b_horizon_cka.npz",
+    "model_name": "Qwen/Qwen3-4B",
+    "experiment": "E1_horizon",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "Qwen/Qwen3-4B|L36",
+    "n_blocks": 3,
+    "blockiness": 0.2641200302613007,
+    "layer_coupling": 0.7556053283525187,
+    "boundaries_rho": [
+      0.22857142857142856,
+      0.6571428571428571
+    ],
+    "penalty": {
+      "k_at_default": 3,
+      "k_range": [
+        2,
+        3
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.026,
+      "margin": 0.026,
+      "k_by_penalty": {
+        "0.0": 3,
+        "0.02": 3,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6285714285714286
+        ],
+        "blockiness": 0.23811680618829856
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.22857142857142856,
+          0.6571428571428571
+        ],
+        "blockiness": 0.2641200302613007
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.22857142857142856,
+          0.6285714285714286,
+          0.7714285714285715
+        ],
+        "blockiness": 0.26219643187866193
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 3,
+      "first_block": {
+        "n": 8,
+        "slope": -0.023460992414235413,
+        "mean": 0.9386797973829999,
+        "std": 0.04825437171358888,
+        "r2": 0.7091542046180546
+      },
+      "later_blocks": {
+        "n": 27,
+        "slope": -0.023730983259745656,
+        "mean": 0.7962420099099526,
+        "std": 0.16388073111580964,
+        "r2": 0.8154572819184949
+      },
+      "first_block_rho": [
+        0.0,
+        0.2
+      ],
+      "degeneracy_score": -0.1927773860407721
+    }
+  },
+  {
+    "path": "runs/E1_horizon_4k/results/gemma3-1b-it/gemma3-1b-it_horizon_cka.npz",
+    "model_name": "google/gemma-3-1b-it",
+    "experiment": "E1_horizon_4k",
+    "n_layers": 26,
+    "variant": "4k",
+    "model_key": "google/gemma-3-1b-it|L26",
+    "n_blocks": 3,
+    "blockiness": 0.3412273592861673,
+    "layer_coupling": 0.6598243926184055,
+    "boundaries_rho": [
+      0.24,
+      0.68
+    ],
+    "penalty": {
+      "k_at_default": 3,
+      "k_range": [
+        2,
+        5
+      ],
+      "stable_penalty_lo": 0.014,
+      "stable_penalty_hi": 0.038,
+      "margin": 0.024,
+      "k_by_penalty": {
+        "0.0": 5,
+        "0.02": 3,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.32
+        ],
+        "blockiness": 0.30124484545519875
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.24,
+          0.68
+        ],
+        "blockiness": 0.3412273592861673
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.16,
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.3541652328705879
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 3,
+      "first_block": {
+        "n": 6,
+        "slope": -0.05018102096542091,
+        "mean": 0.8973263866235501,
+        "std": 0.0864200356812834,
+        "r2": 0.52448808886651
+      },
+      "later_blocks": {
+        "n": 19,
+        "slope": -0.025849729388720075,
+        "mean": 0.7747720234932545,
+        "std": 0.13299735491096626,
+        "r2": 0.713563137741739
+      },
+      "first_block_rho": [
+        0.0,
+        0.2
+      ],
+      "degeneracy_score": -1.45559459471842
+    }
+  },
+  {
+    "path": "runs/E1_horizon_4k/results/gemma3-1b-pt/gemma3-1b-pt_horizon_cka.npz",
+    "model_name": "google/gemma-3-1b-pt",
+    "experiment": "E1_horizon_4k",
+    "n_layers": 26,
+    "variant": "4k",
+    "model_key": "google/gemma-3-1b-pt|L26",
+    "n_blocks": 3,
+    "blockiness": 0.29886337223531323,
+    "layer_coupling": 0.6827807794008429,
+    "boundaries_rho": [
+      0.44,
+      0.68
+    ],
+    "penalty": {
+      "k_at_default": 3,
+      "k_range": [
+        2,
+        9
+      ],
+      "stable_penalty_lo": 0.016,
+      "stable_penalty_hi": 0.024,
+      "margin": 0.008,
+      "k_by_penalty": {
+        "0.0": 9,
+        "0.02": 3,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.44
+        ],
+        "blockiness": 0.2731002552485623
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.29886337223531323
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.16,
+          0.44,
+          0.68
+        ],
+        "blockiness": 0.31422953818290367
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 3,
+      "first_block": {
+        "n": 11,
+        "slope": -0.03068997956488191,
+        "mean": 0.8513840475145261,
+        "std": 0.09607739292197667,
+        "r2": 0.6122122694338262
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.034682029325653466,
+        "mean": 0.8058002744606562,
+        "std": 0.12791792809174593,
+        "r2": 0.7350995710606872
+      },
+      "first_block_rho": [
+        0.0,
+        0.4
+      ],
+      "degeneracy_score": -0.7605247067686569
+    }
+  },
+  {
+    "path": "runs/E1_horizon_4k/results/qwen3-1.7b/qwen3-1.7b_horizon_cka.npz",
+    "model_name": "Qwen/Qwen3-1.7B",
+    "experiment": "E1_horizon_4k",
+    "n_layers": 28,
+    "variant": "4k",
+    "model_key": "Qwen/Qwen3-1.7B|L28",
+    "n_blocks": 2,
+    "blockiness": 0.20693623269250316,
+    "layer_coupling": 0.7884815215218751,
+    "boundaries_rho": [
+      0.5925925925925926
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        5
+      ],
+      "stable_penalty_lo": 0.004,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.196,
+      "k_by_penalty": {
+        "0.0": 5,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5925925925925926
+        ],
+        "blockiness": 0.20693623269250316
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.18518518518518517,
+          0.6666666666666666
+        ],
+        "blockiness": 0.1910137450435755
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.18518518518518517,
+          0.6666666666666666,
+          0.9629629629629629
+        ],
+        "blockiness": 0.21023096740438196
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 16,
+        "slope": -0.013812640298859603,
+        "mean": 0.9121342766458861,
+        "std": 0.06338776255798487,
+        "r2": 0.627837152498127
+      },
+      "later_blocks": {
+        "n": 11,
+        "slope": -0.03631271186581874,
+        "mean": 0.848848365401997,
+        "std": 0.11755754836530317,
+        "r2": 0.5724895674214615
+      },
+      "first_block_rho": [
+        0.0,
+        0.5555555555555556
+      ],
+      "degeneracy_score": 0.10607761445956254
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage1-step1000.npz",
+    "model_name": "olmo32b stage1-step1000 (8.4B, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage1-step1000|L64",
+    "n_blocks": 2,
+    "blockiness": 0.17395568150631502,
+    "layer_coupling": 0.8727134818188016,
+    "boundaries_rho": [
+      0.38095238095238093
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.172,
+      "margin": 0.172,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 1,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.38095238095238093
+        ],
+        "blockiness": 0.17395568150631502
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.2698412698412698,
+          0.6349206349206349
+        ],
+        "blockiness": 0.15351995130752194
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.1746031746031746,
+          0.38095238095238093,
+          0.7142857142857143
+        ],
+        "blockiness": 0.15052022385421093
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 24,
+        "slope": -0.008843343406516876,
+        "mean": 0.9431462916744131,
+        "std": 0.05162441177475512,
+        "r2": 0.8966293109152879
+      },
+      "later_blocks": {
+        "n": 39,
+        "slope": -0.0043286666222127086,
+        "mean": 0.9609028303370432,
+        "std": 0.040203341840726235,
+        "r2": 0.9531761777748698
+      },
+      "first_block_rho": [
+        0.0,
+        0.36507936507936506
+      ],
+      "degeneracy_score": 0.38291490831471753
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage1-step11000.npz",
+    "model_name": "olmo32b stage1-step11000 (92.3B, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage1-step11000|L64",
+    "n_blocks": 2,
+    "blockiness": 0.2432471681786621,
+    "layer_coupling": 0.864501459820857,
+    "boundaries_rho": [
+      0.2698412698412698
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.2698412698412698
+        ],
+        "blockiness": 0.2432471681786621
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.2222222222222222,
+          0.4603174603174603
+        ],
+        "blockiness": 0.18633707322400295
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.15873015873015872,
+          0.3333333333333333,
+          0.6507936507936508
+        ],
+        "blockiness": 0.1644760941871346
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 17,
+        "slope": -0.01286682913781824,
+        "mean": 0.9404527928732598,
+        "std": 0.05278852112251984,
+        "r2": 0.891159284454699
+      },
+      "later_blocks": {
+        "n": 46,
+        "slope": -0.00293483220871553,
+        "mean": 0.9647181469784907,
+        "std": 0.03492487762838311,
+        "r2": 0.8112875221623101
+      },
+      "first_block_rho": [
+        0.0,
+        0.25396825396825395
+      ],
+      "degeneracy_score": 0.21462554287045088
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage1-step130000.npz",
+    "model_name": "olmo32b stage1-step130000 (1.09T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage1-step130000|L64",
+    "n_blocks": 2,
+    "blockiness": 0.36260159304851336,
+    "layer_coupling": 0.7781693020231547,
+    "boundaries_rho": [
+      0.36507936507936506
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.36507936507936506
+        ],
+        "blockiness": 0.36260159304851336
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.2857142857142857,
+          0.4444444444444444
+        ],
+        "blockiness": 0.31982035695323563
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.20634920634920634,
+          0.38095238095238093,
+          0.6507936507936508
+        ],
+        "blockiness": 0.2675497440267457
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 23,
+        "slope": -0.010977568974965882,
+        "mean": 0.9338876279641034,
+        "std": 0.06116202599637998,
+        "r2": 0.9020002428287145
+      },
+      "later_blocks": {
+        "n": 40,
+        "slope": -0.004276885345960481,
+        "mean": 0.9538754632591419,
+        "std": 0.04726046499598623,
+        "r2": 0.708849738338031
+      },
+      "first_block_rho": [
+        0.0,
+        0.3492063492063492
+      ],
+      "degeneracy_score": 0.2501367649799482
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage1-step2000.npz",
+    "model_name": "olmo32b stage1-step2000 (16.8B, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage1-step2000|L64",
+    "n_blocks": 2,
+    "blockiness": 0.11103159482024572,
+    "layer_coupling": 0.9228577723079254,
+    "boundaries_rho": [
+      0.3333333333333333
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.11,
+      "margin": 0.11,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 1,
+        "0.14": 1,
+        "0.16": 1,
+        "0.18": 1,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.3333333333333333
+        ],
+        "blockiness": 0.11103159482024572
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.2222222222222222,
+          0.5396825396825397
+        ],
+        "blockiness": 0.09341602574575303
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.15873015873015872,
+          0.3492063492063492,
+          0.6825396825396826
+        ],
+        "blockiness": 0.08982520166438357
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 21,
+        "slope": -0.007978144174386732,
+        "mean": 0.9516793491401933,
+        "std": 0.04130176871352185,
+        "r2": 0.8665033308309672
+      },
+      "later_blocks": {
+        "n": 42,
+        "slope": -0.0021097823526090072,
+        "mean": 0.9782014936955356,
+        "std": 0.021142742802513784,
+        "r2": 0.9514995758575772
+      },
+      "first_block_rho": [
+        0.0,
+        0.31746031746031744
+      ],
+      "degeneracy_score": 0.4673465073106366
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage1-step26000.npz",
+    "model_name": "olmo32b stage1-step26000 (0.22T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage1-step26000|L64",
+    "n_blocks": 2,
+    "blockiness": 0.3001555315686455,
+    "layer_coupling": 0.816597192992898,
+    "boundaries_rho": [
+      0.3333333333333333
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.3333333333333333
+        ],
+        "blockiness": 0.3001555315686455
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.2222222222222222,
+          0.4444444444444444
+        ],
+        "blockiness": 0.2588295386720103
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.20634920634920634,
+          0.36507936507936506,
+          0.6507936507936508
+        ],
+        "blockiness": 0.22188094386244128
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 21,
+        "slope": -0.015608964801761792,
+        "mean": 0.9158121264829956,
+        "std": 0.07987019890885766,
+        "r2": 0.8869159133596812
+      },
+      "later_blocks": {
+        "n": 42,
+        "slope": -0.00356396061310057,
+        "mean": 0.9610145180582659,
+        "std": 0.03914496513253469,
+        "r2": 0.7920815772466229
+      },
+      "first_block_rho": [
+        0.0,
+        0.31746031746031744
+      ],
+      "degeneracy_score": -0.028027261222906774
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage1-step292000.npz",
+    "model_name": "olmo32b stage1-step292000 (2.45T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage1-step292000|L64",
+    "n_blocks": 2,
+    "blockiness": 0.30454109049803946,
+    "layer_coupling": 0.7982282755898356,
+    "boundaries_rho": [
+      0.3968253968253968
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.3968253968253968
+        ],
+        "blockiness": 0.30454109049803946
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.2698412698412698,
+          0.4444444444444444
+        ],
+        "blockiness": 0.27376593303120067
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.20634920634920634,
+          0.3968253968253968,
+          0.6507936507936508
+        ],
+        "blockiness": 0.23569290382824248
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 25,
+        "slope": -0.010549841456483473,
+        "mean": 0.9301153237412237,
+        "std": 0.06291806233253332,
+        "r2": 0.9340494442945244
+      },
+      "later_blocks": {
+        "n": 38,
+        "slope": -0.004630847181688525,
+        "mean": 0.9533016292509123,
+        "std": 0.0475728700290449,
+        "r2": 0.7390890976607802
+      },
+      "first_block_rho": [
+        0.0,
+        0.38095238095238093
+      ],
+      "degeneracy_score": 0.2564494161517516
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage1-step5000.npz",
+    "model_name": "olmo32b stage1-step5000 (41.9B, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage1-step5000|L64",
+    "n_blocks": 2,
+    "blockiness": 0.14750847119109567,
+    "layer_coupling": 0.9098185239446485,
+    "boundaries_rho": [
+      0.2698412698412698
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.146,
+      "margin": 0.146,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 1,
+        "0.18": 1,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.2698412698412698
+        ],
+        "blockiness": 0.14750847119109567
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.19047619047619047,
+          0.47619047619047616
+        ],
+        "blockiness": 0.11752521123896364
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.1746031746031746,
+          0.3492063492063492,
+          0.6666666666666666
+        ],
+        "blockiness": 0.1056313119036979
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 17,
+        "slope": -0.009781710618819212,
+        "mean": 0.9524480744627255,
+        "std": 0.03855739420385537,
+        "r2": 0.965396075314156
+      },
+      "later_blocks": {
+        "n": 46,
+        "slope": -0.00243246559641864,
+        "mean": 0.97104181357069,
+        "std": 0.027593634257902996,
+        "r2": 0.8927988767308297
+      },
+      "first_block_rho": [
+        0.0,
+        0.25396825396825395
+      ],
+      "degeneracy_score": 0.40695007289453555
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage1-step58000.npz",
+    "model_name": "olmo32b stage1-step58000 (0.49T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage1-step58000|L64",
+    "n_blocks": 2,
+    "blockiness": 0.3205030938778751,
+    "layer_coupling": 0.797644911648144,
+    "boundaries_rho": [
+      0.36507936507936506
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.36507936507936506
+        ],
+        "blockiness": 0.3205030938778751
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.2698412698412698,
+          0.47619047619047616
+        ],
+        "blockiness": 0.276630416892243
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.2222222222222222,
+          0.38095238095238093,
+          0.6507936507936508
+        ],
+        "blockiness": 0.24475766180753755
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 23,
+        "slope": -0.012300935016063882,
+        "mean": 0.9286813430037207,
+        "std": 0.06825090466289226,
+        "r2": 0.9095308935907734
+      },
+      "later_blocks": {
+        "n": 40,
+        "slope": -0.004411716697667782,
+        "mean": 0.9550930455099902,
+        "std": 0.046003606524525405,
+        "r2": 0.7960244730335615
+      },
+      "first_block_rho": [
+        0.0,
+        0.3492063492063492
+      ],
+      "degeneracy_score": 0.16364032370959636
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage1-step656000.npz",
+    "model_name": "olmo32b stage1-step656000 (5.50T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage1-step656000|L64",
+    "n_blocks": 2,
+    "blockiness": 0.29699314241520935,
+    "layer_coupling": 0.7919875846621435,
+    "boundaries_rho": [
+      0.3968253968253968
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.3968253968253968
+        ],
+        "blockiness": 0.29699314241520935
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.36507936507936506,
+          0.6507936507936508
+        ],
+        "blockiness": 0.24078470322079426
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.12698412698412698,
+          0.38095238095238093,
+          0.6507936507936508
+        ],
+        "blockiness": 0.2400593554239111
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 25,
+        "slope": -0.011482224586837994,
+        "mean": 0.9269122110639618,
+        "std": 0.07025074384054944,
+        "r2": 0.8875215339720527
+      },
+      "later_blocks": {
+        "n": 38,
+        "slope": -0.005818914882573348,
+        "mean": 0.940526308062847,
+        "std": 0.0607793512769446,
+        "r2": 0.7149348885184128
+      },
+      "first_block_rho": [
+        0.0,
+        0.38095238095238093
+      ],
+      "degeneracy_score": 0.1866202522282443
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage3-step1000.npz",
+    "model_name": "olmo32b stage3-step1000 (5.61T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage3-step1000|L64",
+    "n_blocks": 2,
+    "blockiness": 0.3232980612745956,
+    "layer_coupling": 0.7823434306008838,
+    "boundaries_rho": [
+      0.4126984126984127
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4126984126984127
+        ],
+        "blockiness": 0.3232980612745956
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.38095238095238093,
+          0.6507936507936508
+        ],
+        "blockiness": 0.2792178806996267
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.2698412698412698,
+          0.4126984126984127,
+          0.6507936507936508
+        ],
+        "blockiness": 0.262350692067261
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 26,
+        "slope": -0.005787371323230336,
+        "mean": 0.9601969765679632,
+        "std": 0.039168034942789406,
+        "r2": 0.7859621457165967
+      },
+      "later_blocks": {
+        "n": 37,
+        "slope": -0.007055556211050814,
+        "mean": 0.9325132074189393,
+        "std": 0.06816496189879241,
+        "r2": 0.7916245527596931
+      },
+      "first_block_rho": [
+        0.0,
+        0.3968253968253968
+      ],
+      "degeneracy_score": 0.5720299838675921
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo32b/results/cka_stage3-step11921.npz",
+    "model_name": "olmo32b stage3-step11921 (5.70T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 64,
+    "variant": "default",
+    "model_key": "olmo32b stage3-step11921|L64",
+    "n_blocks": 2,
+    "blockiness": 0.3106120221295454,
+    "layer_coupling": 0.7851535127132134,
+    "boundaries_rho": [
+      0.4126984126984127
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4126984126984127
+        ],
+        "blockiness": 0.3106120221295454
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.38095238095238093,
+          0.6507936507936508
+        ],
+        "blockiness": 0.2751126936103141
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.25396825396825395,
+          0.3968253968253968,
+          0.6507936507936508
+        ],
+        "blockiness": 0.2566580598686192
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 26,
+        "slope": -0.005890485195772797,
+        "mean": 0.9620085710862516,
+        "std": 0.04072474374279856,
+        "r2": 0.7531611640554954
+      },
+      "later_blocks": {
+        "n": 37,
+        "slope": -0.007576749143935846,
+        "mean": 0.9265123519481462,
+        "std": 0.07560654042746338,
+        "r2": 0.7420381269627256
+      },
+      "first_block_rho": [
+        0.0,
+        0.3968253968253968
+      ],
+      "degeneracy_score": 0.5634901882841454
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo7b_early/results/cka_stage1-step0.npz",
+    "model_name": "olmo7b_early stage1-step0 (init, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "olmo7b_early stage1-step0|L32",
+    "n_blocks": 2,
+    "blockiness": 0.12703978263649096,
+    "layer_coupling": 0.8490085873606765,
+    "boundaries_rho": [
+      0.41935483870967744
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        10
+      ],
+      "stable_penalty_lo": 0.008,
+      "stable_penalty_hi": 0.126,
+      "margin": 0.118,
+      "k_by_penalty": {
+        "0.0": 10,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 1,
+        "0.16": 1,
+        "0.18": 1,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.41935483870967744
+        ],
+        "blockiness": 0.12703978263649096
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.22580645161290322,
+          0.5806451612903226
+        ],
+        "blockiness": 0.13366303829512027
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.16129032258064516,
+          0.3870967741935484,
+          0.6774193548387096
+        ],
+        "blockiness": 0.1351819468031632
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 13,
+        "slope": -0.02297922948046086,
+        "mean": 0.8827173931508278,
+        "std": 0.07548708372246697,
+        "r2": 0.7928186262591773
+      },
+      "later_blocks": {
+        "n": 18,
+        "slope": -0.010805988308771977,
+        "mean": 0.9283450133164584,
+        "std": 0.04459057200012364,
+        "r2": 0.9918453881305189
+      },
+      "first_block_rho": [
+        0.0,
+        0.3870967741935484
+      ],
+      "degeneracy_score": -0.3384001209574744
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo7b_early/results/cka_stage1-step1000.npz",
+    "model_name": "olmo7b_early stage1-step1000 (4.2B, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "olmo7b_early stage1-step1000|L32",
+    "n_blocks": 2,
+    "blockiness": 0.17930779816876963,
+    "layer_coupling": 0.8548547687180355,
+    "boundaries_rho": [
+      0.5483870967741935
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.178,
+      "margin": 0.178,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 1,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5483870967741935
+        ],
+        "blockiness": 0.17930779816876963
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.3870967741935484,
+          0.6774193548387096
+        ],
+        "blockiness": 0.1616429505127599
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.25806451612903225,
+          0.5161290322580645,
+          0.7419354838709677
+        ],
+        "blockiness": 0.1556363831955666
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 17,
+        "slope": -0.011244214646873188,
+        "mean": 0.9423193605877502,
+        "std": 0.046275385613200264,
+        "r2": 0.8856240897231012
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.01323027513767345,
+        "mean": 0.9530710587812556,
+        "std": 0.042902631137598166,
+        "r2": 0.9509767448962753
+      },
+      "first_block_rho": [
+        0.0,
+        0.5161290322580645
+      ],
+      "degeneracy_score": 0.30744923226002163
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo7b_early/results/cka_stage1-step16000.npz",
+    "model_name": "olmo7b_early stage1-step16000 (67.1B, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "olmo7b_early stage1-step16000|L32",
+    "n_blocks": 2,
+    "blockiness": 0.1714014555141985,
+    "layer_coupling": 0.860579822905831,
+    "boundaries_rho": [
+      0.5806451612903226
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.17,
+      "margin": 0.17,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 1,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5806451612903226
+        ],
+        "blockiness": 0.1714014555141985
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.3548387096774194,
+          0.6451612903225806
+        ],
+        "blockiness": 0.1573725189439532
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.3548387096774194,
+          0.5806451612903226,
+          0.8064516129032258
+        ],
+        "blockiness": 0.1534661026416938
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 18,
+        "slope": -0.009978444023297166,
+        "mean": 0.9424477777014663,
+        "std": 0.042906776453605175,
+        "r2": 0.9134293330303036
+      },
+      "later_blocks": {
+        "n": 13,
+        "slope": -0.012288027876365366,
+        "mean": 0.9554361403149573,
+        "std": 0.03831183815371011,
+        "r2": 0.8801295708777751
+      },
+      "first_block_rho": [
+        0.0,
+        0.5483870967741935
+      ],
+      "degeneracy_score": 0.371682910955159
+    }
+  },
+  {
+    "path": "runs/E2_training/olmo7b_early/results/cka_stage1-step4000.npz",
+    "model_name": "olmo7b_early stage1-step4000 (16.8B, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 32,
+    "variant": "default",
+    "model_key": "olmo7b_early stage1-step4000|L32",
+    "n_blocks": 2,
+    "blockiness": 0.11251735211552782,
+    "layer_coupling": 0.9008609643925899,
+    "boundaries_rho": [
+      0.5483870967741935
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.112,
+      "margin": 0.112,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 1,
+        "0.14": 1,
+        "0.16": 1,
+        "0.18": 1,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5483870967741935
+        ],
+        "blockiness": 0.11251735211552782
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.3870967741935484,
+          0.6774193548387096
+        ],
+        "blockiness": 0.10338277012019848
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.3225806451612903,
+          0.5483870967741935,
+          0.8064516129032258
+        ],
+        "blockiness": 0.10167851478869017
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 17,
+        "slope": -0.007125682515704864,
+        "mean": 0.9580625903493716,
+        "std": 0.02788804556971822,
+        "r2": 0.9792825982311718
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.010930421262433277,
+        "mean": 0.9590302102838018,
+        "std": 0.035888729638837887,
+        "r2": 0.9275933547449603
+      },
+      "first_block_rho": [
+        0.0,
+        0.5161290322580645
+      ],
+      "degeneracy_score": 0.5614831074423041
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage1-step-1280000.npz",
+    "model_name": "smollm3 stage1-step-1280000 (3.03T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage1-step-1280000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.29602701154981936,
+    "layer_coupling": 0.7468204900420278,
+    "boundaries_rho": [
+      0.6
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        3
+      ],
+      "stable_penalty_lo": 0.008,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.192,
+      "k_by_penalty": {
+        "0.0": 3,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6
+        ],
+        "blockiness": 0.29602701154981936
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.6
+        ],
+        "blockiness": 0.3030867206673752
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.45714285714285713,
+          0.6571428571428571
+        ],
+        "blockiness": 0.28111001460614315
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 21,
+        "slope": -0.018588207856402618,
+        "mean": 0.8794086186524905,
+        "std": 0.10521254023676417,
+        "r2": 0.7248427585469053
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.0159350873030336,
+        "mean": 0.9246712184603935,
+        "std": 0.05607401147355954,
+        "r2": 0.8075801619002051
+      },
+      "first_block_rho": [
+        0.0,
+        0.5714285714285714
+      ],
+      "degeneracy_score": -0.2849698565506708
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage1-step-160000.npz",
+    "model_name": "smollm3 stage1-step-160000 (0.38T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage1-step-160000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.2526769782553586,
+    "layer_coupling": 0.7754754578938747,
+    "boundaries_rho": [
+      0.4857142857142857
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.4857142857142857
+        ],
+        "blockiness": 0.2526769782553586
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.4,
+          0.6285714285714286
+        ],
+        "blockiness": 0.24287128684005765
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.4,
+          0.6285714285714286
+        ],
+        "blockiness": 0.25007894738422776
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 17,
+        "slope": -0.020568790487658098,
+        "mean": 0.902489525676248,
+        "std": 0.09061785157129212,
+        "r2": 0.7728251470994422
+      },
+      "later_blocks": {
+        "n": 18,
+        "slope": -0.01593341762597383,
+        "mean": 0.9080317003290342,
+        "std": 0.07120085066057849,
+        "r2": 0.8457628262977179
+      },
+      "first_block_rho": [
+        0.0,
+        0.45714285714285713
+      ],
+      "degeneracy_score": -0.28273350011524445
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage1-step-1920000.npz",
+    "model_name": "smollm3 stage1-step-1920000 (4.55T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage1-step-1920000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.2553804671890749,
+    "layer_coupling": 0.7909516505563028,
+    "boundaries_rho": [
+      0.6
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6
+        ],
+        "blockiness": 0.2553804671890749
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.4,
+          0.6571428571428571
+        ],
+        "blockiness": 0.22370036617858635
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.45714285714285713,
+          0.6571428571428571
+        ],
+        "blockiness": 0.22474706451280524
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 21,
+        "slope": -0.012979853897203778,
+        "mean": 0.9129843859215403,
+        "std": 0.06858916356732096,
+        "r2": 0.8316342580841822
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.01567543926668141,
+        "mean": 0.9267287080785775,
+        "std": 0.057163525866379426,
+        "r2": 0.7519715722550943
+      },
+      "first_block_rho": [
+        0.0,
+        0.5714285714285714
+      ],
+      "degeneracy_score": 0.1194335757641053
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage1-step-2560000.npz",
+    "model_name": "smollm3 stage1-step-2560000 (6.07T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage1-step-2560000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.257400775697493,
+    "layer_coupling": 0.78553326094383,
+    "boundaries_rho": [
+      0.6
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6
+        ],
+        "blockiness": 0.257400775697493
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.6
+        ],
+        "blockiness": 0.24728748294778125
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.45714285714285713,
+          0.6571428571428571
+        ],
+        "blockiness": 0.228667372538778
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 21,
+        "slope": -0.013535763817786723,
+        "mean": 0.9080658622520167,
+        "std": 0.07408324708824703,
+        "r2": 0.7752277204337835
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.015757945175275657,
+        "mean": 0.9234587519608406,
+        "std": 0.06056043785134256,
+        "r2": 0.6770506469600382
+      },
+      "first_block_rho": [
+        0.0,
+        0.5714285714285714
+      ],
+      "degeneracy_score": 0.07030232118755975
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage1-step-320000.npz",
+    "model_name": "smollm3 stage1-step-320000 (0.76T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage1-step-320000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.2651658208631724,
+    "layer_coupling": 0.7753789641082227,
+    "boundaries_rho": [
+      0.5428571428571428
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5428571428571428
+        ],
+        "blockiness": 0.2651658208631724
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.4,
+          0.6285714285714286
+        ],
+        "blockiness": 0.24641699286657692
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.45714285714285713,
+          0.6571428571428571
+        ],
+        "blockiness": 0.25063536757440363
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 19,
+        "slope": -0.016363245368690223,
+        "mean": 0.908404924999816,
+        "std": 0.07795948076589274,
+        "r2": 0.8321611211738287
+      },
+      "later_blocks": {
+        "n": 16,
+        "slope": -0.01666360477964194,
+        "mean": 0.9143551936029638,
+        "std": 0.06723150225633007,
+        "r2": 0.8122631187631189
+      },
+      "first_block_rho": [
+        0.0,
+        0.5142857142857142
+      ],
+      "degeneracy_score": -0.05796281281136384
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage1-step-3200000.npz",
+    "model_name": "smollm3 stage1-step-3200000 (7.58T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage1-step-3200000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.2390720706733067,
+    "layer_coupling": 0.7920072045225599,
+    "boundaries_rho": [
+      0.6
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6
+        ],
+        "blockiness": 0.2390720706733067
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.6
+        ],
+        "blockiness": 0.23840456504540364
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.45714285714285713,
+          0.6571428571428571
+        ],
+        "blockiness": 0.22073302252691884
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 21,
+        "slope": -0.014708501818127492,
+        "mean": 0.9036052848125415,
+        "std": 0.08106935445770684,
+        "r2": 0.7644115211350786
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.015898391113417593,
+        "mean": 0.9252099691348122,
+        "std": 0.06091108948342689,
+        "r2": 0.6812611423539049
+      },
+      "first_block_rho": [
+        0.0,
+        0.5714285714285714
+      ],
+      "degeneracy_score": -0.00901220574338557
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage1-step-40000.npz",
+    "model_name": "smollm3 stage1-step-40000 (95B, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage1-step-40000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.22218256455844132,
+    "layer_coupling": 0.8078338478745567,
+    "boundaries_rho": [
+      0.45714285714285713
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.45714285714285713
+        ],
+        "blockiness": 0.22218256455844132
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.4,
+          0.6285714285714286
+        ],
+        "blockiness": 0.21726660330582126
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.4,
+          0.6285714285714286
+        ],
+        "blockiness": 0.2104253159892039
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 16,
+        "slope": -0.013802180762128087,
+        "mean": 0.9345257920719584,
+        "std": 0.054429752151815204,
+        "r2": 0.8502118627903853
+      },
+      "later_blocks": {
+        "n": 19,
+        "slope": -0.01456606492854578,
+        "mean": 0.9121078031097377,
+        "std": 0.06608357119195699,
+        "r2": 0.9177066653681244
+      },
+      "first_block_rho": [
+        0.0,
+        0.42857142857142855
+      ],
+      "degeneracy_score": 0.1647195529795742
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage1-step-640000.npz",
+    "model_name": "smollm3 stage1-step-640000 (1.52T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage1-step-640000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.28502252097036507,
+    "layer_coupling": 0.7577355642786581,
+    "boundaries_rho": [
+      0.5714285714285714
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.5714285714285714
+        ],
+        "blockiness": 0.28502252097036507
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.2,
+          0.6
+        ],
+        "blockiness": 0.27126652118637196
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.45714285714285713,
+          0.6571428571428571
+        ],
+        "blockiness": 0.27082710247125896
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 20,
+        "slope": -0.01929163489448579,
+        "mean": 0.8902350482023506,
+        "std": 0.09653707601728771,
+        "r2": 0.8386274659316065
+      },
+      "later_blocks": {
+        "n": 15,
+        "slope": -0.01603938010485312,
+        "mean": 0.9217279844195764,
+        "std": 0.06155421275921763,
+        "r2": 0.7846038344683433
+      },
+      "first_block_rho": [
+        0.0,
+        0.5428571428571428
+      ],
+      "degeneracy_score": -0.26757865164623185
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage1-step-80000.npz",
+    "model_name": "smollm3 stage1-step-80000 (0.19T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage1-step-80000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.27778344619484396,
+    "layer_coupling": 0.7583771158053036,
+    "boundaries_rho": [
+      0.45714285714285713
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.45714285714285713
+        ],
+        "blockiness": 0.27778344619484396
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.4,
+          0.6285714285714286
+        ],
+        "blockiness": 0.2632041503088547
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.4,
+          0.6285714285714286
+        ],
+        "blockiness": 0.272363889483762
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 16,
+        "slope": -0.024489474921144685,
+        "mean": 0.8971380644071599,
+        "std": 0.09812208518639924,
+        "r2": 0.8236256463813029
+      },
+      "later_blocks": {
+        "n": 19,
+        "slope": -0.016376959755237605,
+        "mean": 0.9025247697834662,
+        "std": 0.07572645585103548,
+        "r2": 0.8834413292583234
+      },
+      "first_block_rho": [
+        0.0,
+        0.42857142857142855
+      ],
+      "degeneracy_score": -0.4749292731842244
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage2-step-3840000.npz",
+    "model_name": "smollm3 stage2-step-3840000 (9.10T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage2-step-3840000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.20435511652364236,
+    "layer_coupling": 0.8097739857856439,
+    "boundaries_rho": [
+      0.6
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        3
+      ],
+      "stable_penalty_lo": 0.012,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.188,
+      "k_by_penalty": {
+        "0.0": 3,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6
+        ],
+        "blockiness": 0.20435511652364236
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.6
+        ],
+        "blockiness": 0.21482671360607963
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.4,
+          0.6571428571428571
+        ],
+        "blockiness": 0.19662560267334428
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 21,
+        "slope": -0.014733907128258302,
+        "mean": 0.9025895107449452,
+        "std": 0.08432093340749038,
+        "r2": 0.709036874628661
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.014580323346533168,
+        "mean": 0.9295800960077976,
+        "std": 0.056861641496796185,
+        "r2": 0.657499648628741
+      },
+      "first_block_rho": [
+        0.0,
+        0.5714285714285714
+      ],
+      "degeneracy_score": -0.02405050801534847
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage3-step-4400000.npz",
+    "model_name": "smollm3 stage3-step-4400000 (10.43T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage3-step-4400000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.20355056979109176,
+    "layer_coupling": 0.8194341149954636,
+    "boundaries_rho": [
+      0.6
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6
+        ],
+        "blockiness": 0.20355056979109176
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.4,
+          0.6571428571428571
+        ],
+        "blockiness": 0.18106048518775708
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.4857142857142857,
+          0.6857142857142857
+        ],
+        "blockiness": 0.1887782882409188
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 21,
+        "slope": -0.012168166729619307,
+        "mean": 0.9184414473297211,
+        "std": 0.06684546122557859,
+        "r2": 0.7695028486851434
+      },
+      "later_blocks": {
+        "n": 14,
+        "slope": -0.015621384210437782,
+        "mean": 0.9236364965251965,
+        "std": 0.06150407423216752,
+        "r2": 0.6451062603829604
+      },
+      "first_block_rho": [
+        0.0,
+        0.5714285714285714
+      ],
+      "degeneracy_score": 0.16433293324263443
+    }
+  },
+  {
+    "path": "runs/E2_training/smollm3/results/cka_stage3-step-4720000.npz",
+    "model_name": "smollm3 stage3-step-4720000 (11.19T, n=250)",
+    "experiment": "E2_training",
+    "n_layers": 36,
+    "variant": "default",
+    "model_key": "smollm3 stage3-step-4720000|L36",
+    "n_blocks": 2,
+    "blockiness": 0.20702830415265006,
+    "layer_coupling": 0.8178520807027165,
+    "boundaries_rho": [
+      0.6285714285714286
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6285714285714286
+        ],
+        "blockiness": 0.20702830415265006
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.4,
+          0.6857142857142857
+        ],
+        "blockiness": 0.1825563050490584
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11428571428571428,
+          0.45714285714285713,
+          0.6857142857142857
+        ],
+        "blockiness": 0.18387737858713793
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 22,
+        "slope": -0.011388203261023232,
+        "mean": 0.9178064961422597,
+        "std": 0.0634358475275718,
+        "r2": 0.8236188039848809
+      },
+      "later_blocks": {
+        "n": 13,
+        "slope": -0.017322642843102375,
+        "mean": 0.9160568796921215,
+        "std": 0.06301342639006713,
+        "r2": 0.6465622250550199
+      },
+      "first_block_rho": [
+        0.0,
+        0.6
+      ],
+      "degeneracy_score": 0.20853497559104334
+    }
+  },
+  {
+    "path": "runs/E4_delphi/ladder/results/cka_delphi-1e22-9.7Bparams-160Btokens.npz",
+    "model_name": "delphi-1e22-9.7Bparams-160Btokens",
+    "experiment": "E4_delphi",
+    "n_layers": 37,
+    "variant": "default",
+    "model_key": "delphi-1e22-9.7Bparams-160Btokens|L37",
+    "n_blocks": 2,
+    "blockiness": 0.2076074338547398,
+    "layer_coupling": 0.8517762980239169,
+    "boundaries_rho": [
+      0.3333333333333333
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.3333333333333333
+        ],
+        "blockiness": 0.2076074338547398
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.25,
+          0.5555555555555556
+        ],
+        "blockiness": 0.1884153801939824
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.2222222222222222,
+          0.3888888888888889,
+          0.6111111111111112
+        ],
+        "blockiness": 0.17766495146151828
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 12,
+        "slope": -0.017842277727965,
+        "mean": 0.9369268754977452,
+        "std": 0.06224776849398818,
+        "r2": 0.5933676474828946
+      },
+      "later_blocks": {
+        "n": 24,
+        "slope": -0.007899702130966009,
+        "mean": 0.9490154330227362,
+        "std": 0.04780887218834574,
+        "r2": 0.8342469328903154
+      },
+      "first_block_rho": [
+        0.0,
+        0.3055555555555556
+      ],
+      "degeneracy_score": -0.025755307596807553
+    }
+  },
+  {
+    "path": "runs/E4_delphi/ladder/results/cka_delphi-1e23-25Bparams-628Btokens.npz",
+    "model_name": "delphi-1e23-25Bparams-628Btokens",
+    "experiment": "E4_delphi",
+    "n_layers": 51,
+    "variant": "default",
+    "model_key": "delphi-1e23-25Bparams-628Btokens|L51",
+    "n_blocks": 2,
+    "blockiness": 0.20915007996445667,
+    "layer_coupling": 0.8602690057404402,
+    "boundaries_rho": [
+      0.3
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.3
+        ],
+        "blockiness": 0.20915007996445667
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.22,
+          0.48
+        ],
+        "blockiness": 0.1873464408960348
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.14,
+          0.28,
+          0.52
+        ],
+        "blockiness": 0.18031133607041927
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 15,
+        "slope": -0.015974044522662975,
+        "mean": 0.9322382064481413,
+        "std": 0.06318758152508432,
+        "r2": 0.7385112992929525
+      },
+      "later_blocks": {
+        "n": 35,
+        "slope": -0.005175819696614013,
+        "mean": 0.9530223803875467,
+        "std": 0.0481281377669235,
+        "r2": 0.7633155292782872
+      },
+      "first_block_rho": [
+        0.0,
+        0.28
+      ],
+      "degeneracy_score": 0.040526099441284935
+    }
+  },
+  {
+    "path": "runs/E6_moe/deepseek-v4-flash-base/results/cka_deepseek-v4-flash-base.npz",
+    "model_name": "DeepSeek-V4-Flash-Base (284B/13B MoE, n=250)",
+    "experiment": "E6_moe",
+    "n_layers": 44,
+    "variant": "default",
+    "model_key": "DeepSeek-V4-Flash-Base|L44",
+    "n_blocks": 2,
+    "blockiness": 0.4993693292038113,
+    "layer_coupling": 0.8746257476700324,
+    "boundaries_rho": [
+      0.9767441860465116
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.9767441860465116
+        ],
+        "blockiness": 0.4993693292038113
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.11627906976744186,
+          0.9767441860465116
+        ],
+        "blockiness": 0.16510865499878757
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.11627906976744186,
+          0.7906976744186046,
+          0.9767441860465116
+        ],
+        "blockiness": 0.17406725064592987
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 15,
+        "slope": -0.011577713637787855,
+        "mean": 0.937046913820509,
+        "std": 0.05003438787409094,
+        "r2": 0.6187272662858133
+      },
+      "later_blocks": {
+        "n": 1,
+        "slope": NaN,
+        "mean": NaN,
+        "std": NaN,
+        "r2": NaN
+      },
+      "first_block_rho": [
+        0.0,
+        0.7906976744186046
+      ],
+      "degeneracy_score": 0.27380081681263096
+    }
+  },
+  {
+    "path": "runs/E6_moe/kimi-k2.5/results/cka_kimi-k2.5.npz",
+    "model_name": "Kimi-K2.5 (1T/32B MoE, n=100)",
+    "experiment": "E6_moe",
+    "n_layers": 61,
+    "variant": "default",
+    "model_key": "Kimi-K2.5|L61",
+    "n_blocks": 2,
+    "blockiness": 0.4153474028305151,
+    "layer_coupling": 0.7938207537588916,
+    "boundaries_rho": [
+      0.6166666666666667
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6166666666666667
+        ],
+        "blockiness": 0.4153474028305151
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.18333333333333332,
+          0.6166666666666667
+        ],
+        "blockiness": 0.27223154266600424
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.18333333333333332,
+          0.6166666666666667,
+          0.9833333333333333
+        ],
+        "blockiness": 0.2784154939830086
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 13,
+        "slope": -0.01915824560831345,
+        "mean": 0.9318204196531491,
+        "std": 0.06574673568488099,
+        "r2": 0.726459318330111
+      },
+      "later_blocks": {
+        "n": 3,
+        "slope": NaN,
+        "mean": NaN,
+        "std": NaN,
+        "r2": NaN
+      },
+      "first_block_rho": [
+        0.0,
+        0.48333333333333334
+      ],
+      "degeneracy_score": -0.09749634741891278
+    }
+  },
+  {
+    "path": "runs/E7_inkling/results/cka_inkling.npz",
+    "model_name": "Inkling-NVFP4 (~950B MoE, n=250)",
+    "experiment": "E7_inkling",
+    "n_layers": 66,
+    "variant": "default",
+    "model_key": "Inkling-NVFP4|L66",
+    "n_blocks": 2,
+    "blockiness": 0.10607995588343311,
+    "layer_coupling": 0.8620906172726316,
+    "boundaries_rho": [
+      0.49230769230769234
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        6
+      ],
+      "stable_penalty_lo": 0.016,
+      "stable_penalty_hi": 0.106,
+      "margin": 0.09,
+      "k_by_penalty": {
+        "0.0": 6,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 1,
+        "0.14": 1,
+        "0.16": 1,
+        "0.18": 1,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.49230769230769234
+        ],
+        "blockiness": 0.10607995588343311
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.47692307692307695,
+          0.8461538461538461
+        ],
+        "blockiness": 0.11253936563232236
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.3230769230769231,
+          0.4307692307692308,
+          0.8461538461538461
+        ],
+        "blockiness": 0.13489228919500784
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 32,
+        "slope": -0.005344674004477643,
+        "mean": 0.9060972987654418,
+        "std": 0.09929730917892284,
+        "r2": 0.15934196601822526
+      },
+      "later_blocks": {
+        "n": 33,
+        "slope": -0.008440762635933734,
+        "mean": 0.925198963947596,
+        "std": 0.08217519113987139,
+        "r2": 0.617803031585765
+      },
+      "first_block_rho": [
+        0.0,
+        0.47692307692307695
+      ],
+      "degeneracy_score": 0.29512110187064466
+    }
+  },
+  {
+    "path": "runs/E7_inkling/results/inkling_cka.npz",
+    "model_name": "thinkingmachines/Inkling-NVFP4",
+    "experiment": "E7_inkling",
+    "n_layers": 66,
+    "variant": "default",
+    "model_key": "thinkingmachines/Inkling-NVFP4|L66",
+    "n_blocks": 2,
+    "blockiness": 0.10607995588343311,
+    "layer_coupling": 0.8620906172726316,
+    "boundaries_rho": [
+      0.49230769230769234
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        1,
+        6
+      ],
+      "stable_penalty_lo": 0.016,
+      "stable_penalty_hi": 0.106,
+      "margin": 0.09,
+      "k_by_penalty": {
+        "0.0": 6,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 1,
+        "0.14": 1,
+        "0.16": 1,
+        "0.18": 1,
+        "0.2": 1
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.49230769230769234
+        ],
+        "blockiness": 0.10607995588343311
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.47692307692307695,
+          0.8461538461538461
+        ],
+        "blockiness": 0.11253936563232236
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.3230769230769231,
+          0.4307692307692308,
+          0.8461538461538461
+        ],
+        "blockiness": 0.13489228919500784
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 32,
+        "slope": -0.005344674004477643,
+        "mean": 0.9060972987654418,
+        "std": 0.09929730917892284,
+        "r2": 0.15934196601822526
+      },
+      "later_blocks": {
+        "n": 33,
+        "slope": -0.008440762635933734,
+        "mean": 0.925198963947596,
+        "std": 0.08217519113987139,
+        "r2": 0.617803031585765
+      },
+      "first_block_rho": [
+        0.0,
+        0.47692307692307695
+      ],
+      "degeneracy_score": 0.29512110187064466
+    }
+  },
+  {
+    "path": "runs/E8_laguna/results/cka_bf16.npz",
+    "model_name": "Laguna-XS-2.1 bf16 (n=200, fp32 recombination)",
+    "experiment": "E8_laguna",
+    "n_layers": 40,
+    "variant": "bf16",
+    "model_key": "Laguna-XS-2.1 bf16|L40",
+    "n_blocks": 2,
+    "blockiness": 0.27261398835394146,
+    "layer_coupling": 0.7816461143532809,
+    "boundaries_rho": [
+      0.717948717948718
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.717948717948718
+        ],
+        "blockiness": 0.27261398835394146
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.358974358974359,
+          0.7435897435897436
+        ],
+        "blockiness": 0.2520828011069144
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.23076923076923078,
+          0.48717948717948717,
+          0.7692307692307693
+        ],
+        "blockiness": 0.23745184567976363
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 28,
+        "slope": -0.013854046206440075,
+        "mean": 0.8896605287168298,
+        "std": 0.09053519562024356,
+        "r2": 0.980883018049354
+      },
+      "later_blocks": {
+        "n": 11,
+        "slope": -0.020671412731098206,
+        "mean": 0.9313767120329209,
+        "std": 0.05622340060040692,
+        "r2": 0.8110681500753774
+      },
+      "first_block_rho": [
+        0.0,
+        0.6923076923076923
+      ],
+      "degeneracy_score": -0.026642102021747438
+    }
+  },
+  {
+    "path": "runs/E8_laguna/results/cka_nvfp4.npz",
+    "model_name": "Laguna-XS-2.1 nvfp4 (n=200, fp32 recombination)",
+    "experiment": "E8_laguna",
+    "n_layers": 40,
+    "variant": "nvfp4",
+    "model_key": "Laguna-XS-2.1 nvfp4|L40",
+    "n_blocks": 2,
+    "blockiness": 0.27196099731272116,
+    "layer_coupling": 0.7869950935702649,
+    "boundaries_rho": [
+      0.717948717948718
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.717948717948718
+        ],
+        "blockiness": 0.27196099731272116
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.358974358974359,
+          0.7435897435897436
+        ],
+        "blockiness": 0.25142421224185973
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.3333333333333333,
+          0.5641025641025641,
+          0.7692307692307693
+        ],
+        "blockiness": 0.2383086363560788
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 28,
+        "slope": -0.013427922770134056,
+        "mean": 0.8949170368504246,
+        "std": 0.08855533428595323,
+        "r2": 0.9631347592181556
+      },
+      "later_blocks": {
+        "n": 11,
+        "slope": -0.019444570503530073,
+        "mean": 0.9352244145548697,
+        "std": 0.052618725669183374,
+        "r2": 0.8193459434220308
+      },
+      "first_block_rho": [
+        0.0,
+        0.6923076923076923
+      ],
+      "degeneracy_score": 0.003578788901249519
+    }
+  },
+  {
+    "path": "runs/E9_laguna_xs2/results/cka_xs2.npz",
+    "model_name": "Laguna-XS.2 bf16 (n=200, fp32 recombination, own probe)",
+    "experiment": "E9_laguna_xs2",
+    "n_layers": 40,
+    "variant": "default",
+    "model_key": "Laguna-XS.2 bf16|L40",
+    "n_blocks": 2,
+    "blockiness": 0.32398967690518476,
+    "layer_coupling": 0.7311212791473157,
+    "boundaries_rho": [
+      0.6923076923076923
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.6923076923076923
+        ],
+        "blockiness": 0.32398967690518476
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.358974358974359,
+          0.717948717948718
+        ],
+        "blockiness": 0.31246161046257903
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.358974358974359,
+          0.6666666666666666,
+          0.8205128205128205
+        ],
+        "blockiness": 0.3052311726781344
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 27,
+        "slope": -0.01786597522003407,
+        "mean": 0.8651864535832456,
+        "std": 0.11403426546640692,
+        "r2": 0.9545710313260485
+      },
+      "later_blocks": {
+        "n": 12,
+        "slope": -0.025392538475562446,
+        "mean": 0.9131940715059261,
+        "std": 0.0725914572229987,
+        "r2": 0.8837146532283999
+      },
+      "first_block_rho": [
+        0.0,
+        0.6666666666666666
+      ],
+      "degeneracy_score": -0.3055896170837448
+    }
+  },
+  {
+    "path": "runs/E9_laguna_xs2/results/cka_xs21_recomputed.npz",
+    "model_name": "",
+    "experiment": "E9_laguna_xs2",
+    "n_layers": 40,
+    "variant": "default",
+    "model_key": "runs/E9_laguna_xs2/results/cka_xs21_recomputed.npz|L40",
+    "n_blocks": 2,
+    "blockiness": 0.27261398835394146,
+    "layer_coupling": 0.7816461143532809,
+    "boundaries_rho": [
+      0.717948717948718
+    ],
+    "penalty": {
+      "k_at_default": 2,
+      "k_range": [
+        2,
+        2
+      ],
+      "stable_penalty_lo": 0.0,
+      "stable_penalty_hi": 0.2,
+      "margin": 0.2,
+      "k_by_penalty": {
+        "0.0": 2,
+        "0.02": 2,
+        "0.04": 2,
+        "0.06": 2,
+        "0.08": 2,
+        "0.1": 2,
+        "0.12": 2,
+        "0.14": 2,
+        "0.16": 2,
+        "0.18": 2,
+        "0.2": 2
+      }
+    },
+    "forced": {
+      "k2": {
+        "boundaries_rho": [
+          0.717948717948718
+        ],
+        "blockiness": 0.27261398835394146
+      },
+      "k3": {
+        "boundaries_rho": [
+          0.358974358974359,
+          0.7435897435897436
+        ],
+        "blockiness": 0.2520828011069144
+      },
+      "k4": {
+        "boundaries_rho": [
+          0.23076923076923078,
+          0.48717948717948717,
+          0.7692307692307693
+        ],
+        "blockiness": 0.23745184567976363
+      }
+    },
+    "degeneracy": {
+      "n_blocks": 2,
+      "first_block": {
+        "n": 28,
+        "slope": -0.013854046206440075,
+        "mean": 0.8896605287168298,
+        "std": 0.09053519562024356,
+        "r2": 0.980883018049354
+      },
+      "later_blocks": {
+        "n": 11,
+        "slope": -0.020671412731098206,
+        "mean": 0.9313767120329209,
+        "std": 0.05622340060040692,
+        "r2": 0.8110681500753774
+      },
+      "first_block_rho": [
+        0.0,
+        0.6923076923076923
+      ],
+      "degeneracy_score": -0.026642102021747438
+    }
+  }
+]

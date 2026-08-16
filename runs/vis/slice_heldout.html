@@ -1,0 +1,130 @@
+<title>J-lens slice — &#x27;abel hails from&#x27; (latent: berlin, answer: germany)</title>
+<style>
+  :root {
+    --bg:#fbfbfa; --fg:#1a1a19; --dim:#6b6b68; --line:#e3e2df;
+    --accent:#b8552f; --cell:#ffffff; --hi:#f3ede4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#17171a; --fg:#e9e8e4; --dim:#96958f; --line:#2e2e33;
+            --accent:#e08a5f; --cell:#1e1e22; --hi:#2a2620; }
+  }
+  :root[data-theme="dark"] { --bg:#17171a; --fg:#e9e8e4; --dim:#96958f;
+    --line:#2e2e33; --accent:#e08a5f; --cell:#1e1e22; --hi:#2a2620; }
+  :root[data-theme="light"] { --bg:#fbfbfa; --fg:#1a1a19; --dim:#6b6b68;
+    --line:#e3e2df; --accent:#b8552f; --cell:#ffffff; --hi:#f3ede4; }
+  body { margin:0; padding:1.5rem; background:var(--bg); color:var(--fg);
+         font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+         font-size:14px; line-height:1.5; }
+  h1 { font-size:1.05rem; font-weight:600; margin:0 0 .25rem; }
+  .sub { color:var(--dim); font-size:.82rem; margin-bottom:1rem; }
+  .wrap { overflow-x:auto; border:1px solid var(--line); border-radius:6px;
+          background:var(--cell); }
+  table { border-collapse:collapse; font-size:11px; white-space:nowrap; }
+  th, td { border:1px solid var(--line); padding:2px 5px; text-align:center;
+           font-variant-numeric:tabular-nums; }
+  th.layer { position:sticky; left:0; background:var(--cell); z-index:2;
+             color:var(--dim); font-weight:500; text-align:right; }
+  td.cell { cursor:pointer; max-width:120px; overflow:hidden;
+            text-overflow:ellipsis; }
+  td.cell:hover { outline:2px solid var(--accent); outline-offset:-2px; }
+  td.tok { color:var(--dim); font-weight:600; }
+  sup { color:var(--dim); font-size:8px; margin-left:2px; }
+  .pins { margin:.9rem 0 .4rem; display:flex; gap:.4rem; flex-wrap:wrap;
+          align-items:center; }
+  .pin { border:1px solid var(--accent); color:var(--accent); border-radius:99px;
+         padding:.1rem .55rem; font-size:.78rem; cursor:pointer; }
+  .pin.off { border-color:var(--line); color:var(--dim); }
+  #detail { margin-top:1rem; font-size:.82rem; color:var(--dim);
+            min-height:4.5rem; }
+  #detail b { color:var(--fg); }
+  code { background:var(--hi); padding:.05rem .3rem; border-radius:3px; }
+</style>
+<h1>J-lens slice — &#x27;abel hails from&#x27; (latent: berlin, answer: germany)</h1>
+<div class="sub">Rows are layers, deepest at the top. Each cell is the
+top-ranked J-lens token there. Click a cell to pin its token; pinned tokens
+colour every cell by rank (dark = rank 1). Hover for the full top-k.</div>
+<div class="pins" id="pins"><span style="color:var(--dim);font-size:.78rem">
+click a cell to pin a token</span></div>
+<div class="wrap"><table id="grid"></table></div>
+<div id="detail"></div>
+<script>
+const DATA = {"tokens": ["abel", "hails", "from"], "layers": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "top_tokens": [[["lives", "waited", "walked", "delhi", "returned", "smiled", "ghana", "listened"], ["lives", "waited", "smiled", "walked", "returned", "listened", "paused", "hails"], ["lives", "smiled", "waited", "returned", "walked", "listened", "paused", "hails"], ["lives", "smiled", "listened", "returned", "waited", "walked", "paused", "hails"], ["lives", "smiled", "listened", "returned", "waited", "walked", "paused", "hails"], ["lives", "smiled", "listened", "returned", "waited", "walked", "paused", "hails"], ["lives", "smiled", "listened", "returned", "waited", "walked", "paused", "hails"], ["lives", "smiled", "listened", "waited", "returned", "walked", "paused", "hails"], ["lives", "smiled", "listened", "waited", "returned", "walked", "paused", "hails"], ["lives", "smiled", "listened", "waited", "returned", "walked", "paused", "hails"], ["lives", "smiled", "listened", "waited", "returned", "walked", "paused", "hails"]], [["from", "peru", "near", "olive", "hue", "kumasi", "germany", "cusco"], ["from", "peru", "near", "olive", "hue", "germany", "kumasi", "cusco"], ["from", "peru", "near", "olive", "germany", "lima", "hue", "hails"], ["from", "peru", "near", "olive", "lima", "germany", ".", "cusco"], ["from", "peru", "near", "lima", ".", "guayaquil", "olive", "germany"], ["from", "peru", "near", "lima", "guayaquil", ".", "olive", "cusco"], ["from", "near", "peru", "guayaquil", "lima", "germany", "kumasi", "olive"], ["from", "near", "peru", "guayaquil", "lima", "germany", "kumasi", "cusco"], ["from", "near", "peru", "guayaquil", "lima", "kumasi", "germany", "<eos>"], ["from", "near", "peru", "guayaquil", "kumasi", "lima", "vietnam", "germany"], ["from", "near", "peru", "guayaquil", "lima", "kumasi", "germany", "africa"]], [["clam", "german", "munich", "bulgarian", "germany", "olive", "coastal", "cusco"], ["german", "germany", "clam", "bulgarian", "olive", "munich", "norwegian", "ghana"], ["german", "germany", "bulgarian", "clam", "olive", "munich", "norwegian", "ghana"], ["germany", "german", "olive", "bulgarian", "clam", "berlin", "munich", "norwegian"], ["germany", "german", "olive", "berlin", "clam", "hails", "europe", "little"], ["germany", "german", "berlin", "olive", "little", "europe", "hails", "utters"], ["germany", "german", "berlin", "europe", "little", "sits", "utters", "san"], ["germany", "german", "berlin", "europe", "sits", "saint", "utters", "made"], ["germany", "berlin", "german", "europe", "sits", "utters", "made", "saint"], ["germany", "berlin", "german", "europe", "ecuador", "vietnam", "sits", "utters"], ["germany", "berlin", "german", "ecuador", "vietnam", "europe", "sits", "saint"]]], "top_ids": [[[107, 201, 202, 41, 154, 167, 62, 105], [107, 201, 167, 202, 154, 105, 141, 70], [107, 167, 201, 154, 202, 105, 141, 70], [107, 167, 105, 154, 201, 202, 141, 70], [107, 167, 105, 154, 201, 202, 141, 70], [107, 167, 105, 154, 201, 202, 141, 70], [107, 167, 105, 154, 201, 202, 141, 70], [107, 167, 105, 201, 154, 202, 141, 70], [107, 167, 105, 201, 154, 202, 141, 70], [107, 167, 105, 201, 154, 202, 141, 70], [107, 167, 105, 201, 154, 202, 141, 70]], [[58, 142, 122, 132, 77, 95, 61, 37], [58, 142, 122, 132, 77, 61, 95, 37], [58, 142, 122, 132, 61, 103, 77, 70], [58, 142, 122, 132, 103, 61, 2, 37], [58, 142, 122, 103, 2, 68, 132, 61], [58, 142, 122, 103, 68, 2, 132, 37], [58, 122, 142, 68, 103, 61, 95, 132], [58, 122, 142, 68, 103, 61, 95, 37], [58, 122, 142, 68, 103, 95, 61, 1], [58, 122, 142, 68, 95, 103, 196, 61], [58, 122, 142, 68, 103, 95, 61, 5]], [[32, 60, 120, 24, 61, 132, 34, 37], [60, 61, 32, 24, 132, 120, 129, 62], [60, 61, 24, 32, 132, 120, 129, 62], [61, 60, 132, 24, 32, 18, 120, 129], [61, 60, 132, 18, 32, 70, 51, 106], [61, 60, 18, 132, 106, 51, 70, 192], [61, 60, 18, 51, 106, 166, 192, 162], [61, 60, 18, 51, 166, 159, 192, 110], [61, 18, 60, 51, 166, 192, 110, 159], [61, 18, 60, 51, 45, 196, 166, 192], [61, 18, 60, 45, 196, 51, 166, 159]]], "rank_lookup": {"32": [[31, 191, 205, 213, 213, 213, 215, 216, 216, 215, 215], [43, 117, 194, 204, 205, 204, 204, 207, 206, 204, 205], [1, 3, 4, 5, 5, 14, 43, 52, 65, 60, 67]], "58": [[212, 217, 217, 216, 216, 216, 211, 207, 203, 210, 207], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [18, 21, 43, 50, 59, 68, 48, 72, 70, 73, 74]], "60": [[13, 60, 65, 79, 79, 75, 76, 67, 70, 78, 77], [25, 43, 66, 69, 75, 75, 70, 77, 189, 194, 195], [2, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3]], "61": [[11, 46, 53, 62, 64, 63, 60, 60, 60, 67, 85], [7, 6, 5, 6, 8, 9, 6, 6, 7, 8, 7], [5, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1]], "107": [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [46, 25, 16, 14, 17, 21, 21, 21, 22, 29, 26], [201, 62, 30, 21, 13, 16, 14, 11, 9, 16, 28]]}, "id_to_str": {"32": "clam", "58": "from", "60": "german", "61": "germany", "107": "lives"}, "model_top": ["lives", "from", "germany"]};
+let pinned = null;
+const nPos = DATA.tokens.length, nLay = DATA.layers.length;
+
+function rankColor(r) {
+  if (r === null || r === undefined) return "transparent";
+  const t = Math.min(1, Math.log10(r) / 3.2);      // rank 1 -> 0, 1600+ -> 1
+  const a = (1 - t) * 0.75;
+  return `rgba(184,85,47,${a.toFixed(3)})`;
+}
+
+function build() {
+  const rows = [];
+  const head = ["<tr><th class='layer'>layer</th>"];
+  for (let p = 0; p < nPos; p++)
+    head.push(`<th class='tok'>${esc(DATA.tokens[p])}</th>`);
+  head.push("</tr>");
+  rows.push(head.join(""));
+
+  for (let li = nLay - 1; li >= 0; li--) {
+    const tr = [`<tr><th class='layer'>L${DATA.layers[li]}</th>`];
+    for (let p = 0; p < nPos; p++) {
+      const tok = DATA.top_tokens[p][li][0];
+      const id  = DATA.top_ids[p][li][0];
+      let bg = "transparent";
+      if (pinned !== null) {
+        const lut = DATA.rank_lookup[pinned];
+        bg = lut ? rankColor(lut[p][li]) : "transparent";
+      }
+      tr.push(`<td class='cell' style="background:${bg}"
+        data-p='${p}' data-l='${li}' data-id='${id}'>${esc(tok)}</td>`);
+    }
+    tr.push("</tr>");
+    rows.push(tr.join(""));
+  }
+  const outRow = ["<tr><th class='layer'>output</th>"];
+  for (let p = 0; p < nPos; p++)
+    outRow.push(`<td class='tok'>${esc(DATA.model_top[p])}</td>`);
+  outRow.push("</tr>");
+  rows.push(outRow.join(""));
+  document.getElementById("grid").innerHTML = rows.join("");
+
+  document.querySelectorAll("td.cell").forEach(td => {
+    td.onclick = () => {
+      const id = +td.dataset.id;
+      pinned = (pinned === id) ? null : id;
+      build();
+    };
+    td.onmouseenter = () => showDetail(+td.dataset.p, +td.dataset.l);
+  });
+  renderPins();
+}
+
+function renderPins() {
+  const el = document.getElementById("pins");
+  if (pinned === null) {
+    el.innerHTML = "<span style='color:var(--dim);font-size:.78rem'>" +
+                   "click a cell to pin a token</span>";
+    return;
+  }
+  el.innerHTML = `<span class='pin'>pinned: ${esc(DATA.id_to_str[pinned])}
+    &nbsp;&times;</span>`;
+  el.querySelector(".pin").onclick = () => { pinned = null; build(); };
+}
+
+function showDetail(p, li) {
+  const toks = DATA.top_tokens[p][li];
+  const list = toks.map((t, i) => `<code>${esc(t)}</code>`).join(" ");
+  document.getElementById("detail").innerHTML =
+    `<b>position ${p}</b> (<code>${esc(DATA.tokens[p])}</code>) ` +
+    `&middot; <b>layer ${DATA.layers[li]}</b><br>top-k: ${list}`;
+}
+
+function esc(s) {
+  return (s === "" ? "\u2205" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/\n/g, "\u23ce");
+}
+build();
+</script>

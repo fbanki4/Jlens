@@ -1,0 +1,165 @@
+67 CKA matrices
+
+==============================================================================
+(1) IS n_blocks A PROPERTY OF THE MODEL OR OF THE PENALTY?
+==============================================================================
+  n_blocks at default penalty 0.02: {np.int64(2): np.int64(62), np.int64(3): np.int64(4), np.int64(4): np.int64(1)}
+  penalty range over which k is unchanged: median 0.200, min 0.008, max 0.200 (the full swept range is 0.000-0.200)
+  FRAGILE matrices (k flips within 0.02 of the default): 1/67
+      google/gemma-3-1b-pt  k=3  stable only over [0.016,0.024]
+  distinct k values reachable across the whole penalty sweep: median span 0.0, max 9
+  blockiness at the selected k: median 0.247, range 0.106-0.499
+
+  NOTE: 62/67 matrices segment into TWO blocks, so their
+  'sensory_end' and 'motor_start' are the SAME cut. In those models the
+  segmentation has not found a separate motor band at all — a three-regime
+  reading of those pictures is imposed by the reader, not by the data.
+
+==============================================================================
+(2) DO ABLATION VARIANTS OF THE SAME MODEL GIVE THE SAME SHAPE?
+==============================================================================
+  Qwen/Qwen3-1.7B|L28                                  n=2
+      variants: ['4k', 'default']
+      n_blocks seen: [2, 3]
+      forced-k=2 cut rho: 0.593-0.667 (spread 0.074)
+      forced-k=3 cuts rho: early 0.111-0.185 (spread 0.074), late 0.667-0.667 (spread 0.000)
+  google/gemma-3-1b-it|L26                             n=3
+      variants: ['4k', 'default', 'frozenattn']
+      n_blocks seen: [2, 3, 4]
+      forced-k=2 cut rho: 0.320-0.440 (spread 0.120)
+      forced-k=3 cuts rho: early 0.160-0.440 (spread 0.280), late 0.680-0.680 (spread 0.000)
+  google/gemma-3-1b-pt|L26                             n=5
+      variants: ['4k', 'default', 'frozenattn', 'vpdiag', 'vpheads']
+      n_blocks seen: [2, 3]
+      forced-k=2 cut rho: 0.440-0.640 (spread 0.200)
+      forced-k=3 cuts rho: early 0.440-0.480 (spread 0.040), late 0.680-0.680 (spread 0.000)
+  google/gemma-3-27b-it|L62                            n=4
+      variants: ['default', 'n710', 'n710', 'n710']
+      n_blocks seen: [2]
+      forced-k=2 cut rho: 0.443-0.443 (spread 0.000)
+      forced-k=3 cuts rho: early 0.213-0.443 (spread 0.230), late 0.475-0.869 (spread 0.393)
+
+  ACROSS GROUPS: median spread of the single forced cut  0.097 rho
+                 median spread of the forced-k=3 early cut 0.152 rho
+
+==============================================================================
+(3) IS THE FIRST BLOCK A REGIME, OR A DEGENERATE BAND?
+==============================================================================
+  model                                                     first-block             later blocks
+                                                     mean   std   slope       mean   std   slope
+  OptimizerStudy/adamw_1.2b_8                     0.924 0.054 -0.0130    0.931 0.057 -0.0173
+  OptimizerStudy/muon_1.2b_8                      0.911 0.068 -0.0173    0.931 0.061 -0.0186
+  OptimizerStudy/nadamw_1.2b_8                    0.944 0.041 -0.0101    0.931 0.058 -0.0153
+  OptimizerStudy/soape_1.2b_8                     0.923 0.060 -0.0115    0.930 0.057 -0.0191
+  OptimizerStudy/adamw_520m_8                     0.939 0.042 -0.0108    0.925 0.061 -0.0172
+  OptimizerStudy/cautious_520m_8                  0.904 0.068 -0.0170    0.923 0.063 -0.0183
+  OptimizerStudy/kron_520m_8                      0.909 0.066 -0.0173    0.945 0.043 -0.0122
+  OptimizerStudy/lion_520m_8                      0.901 0.074 -0.0178    0.913 0.068 -0.0211
+  OptimizerStudy/mars_520m_8                      0.922 0.057 -0.0135    0.933 0.054 -0.0163
+  OptimizerStudy/mini_520m_8                      0.915 0.064 -0.0168    0.943 0.042 -0.0122
+  OptimizerStudy/muon_520m_8                      0.907 0.071 -0.0195    0.915 0.071 -0.0189
+  OptimizerStudy/nadamw_520m_8                    0.927 0.052 -0.0145    0.921 0.061 -0.0164
+  OptimizerStudy/scion_520m_8                     0.922 0.063 -0.0207    0.945 0.046 -0.0104
+  OptimizerStudy/soape_520m_8                     0.929 0.052 -0.0145    0.933 0.058 -0.0152
+  google/gemma-3-1b-it                            0.946 0.026 -0.0182    0.796 0.130 -0.0252
+  google/gemma-3-1b-it                            0.864 0.105 -0.0331    0.856 0.091 -0.0260
+  google/gemma-3-1b-pt                            0.857 0.099 -0.0329    0.833 0.104 -0.0299
+  google/gemma-3-1b-pt                            0.946 0.047 -0.0114    0.934 0.048 -0.0210
+  google/gemma-3-1b-pt                            0.847 0.107 -0.0370    0.835 0.103 -0.0295
+  google/gemma-3-1b-pt                            0.848 0.108 -0.0373    0.835 0.103 -0.0295
+  google/gemma-3-27b-it                           0.934 0.057 -0.0077    0.888 0.111 -0.0091
+  google/gemma-3-27b-it                           0.915 0.076 -0.0107    0.888 0.112 -0.0091
+  google/gemma-3-27b-it                           0.915 0.076 -0.0107    0.888 0.112 -0.0091
+  google/gemma-3-27b-it                           0.934 0.057 -0.0077    0.888 0.111 -0.0091
+  allenai/Olmo-3-1125-32B                         0.963 0.042 -0.0061    0.931 0.073 -0.0074
+  Qwen/Qwen3-4B                                   0.939 0.048 -0.0235    0.796 0.164 -0.0237
+  google/gemma-3-1b-it                            0.897 0.086 -0.0502    0.775 0.133 -0.0258
+  google/gemma-3-1b-pt                            0.851 0.096 -0.0307    0.806 0.128 -0.0347
+  Qwen/Qwen3-1.7B                                 0.912 0.063 -0.0138    0.849 0.118 -0.0363
+  olmo32b stage1-step1000 (8.4B, n=250)           0.943 0.052 -0.0088    0.961 0.040 -0.0043
+  olmo32b stage1-step11000 (92.3B, n=250)         0.940 0.053 -0.0129    0.965 0.035 -0.0029
+  olmo32b stage1-step130000 (1.09T, n=250)        0.934 0.061 -0.0110    0.954 0.047 -0.0043
+  olmo32b stage1-step2000 (16.8B, n=250)          0.952 0.041 -0.0080    0.978 0.021 -0.0021
+  olmo32b stage1-step26000 (0.22T, n=250)         0.916 0.080 -0.0156    0.961 0.039 -0.0036
+  olmo32b stage1-step292000 (2.45T, n=250)        0.930 0.063 -0.0105    0.953 0.048 -0.0046
+  olmo32b stage1-step5000 (41.9B, n=250)          0.952 0.039 -0.0098    0.971 0.028 -0.0024
+  olmo32b stage1-step58000 (0.49T, n=250)         0.929 0.068 -0.0123    0.955 0.046 -0.0044
+  olmo32b stage1-step656000 (5.50T, n=250)        0.927 0.070 -0.0115    0.941 0.061 -0.0058
+  olmo32b stage3-step1000 (5.61T, n=250)          0.960 0.039 -0.0058    0.933 0.068 -0.0071
+  olmo32b stage3-step11921 (5.70T, n=250)         0.962 0.041 -0.0059    0.927 0.076 -0.0076
+  olmo7b_early stage1-step0 (init, n=250)         0.883 0.075 -0.0230    0.928 0.045 -0.0108
+  olmo7b_early stage1-step1000 (4.2B, n=250)      0.942 0.046 -0.0112    0.953 0.043 -0.0132
+  olmo7b_early stage1-step16000 (67.1B, n=250)    0.942 0.043 -0.0100    0.955 0.038 -0.0123
+  olmo7b_early stage1-step4000 (16.8B, n=250)     0.958 0.028 -0.0071    0.959 0.036 -0.0109
+  smollm3 stage1-step-1280000 (3.03T, n=250)      0.879 0.105 -0.0186    0.925 0.056 -0.0159
+  smollm3 stage1-step-160000 (0.38T, n=250)       0.902 0.091 -0.0206    0.908 0.071 -0.0159
+  smollm3 stage1-step-1920000 (4.55T, n=250)      0.913 0.069 -0.0130    0.927 0.057 -0.0157
+  smollm3 stage1-step-2560000 (6.07T, n=250)      0.908 0.074 -0.0135    0.923 0.061 -0.0158
+  smollm3 stage1-step-320000 (0.76T, n=250)       0.908 0.078 -0.0164    0.914 0.067 -0.0167
+  smollm3 stage1-step-3200000 (7.58T, n=250)      0.904 0.081 -0.0147    0.925 0.061 -0.0159
+  smollm3 stage1-step-40000 (95B, n=250)          0.935 0.054 -0.0138    0.912 0.066 -0.0146
+  smollm3 stage1-step-640000 (1.52T, n=250)       0.890 0.097 -0.0193    0.922 0.062 -0.0160
+  smollm3 stage1-step-80000 (0.19T, n=250)        0.897 0.098 -0.0245    0.903 0.076 -0.0164
+  smollm3 stage2-step-3840000 (9.10T, n=250)      0.903 0.084 -0.0147    0.930 0.057 -0.0146
+  smollm3 stage3-step-4400000 (10.43T, n=250)     0.918 0.067 -0.0122    0.924 0.062 -0.0156
+  smollm3 stage3-step-4720000 (11.19T, n=250)     0.918 0.063 -0.0114    0.916 0.063 -0.0173
+  delphi-1e22-9.7Bparams-160Btokens               0.937 0.062 -0.0178    0.949 0.048 -0.0079
+  delphi-1e23-25Bparams-628Btokens                0.932 0.063 -0.0160    0.953 0.048 -0.0052
+  Inkling-NVFP4 (~950B MoE, n=250)                0.906 0.099 -0.0053    0.925 0.082 -0.0084
+  thinkingmachines/Inkling-NVFP4                  0.906 0.099 -0.0053    0.925 0.082 -0.0084
+  Laguna-XS-2.1 bf16 (n=200, fp32 recombination)  0.890 0.091 -0.0139    0.931 0.056 -0.0207
+  Laguna-XS-2.1 nvfp4 (n=200, fp32 recombination  0.895 0.089 -0.0134    0.935 0.053 -0.0194
+  Laguna-XS.2 bf16 (n=200, fp32 recombination, o  0.865 0.114 -0.0179    0.913 0.073 -0.0254
+  runs/E9_laguna_xs2/results/cka_xs21_recomputed  0.890 0.091 -0.0139    0.931 0.056 -0.0207
+
+  medians: first block  std 0.066  slope -0.0138
+           later blocks std 0.061  slope -0.0156
+  first blocks that are flat AND tight (|slope|<0.005, std<0.05): 0/64
+
+==============================================================================
+(4) CONTROLLED: SAME ARCHITECTURE AND DATA, DIFFERENT OPTIMIZER
+==============================================================================
+  If the shape were a fact about the trained model, optimizers that
+  reach comparable loss should reach comparable shapes.
+  run                           k  blockiness  coupling  k=2 cut           k=3 cuts
+  OptimizerStudy/adamw_1.2b_8   2       0.214     0.817    0.548       0.419  0.677
+  OptimizerStudy/muon_1.2b_8    2       0.238     0.797    0.548       0.290  0.613
+  OptimizerStudy/nadamw_1.2b_8  2       0.195     0.836    0.484       0.226  0.581
+  OptimizerStudy/soape_1.2b_8   2       0.211     0.819    0.581       0.387  0.645
+  OptimizerStudy/adamw_520m_8   2       0.187     0.836    0.516       0.258  0.613
+  OptimizerStudy/cautious_520m  2       0.261     0.778    0.548       0.290  0.548
+  OptimizerStudy/kron_520m_8    2       0.206     0.819    0.516       0.258  0.581
+  OptimizerStudy/lion_520m_8    2       0.247     0.780    0.548       0.226  0.613
+  OptimizerStudy/mars_520m_8    2       0.201     0.823    0.548       0.226  0.613
+  OptimizerStudy/mini_520m_8    2       0.171     0.840    0.516       0.258  0.581
+  OptimizerStudy/muon_520m_8    2       0.247     0.784    0.484       0.226  0.581
+  OptimizerStudy/nadamw_520m_8  2       0.204     0.819    0.484       0.323  0.613
+  OptimizerStudy/scion_520m_8   2       0.206     0.834    0.419       0.194  0.516
+  OptimizerStudy/soape_520m_8   2       0.203     0.827    0.484       0.355  0.645
+
+  forced-k=2 cut across 14 optimizers: 0.419-0.581 (spread 0.161 rho)
+  blockiness across the same runs:  0.171-0.261 (spread 0.089)
+
+==============================================================================
+(5) DOES THE SHAPE TRACK MODEL DEPTH?
+==============================================================================
+  depth range 26-66 layers over 67 matrices
+  corr(n_layers, blockiness)      +0.039
+  corr(n_layers, layer_coupling)  +0.339
+  corr(n_layers, forced-k=2 cut)  -0.393
+
+   depth   n  blockiness  coupling  k=2 cut
+      26   8       0.316     0.698    0.450
+      28   2       0.216     0.785    0.630
+      32  18       0.199     0.826    0.518
+      36  13       0.248     0.784    0.567
+      37   1       0.208     0.852    0.333
+      40   4       0.285     0.770    0.712
+      44   1       0.499     0.875    0.977
+      51   1       0.209     0.860    0.300
+      61   1       0.415     0.794    0.617
+      62   4       0.249     0.777    0.443
+      64  12       0.268     0.825    0.362
+      66   2       0.106     0.862    0.492
+
+wrote runs/shapes/shapes.json

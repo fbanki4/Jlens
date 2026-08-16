@@ -1,0 +1,42 @@
+{
+  "untrained": {
+    "geometry": {
+      "n_blocks": 2,
+      "blockiness": 0.1437026543590404,
+      "layer_coupling": 0.800536444406592,
+      "boundaries_rho": [
+        0.45454545454545453
+      ],
+      "pr_peak": 60.165496826171875,
+      "eff_dim_95_mid": 0.6041666666666666
+    },
+    "function": {
+      "heldout_accuracy": 0.0,
+      "median_latent_rank": 87.5,
+      "median_distractor_rank": 101.0,
+      "specificity": 1.1542857142857144,
+      "latent_beats_distractors_frac": 0.5833333333333334,
+      "swap_n": 0,
+      "swap_follow_rate": NaN
+    }
+  },
+  "trained": {
+    "geometry": {
+      "n_blocks": 1,
+      "blockiness": 0.0,
+      "layer_coupling": 0.9841309797428239,
+      "boundaries_rho": [],
+      "pr_peak": 12.087270736694336,
+      "eff_dim_95_mid": 0.4166666666666667
+    },
+    "function": {
+      "heldout_accuracy": 0.9791666666666666,
+      "median_latent_rank": 3.0,
+      "median_distractor_rank": 52.5,
+      "specificity": 17.5,
+      "latent_beats_distractors_frac": 1.0,
+      "swap_n": 94,
+      "swap_follow_rate": 0.10638297872340426
+    }
+  }
+}

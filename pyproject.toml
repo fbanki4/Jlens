@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jlens"
+version = "0.1.0"
+description = "The Jacobian lens, from scratch: fitting, J-space analysis, and a workspace atlas"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "numpy>=1.24",
+    "torch>=2.1",
+    "scipy>=1.10",
+]
+
+# `transformers` is deliberately optional: the toy model, the whole test suite
+# and the atlas viewer all run without it, so a clone that only wants to look
+# at existing data should not have to install it.
+[project.optional-dependencies]
+hf = ["transformers>=4.40", "huggingface_hub>=0.23"]
+
+[tool.setuptools]
+packages = ["jlens", "jlens.toy", "experiments"]

@@ -1,0 +1,24 @@
+  step      1  loss 5.4458  atomic 0.00  2hop train 0.00 held 0.00  (2s)
+  step      2  loss 5.3867  atomic 0.00  2hop train 0.00 held 0.00  (4s)
+  step      3  loss 5.3121  atomic 0.00  2hop train 0.00 held 0.00  (6s)
+  step      5  loss 5.0669  atomic 0.00  2hop train 0.00 held 0.00  (8s)
+  step      9  loss 4.7190  atomic 0.00  2hop train 0.00 held 0.00  (11s)
+  step     16  loss 4.3590  atomic 0.00  2hop train 0.00 held 0.00  (15s)
+  step     28  loss 3.8920  atomic 0.00  2hop train 0.00 held 0.00  (19s)
+  step     48  loss 2.9151  atomic 0.00  2hop train 0.08 held 0.00  (24s)
+  step     83  loss 1.1719  atomic 0.08  2hop train 0.43 held 0.04  (33s)
+  step    145  loss 0.4581  atomic 0.92  2hop train 1.00 held 0.83  (46s)
+  step    252  loss 0.3771  atomic 1.00  2hop train 1.00 held 0.96  (67s)
+  step    438  loss 0.3040  atomic 1.00  2hop train 1.00 held 0.92  (106s)
+  step    500  loss 0.3590
+  step    761  loss 0.3885  atomic 1.00  2hop train 1.00 held 0.75  (166s)
+  step   1000  loss 0.3409
+  step   1324  loss 0.3590  atomic 1.00  2hop train 1.00 held 0.96  (266s)
+  step   1500  loss 0.3049
+  step   2000  loss 0.2998
+  step   2301  loss 0.3656  atomic 1.00  2hop train 1.00 held 0.96  (432s)
+  step   2500  loss 0.3330
+  step   3000  loss 0.3046
+  step   3500  loss 0.3096
+  step   4000  loss 0.3008  atomic 1.00  2hop train 1.00 held 0.92  (737s)
+DONE
